@@ -14,8 +14,8 @@ namespace Location.Tracking.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddDbContext<TrackingDbContext>(options =>
-               // options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<TrackingDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
 
             // Register future repositories:

@@ -9,5 +9,10 @@ namespace Location.Tracking.Infrastructure.Data
 {
     public class TrackingDbContext : DbContext
     {
+        public TrackingDbContext(DbContextOptions<TrackingDbContext> options) : base(options) { }
+
+        protected TrackingDbContext()
+        {
+        }
     }
 }
