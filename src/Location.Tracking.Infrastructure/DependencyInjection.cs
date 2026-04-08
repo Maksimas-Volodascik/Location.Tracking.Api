@@ -17,7 +17,7 @@ namespace Location.Tracking.Infrastructure
             services.AddDbContext<TrackingDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-
+            
             // Register future repositories:
             // services.AddScoped<ILocationRepository, LocationRepository>();
             // services.AddScoped<ITrackingSessionRepository, TrackingSessionRepository>();
