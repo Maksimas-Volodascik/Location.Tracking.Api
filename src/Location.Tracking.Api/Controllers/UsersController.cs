@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Location.Tracking.Application.DTOs;
+using Location.Tracking.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
 
 namespace Location.Tracking.Api.Controllers
 {
@@ -7,16 +10,22 @@ namespace Location.Tracking.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        public UsersController()
+        private readonly IUserService _userService;
+        public UsersController(IUserService userService)
         {
-            
+            _userService = userService;
         }
 
-        [HttpGet("/users")]
-        public async Task<IActionResult> GetUsers()
+        [HttpGet("register")]
+        public async Task<IActionResult> Register([FromQuery] LoginDto credentials)
         {
+            if (credentials == null) return BadRequest();
 
-            return Ok("Hello");
+            var response = await _userService.RegisterAsync(credentials);
+
+            if (response == null) return BadRequest(new string[] { "User not found", "Invalid ID" });
+
+            return Ok($"{credentials.Email} and {credentials.Password}");
         }
     }
 }
