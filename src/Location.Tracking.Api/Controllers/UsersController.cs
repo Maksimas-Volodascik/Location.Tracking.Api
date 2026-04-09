@@ -2,7 +2,6 @@
 using Location.Tracking.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Numerics;
 
 namespace Location.Tracking.Api.Controllers
 {
@@ -17,15 +16,13 @@ namespace Location.Tracking.Api.Controllers
         }
 
         [HttpGet("register")]
-        public async Task<IActionResult> Register([FromQuery] LoginDto credentials)
+        public async Task<IActionResult> GetUsers([FromQuery] LoginDto loginDto)
         {
-            if (credentials == null) return BadRequest();
+            var response = await _userService.RegisterAsync(loginDto);
 
-            var response = await _userService.RegisterAsync(credentials);
+            if (response == null) return BadRequest(new string[] { "User exist" });
 
-            if (response == null) return BadRequest(new string[] { "User not found", "Invalid ID" });
-
-            return Ok($"{credentials.Email} and {credentials.Password}");
+            return Ok($"{loginDto.Email} and {loginDto.Password}");
         }
     }
 }

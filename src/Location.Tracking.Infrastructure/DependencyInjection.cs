@@ -1,16 +1,16 @@
-﻿using Location.Tracking.Application.Interfaces.Repositories;
-using Location.Tracking.Application.Interfaces.Services;
-using Location.Tracking.Application.Services;
-using Location.Tracking.Infrastructure.Data;
-using Location.Tracking.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Location.Tracking.Infrastructure.Data;
+using Location.Tracking.Application.Interfaces.Repositories;
+using Location.Tracking.Application.Interfaces.Services;
+using Location.Tracking.Application.Services;
+using Location.Tracking.Infrastructure.Repositories;
 
 namespace Location.Tracking.Infrastructure
 {
@@ -26,7 +26,7 @@ namespace Location.Tracking.Infrastructure
 
             //Services
             services.AddScoped<IUserService, UserService>();
-
+            
             // Register future repositories:
             // services.AddScoped<ILocationRepository, LocationRepository>();
             // services.AddScoped<ITrackingSessionRepository, TrackingSessionRepository>();

@@ -8,12 +8,16 @@
 
   <ItemGroup>
     <Compile Remove="bin\**" />
+    <Compile Remove="DTOs\**" />
     <Compile Remove="obj\**" />
     <Content Remove="bin\**" />
+    <Content Remove="DTOs\**" />
     <Content Remove="obj\**" />
     <EmbeddedResource Remove="bin\**" />
+    <EmbeddedResource Remove="DTOs\**" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="bin\**" />
+    <None Remove="DTOs\**" />
     <None Remove="obj\**" />
   </ItemGroup>
 
@@ -24,6 +28,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.17.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.13.20" />
   </ItemGroup>
 
