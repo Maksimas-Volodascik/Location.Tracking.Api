@@ -14,10 +14,10 @@ namespace Location.Tracking.Application.Services
 {
     public class UserService : IUserService
     {
-        private readonly IBaseRepository<User> _baseRepository;
-        public UserService(IBaseRepository<User> baseRepository)
+        private readonly IUserRepository _userRepository;
+        public UserService(IUserRepository userRepository)
         {
-            _baseRepository = baseRepository;
+            _userRepository = userRepository;
         }
 
         public Task<User> LoginAsync(LoginDto credentials)
@@ -27,7 +27,8 @@ namespace Location.Tracking.Application.Services
 
         public async Task<User> RegisterAsync(RegisterDto credentials)
         {
-            //var doesExist = _baseRepository.GetByIdAsync(Guid.NewGuid());
+            if (await _userRepository.GetUserByEmailAsync(credentials.Email) != null) return null;
+
             User newUser = new User
             {
                 FirstName = credentials.FirstName,
@@ -40,8 +41,8 @@ namespace Location.Tracking.Application.Services
 
             newUser.PasswordHash = hashedPassword;
 
-            await _baseRepository.AddAsync(newUser);
-            await _baseRepository.SaveChangesAsync();
+            await _userRepository.AddAsync(newUser);
+            await _userRepository.SaveChangesAsync();
 
             return newUser;
         }

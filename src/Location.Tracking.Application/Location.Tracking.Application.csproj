@@ -24,7 +24,6 @@
   <ItemGroup>
     <Folder Include="Services\Tracking\" />
     <Folder Include="Interfaces\Services\" />
-    <Folder Include="Interfaces\Repositories\" />
     <Folder Include="Shared\" />
   </ItemGroup>
 

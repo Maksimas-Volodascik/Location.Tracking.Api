@@ -23,7 +23,7 @@ namespace Location.Tracking.Infrastructure
 
             //Repositories
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-
+            services.AddScoped<IUserRepository, UserRepository>();
             //Services
             services.AddScoped<IUserService, UserService>();
             
