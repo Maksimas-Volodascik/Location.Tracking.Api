@@ -1,5 +1,7 @@
 ﻿using Location.Tracking.Application.DTOs;
 using Location.Tracking.Application.Interfaces.Services;
+using Location.Tracking.Application.Shared;
+using Location.Tracking.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
