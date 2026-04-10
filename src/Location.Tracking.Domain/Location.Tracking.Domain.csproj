@@ -18,6 +18,7 @@
   <ItemGroup>
     <Folder Include="Events\" />
     <Folder Include="Exceptions\" />
+    <Folder Include="Shared\" />
   </ItemGroup>
 
 </Project>
