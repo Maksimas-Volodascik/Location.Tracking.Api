@@ -16,13 +16,23 @@ namespace Location.Tracking.Api.Controllers
         }
 
         [HttpGet("register")]
-        public async Task<IActionResult> GetUsers([FromQuery] RegisterDto registerDto)
+        public async Task<IActionResult> RegisterAsync([FromQuery] RegisterDto registerDto)
         {
             var response = await _userService.RegisterAsync(registerDto);
 
             if (response == null) return BadRequest(new string[] { "User exist" });
 
             return Ok($"user: {response.FirstName} hashed password: {response.PasswordHash}");
+        }
+
+        [HttpGet("login")]
+        public async Task<IActionResult> LoginAsync([FromQuery] LoginDto registerDto)
+        {
+            var response = await _userService.LoginAsync(registerDto);
+
+            if (response == null) return BadRequest(new string[] { "user does not exist" });
+
+            return Ok($"token: {response.accessToken}");
         }
     }
 }

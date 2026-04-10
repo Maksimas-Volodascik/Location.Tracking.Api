@@ -1,4 +1,5 @@
 using Location.Tracking.Application;
+using Location.Tracking.Application.Shared;
 using Location.Tracking.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
@@ -17,18 +18,20 @@ builder.Services.AddAuthentication()
         jwtOptions.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["ApiConfiguration:Issuer"],////Must match the ValidIssuer
+            ValidIssuer = builder.Configuration["JwtConfiguration:Issuer"],////Must match the ValidIssuer
 
             ValidateAudience = true,
-            ValidAudience = builder.Configuration["ApiConfiguration:Audience"], //Must match the ValidAudience
+            ValidAudience = builder.Configuration["JwtConfiguration:Audience"], //Must match the ValidAudience
 
             ValidateLifetime = true, //checks "exp"
             RequireExpirationTime = true, //Forces token to have expiration time
 
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["ApiConfiguration:Token"]!)) //Verifies tokens signature using secret key
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfiguration:Token"]!)) //Verifies tokens signature using secret key
         };
     });
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtConfiguration")); //map Jwt configuration from appsettings.json to JwtSettings
 
 builder.Services.AddRouting(ops =>
 {

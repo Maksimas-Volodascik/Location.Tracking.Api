@@ -10,7 +10,7 @@ namespace Location.Tracking.Application.Interfaces.Services
 {
     public interface IUserService
     {
-        Task<User> LoginAsync(LoginDto credentials);
+        Task<TokenResponse> LoginAsync(LoginDto credentials);
         Task<User> RegisterAsync(RegisterDto credentials);
         //get user
         //delete user
