@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Location.Tracking.Application.DTOs;
+using Location.Tracking.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers
@@ -7,16 +9,30 @@ namespace Location.Tracking.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        public UsersController()
+        private readonly IUserService _userService;
+        public UsersController(IUserService userService)
         {
-            
+            _userService = userService;
         }
 
-        [HttpGet("/users")]
-        public async Task<IActionResult> GetUsers()
+        [HttpGet("register")]
+        public async Task<IActionResult> RegisterAsync([FromQuery] RegisterDto registerDto)
         {
+            var response = await _userService.RegisterAsync(registerDto);
 
-            return Ok("Hello");
+            if (response == null) return BadRequest(new string[] { "User exist" });
+
+            return Ok($"user: {response.FirstName} hashed password: {response.PasswordHash}");
+        }
+
+        [HttpGet("login")]
+        public async Task<IActionResult> LoginAsync([FromQuery] LoginDto registerDto)
+        {
+            var response = await _userService.LoginAsync(registerDto);
+
+            if (response == null) return BadRequest(new string[] { "user does not exist" });
+
+            return Ok($"token: {response.accessToken}");
         }
     }
 }
