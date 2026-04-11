@@ -13,10 +13,12 @@ namespace Location.Tracking.Domain.Entities
         [Required]
         public Guid Id { get; set; }
 
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
         [MaxLength(255)]
         public string Email { get; set; } = string.Empty;
+
+        [Required]
         public string PasswordHash { get; set; } = string.Empty;
 
         [MaxLength(50)]
@@ -29,5 +31,12 @@ namespace Location.Tracking.Domain.Entities
         public DateTimeOffset CreatedAt { get; set; } = DateTime.UtcNow;
 
         public List<Device> Devices = new List<Device>();
+
+        public User() { } 
+
+        public User(string email, string passwordHash) {
+            Email = email;
+            PasswordHash = passwordHash;
+        }
     }
 }
