@@ -3,10 +3,13 @@
   <ItemGroup>
     <Compile Remove="bin\**" />
     <Compile Remove="obj\**" />
+    <Compile Remove="Services\Tracking\**" />
     <EmbeddedResource Remove="bin\**" />
     <EmbeddedResource Remove="obj\**" />
+    <EmbeddedResource Remove="Services\Tracking\**" />
     <None Remove="bin\**" />
     <None Remove="obj\**" />
+    <None Remove="Services\Tracking\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Tracking\" />
     <Folder Include="Interfaces\Services\" />
     <Folder Include="Shared\" />
   </ItemGroup>

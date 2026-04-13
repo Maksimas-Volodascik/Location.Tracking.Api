@@ -31,15 +31,18 @@ builder.Services.AddAuthentication()
         };
     });
 
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtConfiguration")); //map Jwt configuration from appsettings.json to JwtSettings
+//map Jwt configuration from appsettings.json to JwtSettings
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtConfiguration")); 
 
 builder.Services.AddRouting(ops =>
 {
     ops.LowercaseUrls = true; //lowercase url
 });
 
+
 builder.Services.AddAuthentication();
-   
+builder.Services.AddAuthorization();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
