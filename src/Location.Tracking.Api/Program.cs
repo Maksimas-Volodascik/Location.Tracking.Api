@@ -1,3 +1,5 @@
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using Location.Tracking.Application;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Infrastructure;
@@ -39,6 +41,23 @@ builder.Services.AddRouting(ops =>
     ops.LowercaseUrls = true; //lowercase url
 });
 
+//API Versioning
+builder.Services.AddApiVersioning(opt =>
+{
+    opt.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+    opt.ReportApiVersions = true;
+    opt.AssumeDefaultVersionWhenUnspecified = true;
+    opt.ApiVersionReader = new UrlSegmentApiVersionReader();
+})
+.AddMvc()
+.AddApiExplorer(opt =>
+{
+    opt.GroupNameFormat = "'v'VVV";
+    opt.SubstituteApiVersionInUrl = true;
+});
+
+builder.Services.AddOpenApi("v1");
+builder.Services.AddOpenApi("v2");
 
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
@@ -50,7 +69,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference("/docs");
+    app.MapScalarApiReference("docs", opt =>
+    {//load separate documentation for different versions
+        opt.AddDocument("v1", "API Version 1.0", "/openapi/v1.json", isDefault: true);
+        opt.AddDocument("v2", "API Version 2.0", "/openapi/v2.json");
+    });
 }
 
 app.UseHttpsRedirection();

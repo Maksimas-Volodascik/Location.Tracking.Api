@@ -1,4 +1,5 @@
-﻿using Location.Tracking.Application.DTOs;
+﻿using Asp.Versioning;
+using Location.Tracking.Application.DTOs;
 using Location.Tracking.Application.Interfaces.Services;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Domain.Entities;
@@ -7,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion(1, Deprecated = true)]
+    [ApiVersion(2)] //v2 for testing
+    [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -35,6 +38,12 @@ namespace Location.Tracking.Api.Controllers
             if (response == null) return BadRequest(new string[] { "user does not exist" });
 
             return Ok($"token: {response.accessToken}");
+        }
+
+        [HttpGet("test")]
+        public IActionResult test()
+        {
+            return Ok();
         }
     }
 }
