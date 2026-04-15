@@ -28,7 +28,7 @@ namespace Location.Tracking.Infrastructure.Data
             modelBuilder.Entity<Device>()
                 .HasOne(e => e.DeviceModel)
                 .WithOne(e => e.Device)
-                .HasForeignKey<DeviceModel>(e => e.DeviceId)
+                .HasForeignKey<Device>(e => e.DeviceModelId)
                 .IsRequired();
 
             modelBuilder.Entity<Device>()

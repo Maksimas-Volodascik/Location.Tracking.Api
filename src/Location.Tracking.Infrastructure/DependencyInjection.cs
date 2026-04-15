@@ -24,10 +24,11 @@ namespace Location.Tracking.Infrastructure
             //Repositories
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IDeviceRepository, DeviceRepository>();
 
             //Services
             services.AddScoped<IUserService, UserService>();
-            
+            services.AddScoped<IDeviceService, DeviceService>();
             // Register future repositories:
             // services.AddScoped<ILocationRepository, LocationRepository>();
             // services.AddScoped<ITrackingSessionRepository, TrackingSessionRepository>();

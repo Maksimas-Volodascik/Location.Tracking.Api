@@ -22,7 +22,7 @@ namespace Location.Tracking.Domain.Entities
         [MaxLength(200)]
         public string Description { get; set; } = string.Empty; //OBD tracker, basic tracker etc..
 
-        public Guid DeviceId { get; set; }
+
         public Device Device { get; set; } = null!;
     }
 }

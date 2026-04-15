@@ -28,14 +28,16 @@ namespace Location.Tracking.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("DeviceModelId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Imei")
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("character varying(15)");
 
-                    b.Property<string>("IsEnabled")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("LastSeen")
                         .HasColumnType("timestamp with time zone");
@@ -49,6 +51,9 @@ namespace Location.Tracking.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DeviceModelId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -69,9 +74,6 @@ namespace Location.Tracking.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<Guid>("DeviceId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -83,9 +85,6 @@ namespace Location.Tracking.Infrastructure.Migrations
                         .HasColumnType("character varying(25)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DeviceId")
-                        .IsUnique();
 
                     b.ToTable("DeviceModel");
                 });
@@ -162,24 +161,21 @@ namespace Location.Tracking.Infrastructure.Migrations
 
             modelBuilder.Entity("Location.Tracking.Domain.Entities.Device", b =>
                 {
+                    b.HasOne("Location.Tracking.Domain.Entities.DeviceModel", "DeviceModel")
+                        .WithOne("Device")
+                        .HasForeignKey("Location.Tracking.Domain.Entities.Device", "DeviceModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Location.Tracking.Domain.Entities.User", "User")
                         .WithMany("Devices")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("DeviceModel");
+
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Location.Tracking.Domain.Entities.DeviceModel", b =>
-                {
-                    b.HasOne("Location.Tracking.Domain.Entities.Device", "Device")
-                        .WithOne("DeviceModel")
-                        .HasForeignKey("Location.Tracking.Domain.Entities.DeviceModel", "DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Device");
                 });
 
             modelBuilder.Entity("Location.Tracking.Domain.Entities.RawRecord", b =>
@@ -195,10 +191,13 @@ namespace Location.Tracking.Infrastructure.Migrations
 
             modelBuilder.Entity("Location.Tracking.Domain.Entities.Device", b =>
                 {
-                    b.Navigation("DeviceModel")
-                        .IsRequired();
-
                     b.Navigation("Records");
+                });
+
+            modelBuilder.Entity("Location.Tracking.Domain.Entities.DeviceModel", b =>
+                {
+                    b.Navigation("Device")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Location.Tracking.Domain.Entities.User", b =>

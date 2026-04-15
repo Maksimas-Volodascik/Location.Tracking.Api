@@ -12,6 +12,20 @@ namespace Location.Tracking.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "DeviceModel",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    ProtocolName = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: false),
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeviceModel", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -36,38 +50,24 @@ namespace Location.Tracking.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Imei = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    IsEnabled = table.Column<string>(type: "text", nullable: false),
+                    IsEnabled = table.Column<bool>(type: "boolean", nullable: false),
                     LastSeen = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DeviceModelId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Devices", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Devices_DeviceModel_DeviceModelId",
+                        column: x => x.DeviceModelId,
+                        principalTable: "DeviceModel",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Devices_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DeviceModel",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    ProtocolName = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: false),
-                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    DeviceId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeviceModel", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DeviceModel_Devices_DeviceId",
-                        column: x => x.DeviceId,
-                        principalTable: "Devices",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -94,9 +94,9 @@ namespace Location.Tracking.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeviceModel_DeviceId",
-                table: "DeviceModel",
-                column: "DeviceId",
+                name: "IX_Devices_DeviceModelId",
+                table: "Devices",
+                column: "DeviceModelId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -126,13 +126,13 @@ namespace Location.Tracking.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DeviceModel");
-
-            migrationBuilder.DropTable(
                 name: "RawRecords");
 
             migrationBuilder.DropTable(
                 name: "Devices");
+
+            migrationBuilder.DropTable(
+                name: "DeviceModel");
 
             migrationBuilder.DropTable(
                 name: "Users");

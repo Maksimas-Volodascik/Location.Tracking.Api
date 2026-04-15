@@ -19,11 +19,12 @@ namespace Location.Tracking.Domain.Entities
 
         [MaxLength(50)]
         public string Name { get; set; } = string.Empty; //User defined name e.g. "Device for VIN xyz123"
-        public string IsEnabled { get; set; } = string.Empty;
+        public bool IsEnabled { get; set; } = true;
         public DateTimeOffset? LastSeen { get; set; }
 
         public Guid UserId { get; set; }
         public User User { get; set; } = null!;
+        public Guid DeviceModelId { get; set; }
         public DeviceModel DeviceModel { get; set; } = null!;
 
         public List<RawRecord> Records = new List<RawRecord>();
