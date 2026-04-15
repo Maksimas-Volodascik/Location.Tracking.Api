@@ -24,6 +24,7 @@ namespace Location.Tracking.Domain.Entities
 
         public Guid UserId { get; set; }
         public User User { get; set; } = null!;
+        public Guid DeviceModelId { get; set; }
         public DeviceModel DeviceModel { get; set; } = null!;
 
         public List<RawRecord> Records = new List<RawRecord>();
