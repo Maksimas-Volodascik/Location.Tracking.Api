@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Location.Tracking.Application.DTOs;
 using Location.Tracking.Application.Interfaces.Services;
 using Location.Tracking.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -33,8 +34,10 @@ namespace Location.Tracking.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDeviceAsync()
+        public async Task<IActionResult> CreateDeviceAsync([FromQuery] DeviceConfigurationDto deviceConfiguration)
         {
+            await _deviceService.CreateNewDeviceAsync(deviceConfiguration);
+
             return Ok();
         }
 
