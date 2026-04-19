@@ -1,4 +1,5 @@
-﻿using Location.Tracking.Application.DTOs;
+﻿using AutoMapper;
+using Location.Tracking.Application.DTOs;
 using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Application.Interfaces.Services;
 using Location.Tracking.Domain.Entities;
@@ -14,10 +15,12 @@ namespace Location.Tracking.Application.Services
     {
         private readonly IDeviceRepository _deviceRepository;
         private readonly IDeviceModelService _deviceModelService;
-        public DeviceService(IDeviceRepository deviceRepository, IDeviceModelService deviceModelService)
+        private readonly IMapper _mapper;
+        public DeviceService(IDeviceRepository deviceRepository, IDeviceModelService deviceModelService, IMapper mapper)
         {
             _deviceRepository = deviceRepository;
             _deviceModelService = deviceModelService;
+            _mapper = mapper;
         }
 
         public async Task CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto)
@@ -38,9 +41,9 @@ namespace Location.Tracking.Application.Services
             await _deviceRepository.SaveChangesAsync();
         }
 
-        public async Task DeleteDeviceAsync(Guid guid)
+        public async Task DeleteDeviceAsync(Guid deviceId)
         {
-            var device = await _deviceRepository.GetByIdAsync(guid);
+            var device = await _deviceRepository.GetByIdAsync(deviceId);
 
             if (device == null) return;
 
@@ -55,16 +58,30 @@ namespace Location.Tracking.Application.Services
             return devices;
         }
 
-        public async Task<Device> GetDeviceByIdAsync(Guid uuid)
+        public async Task<Device> GetDeviceByIdAsync(Guid deviceId)
         {
-            var device = await _deviceRepository.GetByIdAsync(uuid);
+            Device device = await _deviceRepository.GetByIdAsync(deviceId);
 
             return device;
         }
 
-        public Task UpdateDeviceAsync()
+        public async Task<Device?> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId)
         {
-            throw new NotImplementedException();
+            var deviceModel = await _deviceModelService.GetDeviceModelByName(deviceConfigurationDto.DeviceModelName);
+
+            if (deviceModel == null) return null; //modelNotFound
+
+            Device? device = await _deviceRepository.GetByIdAsync(deviceId);
+
+            if (device == null) return null;
+
+            device = _mapper.Map(deviceConfigurationDto, device);
+            device.DeviceModelId = deviceModel.Id;
+
+            _deviceRepository.Update(device);
+            await _deviceRepository.SaveChangesAsync();
+
+            return device;
         }
     }
 }

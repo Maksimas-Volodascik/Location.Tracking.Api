@@ -11,9 +11,9 @@ namespace Location.Tracking.Application.Interfaces.Services
     public interface IDeviceService
     {
         Task<IEnumerable<Device>> GetAllDevicesAsync();
-        Task<Device> GetDeviceByIdAsync(Guid uuid);
+        Task<Device> GetDeviceByIdAsync(Guid deviceId);
         Task CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto);
-        Task UpdateDeviceAsync();
-        Task DeleteDeviceAsync(Guid guid);
+        Task<Device?> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId);
+        Task DeleteDeviceAsync(Guid deviceId);
     }
 }

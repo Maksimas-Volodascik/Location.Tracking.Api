@@ -25,10 +25,10 @@ namespace Location.Tracking.Api.Controllers
             return Ok(devices);
         }
 
-        [HttpGet("{uuid}")]
-        public async Task<ActionResult<Device>> GetDeviceByIdAsync(Guid uuid)
+        [HttpGet("{deviceId}")]
+        public async Task<ActionResult<Device>> GetDeviceByIdAsync(Guid deviceId)
         {
-            var device = await _deviceService.GetDeviceByIdAsync(uuid);
+            var device = await _deviceService.GetDeviceByIdAsync(deviceId);
 
             return Ok(device);
         }
@@ -41,16 +41,18 @@ namespace Location.Tracking.Api.Controllers
             return Ok();
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> UpdateDeviceAsync()
+        [HttpPatch("{deviceId}")]
+        public async Task<IActionResult> UpdateDeviceAsync([FromQuery] DeviceConfigurationDto deviceConfiguration, Guid deviceId)
         {
-            return Ok();
+            await _deviceService.UpdateDeviceAsync(deviceConfiguration, deviceId);
+
+            return Ok(deviceId);
         }
 
-        [HttpDelete("{uuid}")]
-        public async Task<IActionResult> DeleteDeviceAsync(Guid uuid)
+        [HttpDelete("{deviceId}")]
+        public async Task<IActionResult> DeleteDeviceAsync(Guid deviceId)
         {
-            await _deviceService.DeleteDeviceAsync(uuid);
+            await _deviceService.DeleteDeviceAsync(deviceId);
             return Ok();
         }
     }
