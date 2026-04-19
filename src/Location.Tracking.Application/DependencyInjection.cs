@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using FluentValidation;
+using Location.Tracking.Application.Features.AutoMapper;
 using Location.Tracking.Application.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,11 +19,14 @@ namespace Location.Tracking.Application
             // Register FluentValidation (scans all validators in the assembly)
             services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection), includeInternalTypes: true);
 
+            //services.AddSingleton<IMapper, Mapper>();
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<DeviceProfile>();
+            });
 
             // Add other application services here later
-
             // Riok.Mapperly:
-            // services.AddSingleton<IMapper, Mapper>();
 
             return services;
         }

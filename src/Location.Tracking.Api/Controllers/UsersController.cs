@@ -10,7 +10,7 @@ namespace Location.Tracking.Api.Controllers
 {
     [ApiVersion(1, Deprecated = true)]
     [ApiVersion(2)] //v2 for testing
-    [Route("api/v{v:apiVersion}/[controller]")]
+    [Route("v{v:apiVersion}/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -38,12 +38,6 @@ namespace Location.Tracking.Api.Controllers
             if (response == null) return BadRequest(new string[] { "user does not exist" });
 
             return Ok($"token: {response.accessToken}");
-        }
-
-        [HttpGet("test")]
-        public IActionResult test()
-        {
-            return Ok();
         }
     }
 }

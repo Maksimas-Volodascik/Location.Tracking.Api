@@ -21,7 +21,7 @@ namespace Location.Tracking.Infrastructure.Repositories
 
         public async Task AddAsync(T entity) => await _dbSet.AddAsync(entity);
 
-        public async Task<T?> GetByIdAsync(Guid id) => await _dbSet.FindAsync(id);
+        public async Task<T?> GetByIdAsync(Guid uuid) => await _dbSet.FindAsync(uuid);
 
         public void Update(T entity) => _dbSet.Update(entity);
 
