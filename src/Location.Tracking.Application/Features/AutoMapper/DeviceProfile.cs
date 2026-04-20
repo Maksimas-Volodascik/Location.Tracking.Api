@@ -14,7 +14,7 @@ namespace Location.Tracking.Application.Features.AutoMapper
         public DeviceProfile()
         {
             CreateMap<DeviceConfigurationDto, Device>()
-                .ForMember(d => d.DeviceModelId, opt => opt.Ignore())
+                .ForMember(d => d.DeviceModelId, opt => opt.Ignore());
         }
     }
 }
