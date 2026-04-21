@@ -24,7 +24,7 @@ namespace Location.Tracking.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<Result<Device>> CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto)
+        public async Task<Result> CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto)
         {
             var deviceModel = await _deviceModelService.GetDeviceModelByName(deviceConfigurationDto.DeviceModelName);
 
@@ -41,10 +41,10 @@ namespace Location.Tracking.Application.Services
             await _deviceRepository.AddAsync(device);
             await _deviceRepository.SaveChangesAsync();
 
-            return Result<Device>.Success(device);
+            return Result.Success();
         }
 
-        public async Task<Result<Device>> DeleteDeviceAsync(Guid deviceId)
+        public async Task<Result> DeleteDeviceAsync(Guid deviceId)
         {
             var device = await _deviceRepository.GetByIdAsync(deviceId);
 
@@ -53,7 +53,7 @@ namespace Location.Tracking.Application.Services
             _deviceRepository.Delete(device);
             await _deviceRepository.SaveChangesAsync();
 
-            return Result<Device>.Success(device);
+            return Result.Success();
         }
 
         public async Task<Result<IEnumerable<Device>>> GetAllDevicesAsync()
@@ -72,7 +72,7 @@ namespace Location.Tracking.Application.Services
             return Result<Device>.Success(device);
         }
 
-        public async Task<Result<Device>> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId)
+        public async Task<Result> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId)
         {
             var deviceModel = await _deviceModelService.GetDeviceModelByName(deviceConfigurationDto.DeviceModelName);
 
@@ -88,7 +88,7 @@ namespace Location.Tracking.Application.Services
             _deviceRepository.Update(device);
             await _deviceRepository.SaveChangesAsync();
 
-            return Result<Device>.Success(device);
+            return Result.Success();
         }
     }
 }

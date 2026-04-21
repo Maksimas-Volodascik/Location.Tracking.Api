@@ -49,7 +49,7 @@ namespace Location.Tracking.Api.Controllers
         {
             await _deviceService.UpdateDeviceAsync(deviceConfiguration, deviceId);
 
-            return Ok(deviceId);
+            return Ok();
         }
 
         [HttpDelete("{deviceId}")]
