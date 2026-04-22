@@ -47,7 +47,9 @@ namespace Location.Tracking.Api.Controllers
         [HttpPatch("{deviceId}")]
         public async Task<IActionResult> UpdateDeviceAsync([FromQuery] DeviceConfigurationDto deviceConfiguration, Guid deviceId)
         {
-            await _deviceService.UpdateDeviceAsync(deviceConfiguration, deviceId);
+            var result = await _deviceService.UpdateDeviceAsync(deviceConfiguration, deviceId);
+
+            if (!result.IsSuccess) return NotFound(result.Error!.ErrorMessage);
 
             return Ok();
         }
@@ -55,7 +57,10 @@ namespace Location.Tracking.Api.Controllers
         [HttpDelete("{deviceId}")]
         public async Task<IActionResult> DeleteDeviceAsync(Guid deviceId)
         {
-            await _deviceService.DeleteDeviceAsync(deviceId);
+            var result = await _deviceService.DeleteDeviceAsync(deviceId);
+
+            if (!result.IsSuccess) return NotFound(result.Error!.ErrorMessage);
+
             return Ok();
         }
     }
