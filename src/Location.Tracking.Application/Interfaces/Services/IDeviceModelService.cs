@@ -12,6 +12,7 @@ namespace Location.Tracking.Application.Interfaces.Services
     public interface IDeviceModelService
     {
         Task<Result<DeviceModel>> GetDeviceModelByNameAsync(string model);
+        Task<Result<DeviceModel>> GetDeviceModelByIdAsync(Guid deviceModelId);
         Task<Result<IEnumerable<DeviceModel>>> GetAllDeviceModelsAsync();
         Task<Result> CreateDeviceModelAsync(DeviceModelDto deviceModelDto);
         Task<Result> UpdateDeviceModelAsync(DeviceModelDto deviceModelDto, Guid deviceModelId);

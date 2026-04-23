@@ -28,14 +28,6 @@ namespace Location.Tracking.Api.Controllers
             return Ok(deviceModels);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<Device>> GetDeviceModelByNameAsync(string deviceModelName)
-        {
-            var deviceModel = await _deviceModelService.GetDeviceModelByNameAsync(deviceModelName);
-
-            return Ok(deviceModel);
-        }
-
         [HttpPost]
         public async Task<IActionResult> CreateDeviceModelAsync([FromQuery] DeviceModelDto deviceModelDto)
         {

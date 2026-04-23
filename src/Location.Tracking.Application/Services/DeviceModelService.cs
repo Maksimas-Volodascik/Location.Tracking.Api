@@ -1,4 +1,5 @@
-﻿using Location.Tracking.Application.DTOs;
+﻿using AutoMapper;
+using Location.Tracking.Application.DTOs;
 using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Application.Interfaces.Services;
 using Location.Tracking.Application.Shared;
@@ -14,24 +15,51 @@ namespace Location.Tracking.Application.Services
     public class DeviceModelService : IDeviceModelService
     {
         private readonly IDeviceModelRepository _deviceModelRepository;
-        public DeviceModelService(IDeviceModelRepository deviceModelRepository)
+        private readonly IMapper _mapper;
+        public DeviceModelService(IDeviceModelRepository deviceModelRepository, IMapper mapper)
         {
             _deviceModelRepository = deviceModelRepository;
+            _mapper = mapper;
         }
 
-        public Task<Result> CreateDeviceModelAsync(DeviceModelDto deviceModelDto)
+        public async Task<Result> CreateDeviceModelAsync(DeviceModelDto deviceModelDto)
         {
-            throw new NotImplementedException();
+            DeviceModel deviceModel = new DeviceModel();
+
+            _mapper.Map(deviceModelDto, deviceModel);
+
+            await _deviceModelRepository.AddAsync(deviceModel);
+            await _deviceModelRepository.SaveChangesAsync();
+
+            return Result.Success();
         }
 
-        public Task<Result> DeleteDeviceModelAsync(Guid deviceModelId)
+        public async Task<Result> DeleteDeviceModelAsync(Guid deviceModelId)
         {
-            throw new NotImplementedException();
+            var deviceModel = await GetDeviceModelByIdAsync(deviceModelId);
+
+            if (!deviceModel.IsSuccess) return Result.Failure(deviceModel.Error!);
+
+            _deviceModelRepository.Delete(deviceModel.Data!);
+            await _deviceModelRepository.SaveChangesAsync();
+
+            return Result.Success();
         }
 
-        public Task<Result<IEnumerable<DeviceModel>>> GetAllDeviceModelsAsync()
+        public async Task<Result<IEnumerable<DeviceModel>>> GetAllDeviceModelsAsync()
         {
-            throw new NotImplementedException();
+            var deviceModelList = await _deviceModelRepository.GetAllDeviceModelsAsync();
+
+            return Result<IEnumerable<DeviceModel>>.Success(deviceModelList);
+        }
+
+        public async Task<Result<DeviceModel>> GetDeviceModelByIdAsync(Guid deviceModelId)
+        {
+            DeviceModel? deviceModel = await _deviceModelRepository.GetByIdAsync(deviceModelId);
+
+            if (deviceModel == null) return Result<DeviceModel>.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
+
+            return Result<DeviceModel>.Success(deviceModel);
         }
 
         public async Task<Result<DeviceModel>> GetDeviceModelByNameAsync(string model)
@@ -43,9 +71,18 @@ namespace Location.Tracking.Application.Services
             return Result<DeviceModel>.Success(deviceModel);
         }
 
-        public Task<Result> UpdateDeviceModelAsync(DeviceModelDto deviceModelDto, Guid deviceModelId)
+        public async Task<Result> UpdateDeviceModelAsync(DeviceModelDto deviceModelDto, Guid deviceModelId)
         {
-            throw new NotImplementedException();
+            var deviceModel = await GetDeviceModelByIdAsync(deviceModelId);
+
+            if (!deviceModel.IsSuccess) return Result.Failure(deviceModel.Error!);
+
+            _mapper.Map(deviceModelDto, deviceModel.Data);
+
+            _deviceModelRepository.Update(deviceModel.Data!);
+            await _deviceModelRepository.SaveChangesAsync();
+
+            return Result.Success();
         }
     }
 }

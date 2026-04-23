@@ -26,7 +26,7 @@ namespace Location.Tracking.Application.Services
 
         public async Task<Result> CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto)
         {
-            var deviceModel = await _deviceModelService.GetDeviceModelByName(deviceConfigurationDto.DeviceModelName);
+            var deviceModel = await _deviceModelService.GetDeviceModelByNameAsync(deviceConfigurationDto.DeviceModelName);
 
             if (deviceModel == null) return Result<Device>.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
 
@@ -34,7 +34,7 @@ namespace Location.Tracking.Application.Services
             {
                 Imei = deviceConfigurationDto.Imei,
                 IsEnabled = deviceConfigurationDto.IsEnabled,
-                DeviceModelId = deviceModel.Id,
+                DeviceModelId = deviceModel.Data!.Id,
                 UserId = new Guid("019d971c-510c-7d7f-ac02-c7d5456dfa2c")//temporary
             };
 
@@ -74,7 +74,7 @@ namespace Location.Tracking.Application.Services
 
         public async Task<Result> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId)
         {
-            var deviceModel = await _deviceModelService.GetDeviceModelByName(deviceConfigurationDto.DeviceModelName);
+            var deviceModel = await _deviceModelService.GetDeviceModelByNameAsync(deviceConfigurationDto.DeviceModelName);
 
             if (deviceModel == null) return Result<Device>.Failure(Errors.DeviceModelErrors.DeviceModelNotFound); 
 
@@ -83,7 +83,7 @@ namespace Location.Tracking.Application.Services
             if (device == null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceNotFound);
 
             device = _mapper.Map(deviceConfigurationDto, device);
-            device.DeviceModelId = deviceModel.Id;
+            device.DeviceModelId = deviceModel.Data!.Id;
 
             _deviceRepository.Update(device);
             await _deviceRepository.SaveChangesAsync();

@@ -23,6 +23,7 @@ namespace Location.Tracking.Application
             services.AddAutoMapper(cfg =>
             {
                 cfg.AddProfile<DeviceProfile>();
+                cfg.AddProfile<DeviceModelProfile>();
             });
 
             // Add other application services here later
