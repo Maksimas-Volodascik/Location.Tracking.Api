@@ -16,26 +16,32 @@ namespace Location.Tracking.Application.Services
     {
         private readonly IDeviceRepository _deviceRepository;
         private readonly IDeviceModelService _deviceModelService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public DeviceService(IDeviceRepository deviceRepository, IDeviceModelService deviceModelService, IMapper mapper)
+        public DeviceService(IDeviceRepository deviceRepository, IDeviceModelService deviceModelService, IUserService userService, IMapper mapper)
         {
             _deviceRepository = deviceRepository;
             _deviceModelService = deviceModelService;
+            _userService = userService;
             _mapper = mapper;
         }
 
         public async Task<Result> CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, string deviceId)
         {
+            Guid userId = new Guid(deviceId);
+
+            //todo: check if user exists
+
             var deviceModel = await _deviceModelService.GetDeviceModelByNameAsync(deviceConfigurationDto.DeviceModelName);
 
-            if (deviceModel == null) return Result<Device>.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
+            if (!deviceModel.IsSuccess) return Result<Device>.Failure(deviceModel.Error);
 
             Device device = new Device()
             {
                 Imei = deviceConfigurationDto.Imei,
                 IsEnabled = deviceConfigurationDto.IsEnabled,
-                DeviceModelId = deviceModel.Data!.Id,
-                UserId = new Guid(deviceId)
+                DeviceModelId = deviceModel.Data.Id,
+                UserId = userId
             };
 
             await _deviceRepository.AddAsync(device);
