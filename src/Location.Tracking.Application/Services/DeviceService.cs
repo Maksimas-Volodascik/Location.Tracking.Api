@@ -24,7 +24,7 @@ namespace Location.Tracking.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<Result> CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto)
+        public async Task<Result> CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, string deviceId)
         {
             var deviceModel = await _deviceModelService.GetDeviceModelByNameAsync(deviceConfigurationDto.DeviceModelName);
 
@@ -35,7 +35,7 @@ namespace Location.Tracking.Application.Services
                 Imei = deviceConfigurationDto.Imei,
                 IsEnabled = deviceConfigurationDto.IsEnabled,
                 DeviceModelId = deviceModel.Data!.Id,
-                UserId = new Guid("019d971c-510c-7d7f-ac02-c7d5456dfa2c")//temporary
+                UserId = new Guid(deviceId)
             };
 
             await _deviceRepository.AddAsync(device);

@@ -13,7 +13,7 @@ namespace Location.Tracking.Application.Interfaces.Services
     {
         Task<Result<IEnumerable<Device>>> GetAllDevicesAsync();
         Task<Result<Device>> GetDeviceByIdAsync(Guid deviceId);
-        Task<Result> CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto);
+        Task<Result> CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, string userId);
         Task<Result> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId);
         Task<Result> DeleteDeviceAsync(Guid deviceId);
     }

@@ -3,10 +3,13 @@ using Location.Tracking.Application.DTOs;
 using Location.Tracking.Application.Interfaces.Services;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Location.Tracking.Api.Controllers
 {
+    [Authorize]
     [ApiVersion(1)]
     [Route("v{v:apiVersion}/[controller]")]
     [ApiController]
@@ -37,11 +40,13 @@ namespace Location.Tracking.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDeviceAsync([FromQuery] DeviceConfigurationDto deviceConfiguration)
         {
-            var result = await _deviceService.CreateNewDeviceAsync(deviceConfiguration);
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("Missing Name Identifier");
+
+            var result = await _deviceService.CreateNewDeviceAsync(deviceConfiguration, userId);
 
             if (result.IsSuccess == false) return BadRequest(result.Error!.ErrorMessage);
 
-            return Ok();
+            return Ok(userId);
         }
 
         [HttpPatch("{deviceId}")]
