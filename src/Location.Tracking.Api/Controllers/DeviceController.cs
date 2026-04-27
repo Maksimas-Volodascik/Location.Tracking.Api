@@ -1,11 +1,15 @@
 ﻿using Asp.Versioning;
 using Location.Tracking.Application.DTOs;
 using Location.Tracking.Application.Interfaces.Services;
+using Location.Tracking.Application.Shared;
 using Location.Tracking.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Location.Tracking.Api.Controllers
 {
+    [Authorize]
     [ApiVersion(1)]
     [Route("v{v:apiVersion}/[controller]")]
     [ApiController]
@@ -36,23 +40,32 @@ namespace Location.Tracking.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDeviceAsync([FromQuery] DeviceConfigurationDto deviceConfiguration)
         {
-            await _deviceService.CreateNewDeviceAsync(deviceConfiguration);
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("Missing Name Identifier");
 
-            return Ok();
+            var result = await _deviceService.CreateNewDeviceAsync(deviceConfiguration, userId);
+
+            if (result.IsSuccess == false) return BadRequest(result.Error!.ErrorMessage);
+
+            return Ok(userId);
         }
 
         [HttpPatch("{deviceId}")]
         public async Task<IActionResult> UpdateDeviceAsync([FromQuery] DeviceConfigurationDto deviceConfiguration, Guid deviceId)
         {
-            await _deviceService.UpdateDeviceAsync(deviceConfiguration, deviceId);
+            var result = await _deviceService.UpdateDeviceAsync(deviceConfiguration, deviceId);
 
-            return Ok(deviceId);
+            if (!result.IsSuccess) return NotFound(result.Error!.ErrorMessage);
+
+            return Ok();
         }
 
         [HttpDelete("{deviceId}")]
         public async Task<IActionResult> DeleteDeviceAsync(Guid deviceId)
         {
-            await _deviceService.DeleteDeviceAsync(deviceId);
+            var result = await _deviceService.DeleteDeviceAsync(deviceId);
+
+            if (!result.IsSuccess) return NotFound(result.Error!.ErrorMessage);
+
             return Ok();
         }
     }

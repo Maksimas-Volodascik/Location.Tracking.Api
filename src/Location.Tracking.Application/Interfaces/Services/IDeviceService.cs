@@ -1,4 +1,5 @@
 ﻿using Location.Tracking.Application.DTOs;
+using Location.Tracking.Application.Shared;
 using Location.Tracking.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,10 @@ namespace Location.Tracking.Application.Interfaces.Services
 {
     public interface IDeviceService
     {
-        Task<IEnumerable<Device>> GetAllDevicesAsync();
-        Task<Device> GetDeviceByIdAsync(Guid deviceId);
-        Task CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto);
-        Task<Device?> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId);
-        Task DeleteDeviceAsync(Guid deviceId);
+        Task<Result<IEnumerable<Device>>> GetAllDevicesAsync();
+        Task<Result<Device>> GetDeviceByIdAsync(Guid deviceId);
+        Task<Result> CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, string userId);
+        Task<Result> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId);
+        Task<Result> DeleteDeviceAsync(Guid deviceId);
     }
 }

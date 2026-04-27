@@ -10,5 +10,6 @@ namespace Location.Tracking.Application.Interfaces.Repositories
     public interface IDeviceModelRepository : IBaseRepository<DeviceModel>
     {
         Task<DeviceModel?> GetDeviceModelByName(string name);
+        Task<IEnumerable<DeviceModel>> GetAllDeviceModelsAsync();
     }
 }

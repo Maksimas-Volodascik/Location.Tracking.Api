@@ -2,6 +2,7 @@
 using Location.Tracking.Application.DTOs;
 using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Application.Interfaces.Services;
+using Location.Tracking.Application.Shared;
 using Location.Tracking.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,73 +16,85 @@ namespace Location.Tracking.Application.Services
     {
         private readonly IDeviceRepository _deviceRepository;
         private readonly IDeviceModelService _deviceModelService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public DeviceService(IDeviceRepository deviceRepository, IDeviceModelService deviceModelService, IMapper mapper)
+        public DeviceService(IDeviceRepository deviceRepository, IDeviceModelService deviceModelService, IUserService userService, IMapper mapper)
         {
             _deviceRepository = deviceRepository;
             _deviceModelService = deviceModelService;
+            _userService = userService;
             _mapper = mapper;
         }
 
-        public async Task CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto)
+        public async Task<Result> CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, string deviceId)
         {
-            var deviceModel = await _deviceModelService.GetDeviceModelByName(deviceConfigurationDto.DeviceModelName);
+            Guid userId = new Guid(deviceId);
 
-            if (deviceModel == null) return; // return bad response
+            //todo: check if user exists
+
+            var deviceModel = await _deviceModelService.GetDeviceModelByNameAsync(deviceConfigurationDto.DeviceModelName);
+
+            if (!deviceModel.IsSuccess) return Result<Device>.Failure(deviceModel.Error);
 
             Device device = new Device()
             {
                 Imei = deviceConfigurationDto.Imei,
                 IsEnabled = deviceConfigurationDto.IsEnabled,
-                DeviceModelId = deviceModel.Id,
-                UserId = new Guid("019d971c-510c-7d7f-ac02-c7d5456dfa2c")//temporary
+                DeviceModelId = deviceModel.Data.Id,
+                UserId = userId
             };
 
             await _deviceRepository.AddAsync(device);
             await _deviceRepository.SaveChangesAsync();
+
+            return Result.Success();
         }
 
-        public async Task DeleteDeviceAsync(Guid deviceId)
+        public async Task<Result> DeleteDeviceAsync(Guid deviceId)
         {
             var device = await _deviceRepository.GetByIdAsync(deviceId);
 
-            if (device == null) return;
+            if (device == null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceNotFound);
 
             _deviceRepository.Delete(device);
             await _deviceRepository.SaveChangesAsync();
+
+            return Result.Success();
         }
 
-        public async Task<IEnumerable<Device>> GetAllDevicesAsync()
+        public async Task<Result<IEnumerable<Device>>> GetAllDevicesAsync()
         {
             var devices = await _deviceRepository.GetAllDevicesAsync();
 
-            return devices;
+            return Result<IEnumerable<Device>>.Success(devices);
         }
 
-        public async Task<Device> GetDeviceByIdAsync(Guid deviceId)
+        public async Task<Result<Device>> GetDeviceByIdAsync(Guid deviceId)
         {
-            Device device = await _deviceRepository.GetByIdAsync(deviceId);
+            Device? device = await _deviceRepository.GetByIdAsync(deviceId);
 
-            return device;
+            if(device == null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceNotFound);
+
+            return Result<Device>.Success(device);
         }
 
-        public async Task<Device?> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId)
+        public async Task<Result> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId)
         {
-            var deviceModel = await _deviceModelService.GetDeviceModelByName(deviceConfigurationDto.DeviceModelName);
+            var deviceModel = await _deviceModelService.GetDeviceModelByNameAsync(deviceConfigurationDto.DeviceModelName);
 
-            if (deviceModel == null) return null; //modelNotFound
+            if (deviceModel == null) return Result<Device>.Failure(Errors.DeviceModelErrors.DeviceModelNotFound); 
 
             Device? device = await _deviceRepository.GetByIdAsync(deviceId);
 
-            if (device == null) return null;
+            if (device == null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceNotFound);
 
             device = _mapper.Map(deviceConfigurationDto, device);
-            device.DeviceModelId = deviceModel.Id;
+            device.DeviceModelId = deviceModel.Data!.Id;
 
             _deviceRepository.Update(device);
             await _deviceRepository.SaveChangesAsync();
 
-            return device;
+            return Result.Success();
         }
     }
 }

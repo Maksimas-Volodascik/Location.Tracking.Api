@@ -1,8 +1,10 @@
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
+using Location.Tracking.Api.Middleware;
 using Location.Tracking.Application;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
@@ -12,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
+
 
 //JWT Auth
 builder.Services.AddAuthentication()
@@ -33,8 +36,9 @@ builder.Services.AddAuthentication()
         };
     });
 
-//map Jwt configuration from appsettings.json to JwtSettings
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtConfiguration")); 
+//map JWT and API Limit configuration from appsettings.json to settings class
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtConfiguration"));
+builder.Services.Configure<ApiLimitSettings>(builder.Configuration.GetSection("ApiRateLimiter"));
 
 builder.Services.AddRouting(ops =>
 {
@@ -56,6 +60,10 @@ builder.Services.AddApiVersioning(opt =>
     opt.SubstituteApiVersionInUrl = true;
 });
 
+ApiLimitSettings apiLimitSettings = new ApiLimitSettings();
+builder.Configuration.GetSection("ApiRateLimiter").Bind(apiLimitSettings);
+builder.Services.AddApiRateLimiter(apiLimitSettings); //pass settings from appsettings to api limiter method
+
 builder.Services.AddOpenApi("v1");
 builder.Services.AddOpenApi("v2");
 
@@ -75,6 +83,11 @@ if (app.Environment.IsDevelopment())
         opt.AddDocument("v2", "API Version 2.0", "/openapi/v2.json");
     });
 }
+
+app.UseRateLimiter();
+
+app.MapControllers()
+    .RequireRateLimiting("FixedLimiter"); //apply rate limiting to all controllers
 
 app.UseHttpsRedirection();
 

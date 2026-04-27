@@ -39,7 +39,6 @@ namespace Location.Tracking.Application.Services
             }
 
             TokenResponse token = new TokenResponse { accessToken = CreateAccessToken(user) };
-            //TokenResponse token = new TokenResponse { accessToken = _jwtSettings.Token };
                
             return token;
         }

@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Location.Tracking.Application.Features.AutoMapper
 {
-    public class DeviceProfile : Profile
+    public class DeviceModelProfile : Profile
     {
-        public DeviceProfile()
+        public DeviceModelProfile()
         {
-            CreateMap<DeviceConfigurationDto, Device>()
-                .ForMember(dest => dest.DeviceModelId, opt => opt.Ignore());
+            CreateMap<DeviceModelDto, DeviceModel>()
+                .ForAllMembers(o => o.Condition((src, dest, srcMember) => srcMember != null)); //map parameters that are not null
         }
     }
 }

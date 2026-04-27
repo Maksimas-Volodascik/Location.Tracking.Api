@@ -18,6 +18,14 @@ namespace Location.Tracking.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<DeviceModel>> GetAllDeviceModelsAsync()
+        {
+            var deviceModels = from deviceModel in _context.DeviceModel
+                               select deviceModel;
+            //todo: pagination
+            return await deviceModels.ToListAsync();
+        }
+
         public async Task<DeviceModel?> GetDeviceModelByName(string name)
         {
             var deviceModel = await _context.Set<DeviceModel>().FirstOrDefaultAsync(e => e.ProtocolName.Equals(name));
