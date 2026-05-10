@@ -27,7 +27,6 @@ namespace Location.Tracking.Application
             });
 
             // Add other application services here later
-            // Riok.Mapperly:
 
             return services;
         }

@@ -18,9 +18,9 @@ builder.Services.AddControllers();
 
 //JWT Auth
 builder.Services.AddAuthentication()
-    .AddJwtBearer("BearerAuth", jwtOptions =>
+    .AddJwtBearer("BearerAuth", opt =>
     {
-        jwtOptions.TokenValidationParameters = new TokenValidationParameters
+        opt.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidIssuer = builder.Configuration["JwtConfiguration:Issuer"],////Must match the ValidIssuer
@@ -40,9 +40,9 @@ builder.Services.AddAuthentication()
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtConfiguration"));
 builder.Services.Configure<ApiLimitSettings>(builder.Configuration.GetSection("ApiRateLimiter"));
 
-builder.Services.AddRouting(ops =>
+builder.Services.AddRouting(opt =>
 {
-    ops.LowercaseUrls = true; //lowercase url
+    opt.LowercaseUrls = true; //lowercase url
 });
 
 //API Versioning
@@ -64,6 +64,17 @@ ApiLimitSettings apiLimitSettings = new ApiLimitSettings();
 builder.Configuration.GetSection("ApiRateLimiter").Bind(apiLimitSettings);
 builder.Services.AddApiRateLimiter(apiLimitSettings); //pass settings from appsettings to api limiter method
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddOpenApi("v1");
 builder.Services.AddOpenApi("v2");
 
@@ -83,6 +94,8 @@ if (app.Environment.IsDevelopment())
         opt.AddDocument("v2", "API Version 2.0", "/openapi/v2.json");
     });
 }
+
+app.UseCors("AllowFrontend");
 
 app.UseRateLimiter();
 

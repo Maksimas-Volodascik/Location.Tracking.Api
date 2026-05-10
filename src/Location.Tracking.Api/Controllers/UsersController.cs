@@ -20,17 +20,17 @@ namespace Location.Tracking.Api.Controllers
             _userService = userService;
         }
 
-        [HttpGet("register")]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromQuery] RegisterDto registerDto)
         {
             var response = await _userService.RegisterAsync(registerDto);
 
             if (response == null) return BadRequest(new string[] { "User exist" });
 
-            return Ok($"user: {response.FirstName} hashed password: {response.PasswordHash}");
+            return Ok();
         }
 
-        [HttpGet("login")]
+        [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromQuery] LoginDto registerDto)
         {
             var response = await _userService.LoginAsync(registerDto);
