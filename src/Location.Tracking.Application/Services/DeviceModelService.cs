@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Location.Tracking.Application.DTOs;
+using Location.Tracking.Application.DTOs.Device;
 using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Application.Interfaces.Services;
 using Location.Tracking.Application.Shared;

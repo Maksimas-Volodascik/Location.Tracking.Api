@@ -26,6 +26,11 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\Dashboard\" />
+    <Folder Include="DTOs\Users\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

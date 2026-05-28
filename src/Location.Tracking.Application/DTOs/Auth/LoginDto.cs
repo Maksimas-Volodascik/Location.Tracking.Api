@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Location.Tracking.Application.DTOs
+namespace Location.Tracking.Application.DTOs.Auth
 {
     public class LoginDto
     {
