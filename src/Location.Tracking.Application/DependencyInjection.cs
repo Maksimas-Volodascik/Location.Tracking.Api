@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
-using Location.Tracking.Application.Features.AutoMapper;
+using Location.Tracking.Application.AutoMapper;
 using Location.Tracking.Application.Shared;
 using Microsoft.Extensions.DependencyInjection;
 

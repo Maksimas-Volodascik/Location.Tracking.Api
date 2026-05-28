@@ -1,5 +1,4 @@
-﻿using Location.Tracking.Application.DTOs;
-using Location.Tracking.Application.Interfaces.Repositories;
+﻿using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Application.Interfaces.Services;
 using Location.Tracking.Domain.Entities;
 using System;
@@ -14,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using Location.Tracking.Application.Shared;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
+using Location.Tracking.Application.DTOs.Auth;
+using Location.Tracking.Application.DTOs.Users;
 
 namespace Location.Tracking.Application.Services
 {
@@ -25,6 +26,13 @@ namespace Location.Tracking.Application.Services
         {
             _userRepository = userRepository;
             _jwtSettings = options.Value;
+        }
+
+        public async Task<UsersMetrics> GetUsersMetrics()
+        {
+            UsersMetrics usersMetrics = await _userRepository.GetUsersMetrics();
+
+            return usersMetrics;
         }
 
         public async Task<TokenResponse> LoginAsync(LoginDto credentials)

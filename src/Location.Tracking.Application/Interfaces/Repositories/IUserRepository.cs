@@ -1,4 +1,5 @@
-﻿using Location.Tracking.Domain.Entities;
+﻿using Location.Tracking.Application.DTOs.Users;
+using Location.Tracking.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Location.Tracking.Application.Interfaces.Repositories
 {
     public interface IUserRepository : IBaseRepository<User>
     {
+        Task<UsersMetrics> GetUsersMetrics();
         Task<User?> GetUserByEmailAsync(string email);
     }
 }

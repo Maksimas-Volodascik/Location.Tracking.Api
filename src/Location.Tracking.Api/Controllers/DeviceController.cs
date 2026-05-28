@@ -1,5 +1,5 @@
 ﻿using Asp.Versioning;
-using Location.Tracking.Application.DTOs;
+using Location.Tracking.Application.DTOs.Device;
 using Location.Tracking.Application.Interfaces.Services;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Domain.Entities;
