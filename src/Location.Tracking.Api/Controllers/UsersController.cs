@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Location.Tracking.Application.DTOs.Auth;
+using Location.Tracking.Application.DTOs.Users;
 using Location.Tracking.Application.Interfaces.Services;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Domain.Entities;
@@ -18,6 +19,14 @@ namespace Location.Tracking.Api.Controllers
         public UsersController(IUserService userService)
         {
             _userService = userService;
+        }
+
+        [HttpGet("metrics")]
+        public async Task<ActionResult<UsersMetrics>> GetUsersMetricsAsync()
+        {
+            var response = await _userService.GetUsersMetrics();
+
+            return Ok(response);
         }
 
         [HttpPost("register")]

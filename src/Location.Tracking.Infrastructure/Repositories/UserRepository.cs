@@ -1,4 +1,5 @@
-﻿using Location.Tracking.Application.Interfaces.Repositories;
+﻿using Location.Tracking.Application.DTOs.Users;
+using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Domain.Entities;
 using Location.Tracking.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,20 @@ namespace Location.Tracking.Infrastructure.Repositories
         public async Task<User?> GetUserByEmailAsync(string email)
         {
             return await _context.Set<User>().FirstOrDefaultAsync(e => e.Email.Equals(email));
+        }
+
+        public async Task<UsersMetrics> GetUsersMetrics()
+        {
+            UsersMetrics? query = await _context.Users
+                .GroupBy(_ => 1)
+                .Select(u => new UsersMetrics
+                {
+                    Total = u.Count(),
+                    Users = u.Count(u => u.Role == "User"),
+                    Admin = u.Count(u => u.Role == "Admin")
+                }).FirstOrDefaultAsync();
+
+            return query;
         }
     }
 }

@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Dashboard\" />
-    <Folder Include="DTOs\Users\" />
   </ItemGroup>
 
   <PropertyGroup>
