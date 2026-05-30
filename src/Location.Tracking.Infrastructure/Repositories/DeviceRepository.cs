@@ -1,4 +1,5 @@
-﻿using Location.Tracking.Application.Interfaces.Repositories;
+﻿using Location.Tracking.Application.DTOs.Devices;
+using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Domain.Entities;
 using Location.Tracking.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,19 @@ namespace Location.Tracking.Infrastructure.Repositories
                               select device;
 
             return await deviceQuery.ToListAsync();
+        }
+
+        public async Task<DevicesMetrics> GetDeviceMetricsAsync()
+        {
+            var weekly = DateTimeOffset.UtcNow.AddDays(-7);
+
+            var query = new DevicesMetrics
+            {
+                Total = await _context.Devices.CountAsync(),
+                Weekly = await _context.Devices.CountAsync(d => d.DateAdded >= weekly)
+            };
+
+            return query;
         }
     }
 }

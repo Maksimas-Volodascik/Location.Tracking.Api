@@ -1,4 +1,5 @@
-﻿using Location.Tracking.Domain.Entities;
+﻿using Location.Tracking.Application.DTOs.Devices;
+using Location.Tracking.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace Location.Tracking.Application.Interfaces.Repositories
     public interface IDeviceRepository : IBaseRepository<Device>
     {
         Task<IEnumerable<Device>> GetAllDevicesAsync();
+        Task<DevicesMetrics> GetDeviceMetricsAsync();
     }
 }
