@@ -21,14 +21,6 @@ namespace Location.Tracking.Api.Controllers
             _userService = userService;
         }
 
-        [HttpGet("metrics")]
-        public async Task<ActionResult<UsersMetrics>> GetUsersMetricsAsync()
-        {
-            var response = await _userService.GetUsersMetrics();
-
-            return Ok(response);
-        }
-
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromQuery] RegisterDto registerDto)
         {
