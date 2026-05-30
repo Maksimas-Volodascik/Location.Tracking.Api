@@ -1,4 +1,5 @@
 ﻿using Location.Tracking.Application.DTOs.Device;
+using Location.Tracking.Application.DTOs.Devices;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Domain.Entities;
 using System;
@@ -16,5 +17,6 @@ namespace Location.Tracking.Application.Interfaces.Services
         Task<Result> CreateNewDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, string userId);
         Task<Result> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId);
         Task<Result> DeleteDeviceAsync(Guid deviceId);
+        Task<DevicesMetrics> GetDeviceMetricsAsync();
     }
 }

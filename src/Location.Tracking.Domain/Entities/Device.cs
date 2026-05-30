@@ -21,6 +21,7 @@ namespace Location.Tracking.Domain.Entities
         public string Name { get; set; } = string.Empty; //User defined name e.g. "Device for VIN xyz123"
         public bool IsEnabled { get; set; } = true;
         public DateTimeOffset? LastSeen { get; set; }
+        public DateTimeOffset DateAdded { get; set; } = DateTimeOffset.UtcNow;
 
         public Guid UserId { get; set; }
         public User User { get; set; } = null!;

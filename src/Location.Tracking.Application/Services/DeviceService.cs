@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Location.Tracking.Application.DTOs.Device;
+using Location.Tracking.Application.DTOs.Devices;
 using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Application.Interfaces.Services;
 using Location.Tracking.Application.Shared;
@@ -76,6 +77,13 @@ namespace Location.Tracking.Application.Services
             if(device == null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceNotFound);
 
             return Result<Device>.Success(device);
+        }
+
+        public async Task<DevicesMetrics> GetDeviceMetricsAsync()
+        {
+            var devices = await _deviceRepository.GetDeviceMetricsAsync();
+
+            return devices;
         }
 
         public async Task<Result> UpdateDeviceAsync(DeviceConfigurationDto deviceConfigurationDto, Guid deviceId)
