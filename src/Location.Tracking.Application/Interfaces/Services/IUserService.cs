@@ -11,7 +11,7 @@ namespace Location.Tracking.Application.Interfaces.Services
 {
     public interface IUserService
     {
-        Task<UsersMetrics> GetUsersMetrics();
+        Task<UsersMetrics> GetUsersMetricsAsync();
         Task<TokenResponse> LoginAsync(LoginDto credentials);
         Task<User> RegisterAsync(RegisterDto credentials);
         //get user

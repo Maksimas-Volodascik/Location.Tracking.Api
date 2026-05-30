@@ -27,8 +27,8 @@ namespace Location.Tracking.Application.Services
             _userRepository = userRepository;
             _jwtSettings = options.Value;
         }
-
-        public async Task<UsersMetrics> GetUsersMetrics()
+        
+        public async Task<UsersMetrics> GetUsersMetricsAsync()
         {
             UsersMetrics usersMetrics = await _userRepository.GetUsersMetrics();
 
