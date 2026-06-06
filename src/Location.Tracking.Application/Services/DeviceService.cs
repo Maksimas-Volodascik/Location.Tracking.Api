@@ -60,7 +60,7 @@ namespace Location.Tracking.Application.Services
         {
             var device = await _deviceRepository.GetByIdAsync(deviceId);
 
-            if (device == null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceNotFound);
+            if (device == null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceExists);
 
             _deviceRepository.Delete(device);
             await _deviceRepository.SaveChangesAsync();
