@@ -41,6 +41,7 @@ namespace Location.Tracking.Application.Services
             {
                 Imei = deviceConfigurationDto.Imei,
                 IsEnabled = deviceConfigurationDto.IsEnabled,
+                Name = deviceConfigurationDto.Name,
                 DeviceModelId = deviceModel.Data.Id,
                 UserId = userId
             };
