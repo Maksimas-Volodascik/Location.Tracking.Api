@@ -23,6 +23,6 @@ namespace Location.Tracking.Domain.Entities
         public string Description { get; set; } = string.Empty; //OBD tracker, basic tracker etc..
 
 
-        public Device Device { get; set; } = null!;
+        public List<Device> Devices { get; set; } = new List<Device>();
     }
 }

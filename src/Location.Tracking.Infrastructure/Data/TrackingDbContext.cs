@@ -20,21 +20,21 @@ namespace Location.Tracking.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
-                .HasMany(e => e.Devices)
-                .WithOne(e => e.User)
-                .HasForeignKey(e => e.UserId)
+                .HasMany(u => u.Devices)
+                .WithOne(d => d.User)
+                .HasForeignKey(u => u.UserId)
                 .IsRequired();
 
             modelBuilder.Entity<Device>()
-                .HasOne(e => e.DeviceModel)
-                .WithOne(e => e.Device)
-                .HasForeignKey<Device>(e => e.DeviceModelId)
+                .HasOne(d => d.DeviceModel)
+                .WithMany(dm => dm.Devices)
+                .HasForeignKey(d => d.DeviceModelId)
                 .IsRequired();
 
             modelBuilder.Entity<Device>()
-                .HasMany(e => e.Records)
-                .WithOne(e => e.Device)
-                .HasForeignKey(e => e.DeviceId)
+                .HasMany(d => d.Records)
+                .WithOne(r => r.Device)
+                .HasForeignKey(d => d.DeviceId)
                 .IsRequired();
 
             modelBuilder.Entity<Device>()

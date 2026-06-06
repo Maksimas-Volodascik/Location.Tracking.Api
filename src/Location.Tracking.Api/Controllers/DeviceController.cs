@@ -21,12 +21,20 @@ namespace Location.Tracking.Api.Controllers
             _deviceService = deviceService;
         }
 
+        /*[HttpGet("{imei}")]
+        public async Task<ActionResult<IEnumerable<Device>>> GetDeviceRecords(string imei)
+        {
+            var devices = await _deviceService.GetAllDevicesAsync();
+
+            return Ok(devices.Data);
+        }*/
+
         [HttpGet()]
         public async Task<ActionResult<IEnumerable<Device>>> GetAllDevicesAsync()
         {
             var devices = await _deviceService.GetAllDevicesAsync();
 
-            return Ok(devices);
+            return Ok(devices.Data);
         }
 
         [HttpGet("{deviceId}")]

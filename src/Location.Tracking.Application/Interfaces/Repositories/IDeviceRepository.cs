@@ -10,6 +10,7 @@ namespace Location.Tracking.Application.Interfaces.Repositories
 {
     public interface IDeviceRepository : IBaseRepository<Device>
     {
+        Task<Device> GetDeviceByImeiAsync(string deviceImei);
         Task<IEnumerable<Device>> GetAllDevicesAsync();
         Task<DevicesMetrics> GetDeviceMetricsAsync();
     }

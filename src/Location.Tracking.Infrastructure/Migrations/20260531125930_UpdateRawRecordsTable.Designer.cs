@@ -3,6 +3,7 @@ using System;
 using Location.Tracking.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Location.Tracking.Infrastructure.Migrations
 {
     [DbContext(typeof(TrackingDbContext))]
-    partial class TrackingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260531125930_UpdateRawRecordsTable")]
+    partial class UpdateRawRecordsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,8 @@ namespace Location.Tracking.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceModelId");
+                    b.HasIndex("DeviceModelId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -169,8 +173,8 @@ namespace Location.Tracking.Infrastructure.Migrations
             modelBuilder.Entity("Location.Tracking.Domain.Entities.Device", b =>
                 {
                     b.HasOne("Location.Tracking.Domain.Entities.DeviceModel", "DeviceModel")
-                        .WithMany("Devices")
-                        .HasForeignKey("DeviceModelId")
+                        .WithOne("Device")
+                        .HasForeignKey("Location.Tracking.Domain.Entities.Device", "DeviceModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -203,7 +207,8 @@ namespace Location.Tracking.Infrastructure.Migrations
 
             modelBuilder.Entity("Location.Tracking.Domain.Entities.DeviceModel", b =>
                 {
-                    b.Navigation("Devices");
+                    b.Navigation("Device")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Location.Tracking.Domain.Entities.User", b =>

@@ -11,6 +11,7 @@ namespace Location.Tracking.Application.Shared
         public static class DeviceErrors
         {
             public static Error DeviceNotFound = new Error("Device not found.", "not_found");
+            public static Error DeviceExists = new Error("Device already exists.", "already_exists");
         }
         public static class DeviceModelErrors
         {
