@@ -36,6 +36,10 @@ namespace Location.Tracking.Application.Services
             var deviceModel = await _deviceModelService.GetDeviceModelByNameAsync(deviceConfigurationDto.DeviceModelName);
 
             if (!deviceModel.IsSuccess) return Result<Device>.Failure(deviceModel.Error);
+            
+            var existingDevice = await _deviceRepository.GetDeviceByImeiAsync(deviceConfigurationDto.Imei);
+
+            if(existingDevice != null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceNotFound);
 
             Device device = new Device()
             {
@@ -76,6 +80,15 @@ namespace Location.Tracking.Application.Services
             Device? device = await _deviceRepository.GetByIdAsync(deviceId);
 
             if(device == null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceNotFound);
+
+            return Result<Device>.Success(device);
+        }
+
+        public async Task<Result<Device>> GetDeviceByImeiAsync(string deviceImei)
+        {
+            var device = await _deviceRepository.GetDeviceByImeiAsync(deviceImei);
+
+            if (device == null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceNotFound);
 
             return Result<Device>.Success(device);
         }

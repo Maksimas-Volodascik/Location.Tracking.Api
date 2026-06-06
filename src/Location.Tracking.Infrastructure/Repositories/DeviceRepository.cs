@@ -21,10 +21,19 @@ namespace Location.Tracking.Infrastructure.Repositories
 
         public async Task<IEnumerable<Device>> GetAllDevicesAsync()
         {
-            var deviceQuery = from device in _context.Devices
+            var query = from device in _context.Devices
                               select device;
 
-            return await deviceQuery.ToListAsync();
+            return await query.ToListAsync();
+        }
+
+        public Task<Device> GetDeviceByImeiAsync(string deviceImei)
+        {
+            var query = from device in _context.Devices
+                        where device.Imei == deviceImei
+                        select device;
+
+            return query.FirstOrDefaultAsync();
         }
 
         public async Task<DevicesMetrics> GetDeviceMetricsAsync()
