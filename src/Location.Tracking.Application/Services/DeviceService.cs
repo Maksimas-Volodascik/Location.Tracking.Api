@@ -17,13 +17,11 @@ namespace Location.Tracking.Application.Services
     {
         private readonly IDeviceRepository _deviceRepository;
         private readonly IDeviceModelService _deviceModelService;
-        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public DeviceService(IDeviceRepository deviceRepository, IDeviceModelService deviceModelService, IUserService userService, IMapper mapper)
+        public DeviceService(IDeviceRepository deviceRepository, IDeviceModelService deviceModelService, IMapper mapper)
         {
             _deviceRepository = deviceRepository;
             _deviceModelService = deviceModelService;
-            _userService = userService;
             _mapper = mapper;
         }
 
@@ -90,14 +88,14 @@ namespace Location.Tracking.Application.Services
         {
             var deviceModel = await _deviceModelService.GetDeviceModelByNameAsync(deviceConfigurationDto.DeviceModelName);
 
-            if (deviceModel == null) return Result<Device>.Failure(Errors.DeviceModelErrors.DeviceModelNotFound); 
+            if (deviceModel.Data == null) return Result.Failure(Errors.DeviceModelErrors.DeviceModelNotFound); 
 
             Device? device = await _deviceRepository.GetByIdAsync(deviceId);
 
-            if (device == null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceNotFound);
+            if (device == null) return Result.Failure(Errors.DeviceErrors.DeviceNotFound);
 
             device = _mapper.Map(deviceConfigurationDto, device);
-            device.DeviceModelId = deviceModel.Data!.Id;
+            device.DeviceModelId = deviceModel.Data.Id;
 
             _deviceRepository.Update(device);
             await _deviceRepository.SaveChangesAsync();
