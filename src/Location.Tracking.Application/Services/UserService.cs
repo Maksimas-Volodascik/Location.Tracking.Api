@@ -43,7 +43,7 @@ namespace Location.Tracking.Application.Services
 
             if (new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, credentials.Password) == PasswordVerificationResult.Failed)
             {
-                return new TokenResponse { accessToken = "password does not match" }; //password does not match
+                return new TokenResponse { accessToken = "password does not match" };
             }
 
             TokenResponse token = new TokenResponse { accessToken = CreateAccessToken(user) };
