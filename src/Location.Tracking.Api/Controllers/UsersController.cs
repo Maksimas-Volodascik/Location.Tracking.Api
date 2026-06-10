@@ -1,10 +1,8 @@
 ﻿using Asp.Versioning;
-using Location.Tracking.Application.DTOs.Auth;
-using Location.Tracking.Application.DTOs.Users;
 using Location.Tracking.Application.Interfaces.Services;
-using Location.Tracking.Application.Shared;
-using Location.Tracking.Domain.Entities;
-using Microsoft.AspNetCore.Http;
+using Location.Tracking.Application.Users.Commands.Login;
+using Location.Tracking.Application.Users.Commands.Register;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers
@@ -16,29 +14,31 @@ namespace Location.Tracking.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly IMediator _mediator;
+        public UsersController(IUserService userService, IMediator mediator)
         {
             _userService = userService;
+            _mediator = mediator;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync([FromQuery] RegisterDto registerDto)
+        public async Task<IActionResult> RegisterAsync([FromQuery] RegisterCommand command)
         {
-            var response = await _userService.RegisterAsync(registerDto);
+            var response = await _mediator.Send(command);
 
-            if (response == null) return BadRequest(new string[] { "User exist" });
+            if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
 
             return Ok();
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync([FromQuery] LoginDto registerDto)
+        public async Task<IActionResult> LoginAsync([FromQuery] LoginCommand command)
         {
-            var response = await _userService.LoginAsync(registerDto);
+            var response = await _mediator.Send(command);
 
-            if (response == null) return BadRequest(new string[] { "user does not exist" });
+            if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
 
-            return Ok($"token: {response.accessToken}");
+            return Ok($"token: {response.Data.accessToken}");
         }
     }
 }

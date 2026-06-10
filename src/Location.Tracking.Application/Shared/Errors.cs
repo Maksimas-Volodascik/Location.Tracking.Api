@@ -17,5 +17,11 @@ namespace Location.Tracking.Application.Shared
         {
             public static Error DeviceModelNotFound = new Error("\"Device model not found.", "not_found");
         }
+
+        public static class UserErrors
+        {
+            public static Error UserExists = new Error("User already exists.", "already_exists");
+            public static Error InvalidCredentials = new Error("Invalid credentials.", "invalid_credentials");
+        }
     }
 }

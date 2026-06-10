@@ -1,5 +1,4 @@
-﻿using Location.Tracking.Application.DTOs.Auth;
-using Location.Tracking.Application.DTOs.Users;
+﻿using Location.Tracking.Application.DTOs.Users;
 using Location.Tracking.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,9 +11,5 @@ namespace Location.Tracking.Application.Interfaces.Services
     public interface IUserService
     {
         Task<UsersMetrics> GetUsersMetricsAsync();
-        Task<TokenResponse> LoginAsync(LoginDto credentials);
-        Task<User> RegisterAsync(RegisterDto credentials);
-        //get user
-        //delete user
     }
 }

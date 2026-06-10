@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Location.Tracking.Application.Shared;
+using MediatR;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Location.Tracking.Application.DTOs.Auth
+namespace Location.Tracking.Application.Users.Commands.Login
 {
-    public class LoginDto
+    public class LoginCommand : IRequest<Result<TokenResponse>>
     {
         [Required]
         [EmailAddress]
