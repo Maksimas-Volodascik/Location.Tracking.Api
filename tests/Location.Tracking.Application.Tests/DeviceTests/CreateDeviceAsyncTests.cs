@@ -19,16 +19,14 @@ namespace Location.Tracking.Application.Tests.DeviceTests
         private readonly Mock<IDeviceRepository> _deviceRepositoryMock;
         private readonly IDeviceService _deviceService;
         private readonly Mock<IDeviceModelService> _deviceModelServiceMock;
-        private readonly Mock<IUserService> _userServiceMock;
 
         public CreateDeviceAsyncTests()
         {
             _deviceRepositoryMock = new Mock<IDeviceRepository>();
             _deviceModelServiceMock = new Mock<IDeviceModelService>();
-            _userServiceMock = new Mock<IUserService>();
             var mapperMock = new Mock<IMapper>(); //not used for tests
 
-            _deviceService = new DeviceService(_deviceRepositoryMock.Object, _deviceModelServiceMock.Object, _userServiceMock.Object, mapperMock.Object);
+            _deviceService = new DeviceService(_deviceRepositoryMock.Object, _deviceModelServiceMock.Object, mapperMock.Object);
         }
 
         [Fact]

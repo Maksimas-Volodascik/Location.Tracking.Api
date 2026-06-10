@@ -68,7 +68,6 @@ namespace Location.Tracking.Domain.Tests.Domain
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-
         public void User_Fail_When_Email_Empty(string email)
         {
             // Arrange
