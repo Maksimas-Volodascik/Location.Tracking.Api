@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Location.Tracking.Application.Users.Commands.Login
 {
-    public class LoginCommand : IRequest<Result<TokenResponse>>
+    public record LoginCommand : IRequest<Result<TokenResponse>>
     {
         [Required]
         [EmailAddress]

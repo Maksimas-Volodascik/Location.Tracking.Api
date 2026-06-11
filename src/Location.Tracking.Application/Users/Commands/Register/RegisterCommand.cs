@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Location.Tracking.Application.Users.Commands.Register
 {
-    public class RegisterCommand : IRequest<Result<User>>
+    public record RegisterCommand : IRequest<Result<User>>
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

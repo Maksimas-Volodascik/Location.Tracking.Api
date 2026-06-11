@@ -28,7 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Auth\" />
+    <Folder Include="Devices\" />
+    <Folder Include="Records\Commands\" />
   </ItemGroup>
 
   <PropertyGroup>

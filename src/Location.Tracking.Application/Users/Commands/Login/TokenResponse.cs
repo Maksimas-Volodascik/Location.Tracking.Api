@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Location.Tracking.Application.Users.Commands.Login
 {
-    public class TokenResponse
+    public record TokenResponse
     {
         public string accessToken { get; set; } = string.Empty;
     }
