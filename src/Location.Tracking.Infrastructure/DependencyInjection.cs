@@ -29,10 +29,7 @@ namespace Location.Tracking.Infrastructure
             services.AddScoped<IRecordRepository, RecordRepository>();
 
             //Services
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDeviceService, DeviceService>();
-            services.AddScoped<IDeviceModelService, DeviceModelService>();
-            services.AddScoped<IRecordService, RecordService>();
 
 
             // Add other infrastructure services here (caching, external APIs, email, etc.)

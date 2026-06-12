@@ -1,7 +1,4 @@
-﻿using Location.Tracking.Application.DTOs.Devices;
-using Location.Tracking.Application.DTOs.Records;
-using Location.Tracking.Application.DTOs.Users;
-using Location.Tracking.Application.Interfaces.Repositories;
+﻿using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Application.Shared;
 using MediatR;
 using System;

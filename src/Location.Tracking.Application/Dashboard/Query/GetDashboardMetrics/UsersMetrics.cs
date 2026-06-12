@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics
 {
-    public record SystemMetrics
+    public record UsersMetrics
     {
-        public UsersMetrics Users { get; set; }
-        public RecordsMetrics Records { get; set; }
-        public DevicesMetrics Devices { get; set; }
+        public int Total { get; init; } = 0;
+        public int Admin { get; init; } = 0;
+        public int Users { get; init; } = 0;
     }
 }

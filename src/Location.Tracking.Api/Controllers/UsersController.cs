@@ -13,11 +13,9 @@ namespace Location.Tracking.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
         private readonly IMediator _mediator;
-        public UsersController(IUserService userService, IMediator mediator)
+        public UsersController(IMediator mediator)
         {
-            _userService = userService;
             _mediator = mediator;
         }
 

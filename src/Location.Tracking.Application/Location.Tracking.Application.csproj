@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="Devices\" />
-    <Folder Include="Records\Commands\" />
   </ItemGroup>
 
   <PropertyGroup>
