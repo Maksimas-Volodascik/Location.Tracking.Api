@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -25,6 +26,8 @@ namespace Location.Tracking.Application
                 cfg.AddProfile<DeviceProfile>();
                 cfg.AddProfile<DeviceModelProfile>();
             });
+
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             // Add other application services here later
 

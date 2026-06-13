@@ -1,4 +1,4 @@
-﻿using Location.Tracking.Application.DTOs.Records;
+﻿using Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics;
 using Location.Tracking.Domain.Entities;
 using System;
 using System.Collections.Generic;

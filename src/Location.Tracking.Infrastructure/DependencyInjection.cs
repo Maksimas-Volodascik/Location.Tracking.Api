@@ -8,8 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Location.Tracking.Infrastructure.Data;
 using Location.Tracking.Application.Interfaces.Repositories;
-using Location.Tracking.Application.Interfaces.Services;
-using Location.Tracking.Application.Services;
 using Location.Tracking.Infrastructure.Repositories;
 
 namespace Location.Tracking.Infrastructure
@@ -27,14 +25,6 @@ namespace Location.Tracking.Infrastructure
             services.AddScoped<IDeviceRepository, DeviceRepository>();
             services.AddScoped<IDeviceModelRepository, DeviceModelRepository>();
             services.AddScoped<IRecordRepository, RecordRepository>();
-
-            //Services
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IDeviceService, DeviceService>();
-            services.AddScoped<IDeviceModelService, DeviceModelService>();
-            services.AddScoped<IRecordService, RecordService>();
-            services.AddScoped<IDashboardService, DashboardService>();
-
 
             // Add other infrastructure services here (caching, external APIs, email, etc.)
 

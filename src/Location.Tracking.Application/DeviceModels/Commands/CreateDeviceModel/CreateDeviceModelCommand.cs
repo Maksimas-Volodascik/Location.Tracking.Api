@@ -1,0 +1,21 @@
+﻿using Location.Tracking.Application.Shared;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Location.Tracking.Application.DeviceModels.Commands.CreateDeviceModel
+{
+    public record CreateDeviceModelCommand :IRequest<Result> 
+    {
+        [Required]
+        public string Name { get; set; } = string.Empty;
+
+        [Required]
+        public string ProtocolName { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+    }
+}
