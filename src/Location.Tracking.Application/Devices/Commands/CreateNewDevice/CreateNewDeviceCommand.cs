@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Location.Tracking.Application.Shared;
+using MediatR;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Location.Tracking.Application.DTOs.Device
+namespace Location.Tracking.Application.Devices.Commands.CreateNewDevice
 {
-    public class DeviceConfigurationDto
+    public record CreateNewDeviceCommand : IRequest<Result>
     {
         [Required(ErrorMessage = "Device IMEI is required.")]
         [MaxLength(15, ErrorMessage = "IMEI cannot exceed 15 characters")]
@@ -18,9 +20,8 @@ namespace Location.Tracking.Application.DTOs.Device
 
         public bool IsEnabled { get; set; } = true;
 
-        [Required (ErrorMessage = "Device model is required.")]
+        [Required(ErrorMessage = "Device model is required.")]
         public string DeviceModelName { get; set; } = string.Empty;
-
-        //todo: network + security configuration
+        public Guid UserId { get; set; } = Guid.Empty;
     }
 }

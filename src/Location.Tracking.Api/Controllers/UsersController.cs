@@ -1,5 +1,4 @@
 ﻿using Asp.Versioning;
-using Location.Tracking.Application.Interfaces.Services;
 using Location.Tracking.Application.Users.Commands.Login;
 using Location.Tracking.Application.Users.Commands.Register;
 using MediatR;

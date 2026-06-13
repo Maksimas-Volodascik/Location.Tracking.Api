@@ -1,6 +1,5 @@
 ﻿using Asp.Versioning;
 using Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics;
-using Location.Tracking.Application.Interfaces.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
