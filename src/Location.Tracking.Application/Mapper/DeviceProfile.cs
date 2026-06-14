@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Location.Tracking.Application.DeviceModels.Commands.CreateDeviceModel;
+using Location.Tracking.Application.Devices.Commands.UpdateDevice;
 using Location.Tracking.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Location.Tracking.Application.AutoMapper
     {
         public DeviceProfile()
         {
-            CreateMap<CreateDeviceModelCommand, Device>()
+            CreateMap<DeviceConfiguration, Device>()
                 .ForMember(dest => dest.DeviceModelId, opt => opt.Ignore());
         }
     }

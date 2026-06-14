@@ -1,19 +1,19 @@
 ﻿using Location.Tracking.Application.Interfaces.Repositories;
-using Location.Tracking.Application.Services;
 using Location.Tracking.Application.Shared;
+using Location.Tracking.Application.Users.Commands.Login;
 using Location.Tracking.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace Location.Tracking.Application.Tests.UserTests
+namespace Location.Tracking.Application.Tests.UserTests.Commands
 {
-    public class UserLoginTests
+    public class LoginUserCommandHandlerTests
     {
         private readonly Mock<IUserRepository> _userRepositoryMock;
-        private readonly UserService _userService;
         private readonly IOptions<JwtSettings> _jwtSettings;
-        public UserLoginTests()
+        private readonly LoginUserCommandHandler _handler;
+        public LoginUserCommandHandlerTests()
         {
             _userRepositoryMock = new Mock<IUserRepository>();
 
@@ -24,11 +24,11 @@ namespace Location.Tracking.Application.Tests.UserTests
                 Issuer = "location.tracking",
                 TokenExpiryInHours = 8000
             });
-            _userService = new UserService(_userRepositoryMock.Object, _jwtSettings);
+            _handler = new LoginUserCommandHandler(_userRepositoryMock.Object, _jwtSettings);
         }
 
-        /*[Fact]
-        public async Task LoginAsync_ValidData_ReturnsSuccessResult()
+        [Fact]
+        public async Task Handle_ValidCredentials_ReturnsSuccessResult()
         {
             // Arrange
             var password = "Password123!";
@@ -40,48 +40,54 @@ namespace Location.Tracking.Application.Tests.UserTests
             var passwordHasher = new PasswordHasher<User>();
             user.PasswordHash = passwordHasher.HashPassword(user, password);
 
-            var loginDto = new LoginDto
+            var loginCommand = new LoginCommand
             {
                 Email = "test@test.com",
                 Password = password
             };
 
             _userRepositoryMock
-                .Setup(x => x.GetUserByEmailAsync(loginDto.Email))
+                .Setup(x => x.GetUserByEmailAsync(loginCommand.Email))
                 .ReturnsAsync(user);
 
             // Act
-            var result = await _userService.LoginAsync(loginDto);
+            var result = await _handler.Handle(loginCommand, CancellationToken.None);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.False(string.IsNullOrEmpty(result.accessToken));
-            Assert.NotEqual("password does not match", result.accessToken);
+            Assert.True(result.IsSuccess);
+            Assert.NotNull(result.Data);
+            Assert.NotNull(result.Data.accessToken);
+            Assert.NotEmpty(result.Data.accessToken);
+
+            _userRepositoryMock.Verify(u => u.GetUserByEmailAsync(loginCommand.Email), Times.Once);
         }
 
         [Fact]
-        public async Task LoginAsync_UserDoesNotExist_ReturnsErrorResult()
+        public async Task Handle_UserDoesNotExist_ReturnsErrorResult()
         {
             // Arrange
-            var loginDto = new LoginDto
+            var loginCommand = new LoginCommand
             {
                 Email = "unknown@test.com",
                 Password = "Password123!"
             };
 
             _userRepositoryMock
-                .Setup(x => x.GetUserByEmailAsync(loginDto.Email))
+                .Setup(x => x.GetUserByEmailAsync(loginCommand.Email))
                 .ReturnsAsync((User)null);
 
             // Act
-            var result = await _userService.LoginAsync(loginDto);
+            var result = await _handler.Handle(loginCommand, CancellationToken.None);
 
             // Assert
-            Assert.Null(result);
+            Assert.False(result.IsSuccess);
+            Assert.NotNull(result.Error);
+
+            _userRepositoryMock.Verify(u => u.GetUserByEmailAsync(loginCommand.Email), Times.Once);
         }
 
         [Fact] 
-        public async Task LoginAsync_InvalidPassword_ReturnsErrorResult()
+        public async Task Handle_InvalidPassword_ReturnsErrorResult()
         {
             // Arrange
             var user = new User
@@ -92,22 +98,24 @@ namespace Location.Tracking.Application.Tests.UserTests
             var passwordHasher = new PasswordHasher<User>();
             user.PasswordHash = passwordHasher.HashPassword(user, "CorrectPassword");
 
-            var loginDto = new LoginDto
+            var loginCommand = new LoginCommand
             {
                 Email = "test@test.com",
                 Password = "WrongPassword"
             };
 
             _userRepositoryMock
-                .Setup(x => x.GetUserByEmailAsync(loginDto.Email))
+                .Setup(x => x.GetUserByEmailAsync(loginCommand.Email))
                 .ReturnsAsync(user);
 
             // Act
-            var result = await _userService.LoginAsync(loginDto);
+            var result = await _handler.Handle(loginCommand, CancellationToken.None);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("password does not match", result.accessToken);
-        }*/
+            Assert.NotNull(result.Error);
+            Assert.Equal("invalid_credentials", result.Error.ErrorType);
+
+            _userRepositoryMock.Verify(u => u.GetUserByEmailAsync(loginCommand.Email), Times.Once);
+        }
     }
 }
