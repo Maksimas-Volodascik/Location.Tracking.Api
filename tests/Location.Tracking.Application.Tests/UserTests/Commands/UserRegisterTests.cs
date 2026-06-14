@@ -1,36 +1,28 @@
 ﻿using Location.Tracking.Application.Interfaces.Repositories;
-using Location.Tracking.Application.Services;
 using Location.Tracking.Application.Shared;
+using Location.Tracking.Application.Users.Commands.Register;
+using Location.Tracking.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Moq;
 
 
-namespace Location.Tracking.Application.Tests.UserTests
+namespace Location.Tracking.Application.Tests.UserTests.Commands
 {
     public class UserRegisterTests
     {
         private readonly Mock<IUserRepository> _userRepositoryMock;
-        private readonly UserService _userService;
-        private readonly IOptions<JwtSettings> _jwtSettings;
+        private readonly RegisterUserCommandHandler _handler;
         public UserRegisterTests()
         {
             _userRepositoryMock = new Mock<IUserRepository>();
-
-            _jwtSettings = Options.Create(new JwtSettings
-            {
-                Token = "Z7xQp2M9vLs8Tn4KcW5rB1yF0Hj6UeA3dGqXhRkP9mC2tYvN8sJwL5oD4bIu1fE7",
-                Audience = "location.tracking",
-                Issuer = "location.tracking",
-                TokenExpiryInHours = 8000
-            });
-            _userService = new UserService(_userRepositoryMock.Object, _jwtSettings);
+            _handler = new RegisterUserCommandHandler(_userRepositoryMock.Object);
         }
 
-        /*[Fact]
-        public async Task RegisterAsync_ValidData_ReturnsSuccessResult()
+        [Fact]
+        public async Task Handle_ValidData_ReturnsSuccessResult()
         {
             //Arrange
-            RegisterDto credentials = new RegisterDto
+            RegisterCommand credentials = new RegisterCommand
             {
                 FirstName = "firstName",
                 LastName = "lastName",
@@ -48,24 +40,24 @@ namespace Location.Tracking.Application.Tests.UserTests
                 .Returns(Task.CompletedTask);
 
             //Act
-            var response = await _userService.RegisterAsync(credentials);
+            var response = await _handler.Handle(credentials, CancellationToken.None);
 
             //Assert
-            Assert.NotNull(response);
-            Assert.Equal(response.Email, credentials.Email);
-            Assert.Equal(response.FirstName, credentials.FirstName);
-            Assert.Equal(response.LastName, credentials.LastName);
-            Assert.False(string.IsNullOrEmpty(response.PasswordHash));
+            Assert.NotNull(response.Data);
+            Assert.Equal(response.Data.Email, credentials.Email);
+            Assert.Equal(response.Data.FirstName, credentials.FirstName);
+            Assert.Equal(response.Data.LastName, credentials.LastName);
+            Assert.False(string.IsNullOrEmpty(response.Data.PasswordHash));
 
             _userRepositoryMock.Verify(u => u.AddAsync(It.IsAny<User>()), Times.Once);
             _userRepositoryMock.Verify(u => u.SaveChangesAsync(), Times.Once);
         }
 
         [Fact]
-        public async Task RegisterAsync_UserExists_ReturnsErrorResult()
+        public async Task Handle_UserExists_ReturnsErrorResult()
         {
             //Arrange
-            RegisterDto credentials = new RegisterDto
+            RegisterCommand credentials = new RegisterCommand
             {
                 FirstName = "firstName",
                 LastName = "lastName",
@@ -85,13 +77,14 @@ namespace Location.Tracking.Application.Tests.UserTests
             ).ReturnsAsync(user);
 
             //Act
-            var response = await _userService.RegisterAsync(credentials);
+            var response = await _handler.Handle(credentials, CancellationToken.None);
 
             //Assert
-            Assert.Null(response);
+            Assert.False(response.IsSuccess);
+            Assert.NotNull(response.Error);
 
             _userRepositoryMock.Verify(u => u.AddAsync(It.IsAny<User>()), Times.Never);
             _userRepositoryMock.Verify(u => u.SaveChangesAsync(), Times.Never);
-        }*/
+        }
     }
 }
