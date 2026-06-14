@@ -1,4 +1,4 @@
-﻿using Location.Tracking.Application.DTOs.Devices;
+﻿using Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics;
 using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Domain.Entities;
 using Location.Tracking.Infrastructure.Data;
