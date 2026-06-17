@@ -4,6 +4,7 @@ using Location.Tracking.Application.Devices.Commands.DeleteDevice;
 using Location.Tracking.Application.Devices.Commands.UpdateDevice;
 using Location.Tracking.Application.Devices.Query.GetAllDevices;
 using Location.Tracking.Application.Devices.Query.GetDeviceById;
+using Location.Tracking.Application.RawRecords.Query;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Domain.Entities;
 using MediatR;
@@ -13,7 +14,7 @@ using System.Security.Claims;
 
 namespace Location.Tracking.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiVersion(1)]
     [Route("v{v:apiVersion}/[controller]")]
     [ApiController]
@@ -39,6 +40,14 @@ namespace Location.Tracking.Api.Controllers
             var device = await _mediator.Send(new GetDeviceByIdQuery { DeviceId = deviceId});
 
             return Ok(device);
+        }
+
+        [HttpGet("rec/{deviceId}")]
+        public async Task<ActionResult<Device>> GetDeviceRecords(Guid deviceId)
+        {
+            var rec = await _mediator.Send(new GetDeviceRecordsQuery { DeviceId = deviceId});
+
+            return Ok(rec);
         }
 
         [HttpPost]

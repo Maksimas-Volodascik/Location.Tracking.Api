@@ -1,5 +1,6 @@
 ﻿using Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics;
 using Location.Tracking.Application.Interfaces.Repositories;
+using Location.Tracking.Application.RawRecords.Query;
 using Location.Tracking.Domain.Entities;
 using Location.Tracking.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,20 @@ namespace Location.Tracking.Infrastructure.Repositories
                 }).FirstOrDefaultAsync();
 
             return query;
+        }
+
+        public async Task<IEnumerable<RecordMessage>> GetDeviceRecords(Guid id)
+        {
+            var query = from R in _context.RawRecords
+                        select new RecordMessage
+                        {
+                            ExpiresAt = R.ExpiresAt,
+                            ReceivedAt = R.ReceivedAt,
+                            RawData = R.RawData,
+                            ParsedData = R.ParsedData,
+                        };
+
+            return await query.ToListAsync();
         }
     }
 }
