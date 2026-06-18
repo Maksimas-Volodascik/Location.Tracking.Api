@@ -14,7 +14,7 @@ using System.Security.Claims;
 
 namespace Location.Tracking.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiVersion(1)]
     [Route("v{v:apiVersion}/[controller]")]
     [ApiController]
@@ -40,14 +40,6 @@ namespace Location.Tracking.Api.Controllers
             var device = await _mediator.Send(new GetDeviceByIdQuery { DeviceId = deviceId});
 
             return Ok(device);
-        }
-
-        [HttpGet("rec/{deviceId}")]
-        public async Task<ActionResult<Device>> GetDeviceRecords(Guid deviceId)
-        {
-            var rec = await _mediator.Send(new GetDeviceRecordsQuery { DeviceId = deviceId});
-
-            return Ok(rec);
         }
 
         [HttpPost]
