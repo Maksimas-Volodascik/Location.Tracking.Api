@@ -40,6 +40,7 @@ namespace Location.Tracking.Infrastructure.Repositories
         public async Task<IEnumerable<RecordMessage>> GetDeviceRecords(Guid id)
         {
             var query = from R in _context.RawRecords
+                        where R.DeviceId == id
                         select new RecordMessage
                         {
                             ExpiresAt = R.ExpiresAt,
