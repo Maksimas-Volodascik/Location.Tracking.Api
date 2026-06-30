@@ -11,6 +11,11 @@ namespace Location.Tracking.Application.Devices.Commands.CreateNewDevice
 {
     public record CreateNewDeviceCommand : IRequest<Result>
     {
+        public CreateNewDeviceRequest DeviceData { get; set; } = new CreateNewDeviceRequest();
+        public Guid UserId { get; set; } = Guid.Empty;
+    }
+    public record CreateNewDeviceRequest
+    {
         [Required(ErrorMessage = "Device IMEI is required.")]
         [MaxLength(15, ErrorMessage = "IMEI cannot exceed 15 characters")]
         public string Imei { get; set; } = string.Empty;
@@ -22,6 +27,5 @@ namespace Location.Tracking.Application.Devices.Commands.CreateNewDevice
 
         [Required(ErrorMessage = "Device model is required.")]
         public string DeviceModelName { get; set; } = string.Empty;
-        public Guid UserId { get; set; } = Guid.Empty;
     }
 }

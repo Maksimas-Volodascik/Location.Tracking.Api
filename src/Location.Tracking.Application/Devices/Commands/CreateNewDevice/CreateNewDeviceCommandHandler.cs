@@ -24,19 +24,19 @@ namespace Location.Tracking.Application.Devices.Commands.CreateNewDevice
         {
             //todo: check if user exists
 
-            var deviceModel = await _deviceModelRepository.GetDeviceModelByName(request.DeviceModelName);
+            var deviceModel = await _deviceModelRepository.GetDeviceModelByName(request.DeviceData.DeviceModelName);
 
             if (deviceModel == null) return Result<Device>.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
 
-            var existingDevice = await _deviceRepository.GetDeviceByImeiAsync(request.Imei);
+            var existingDevice = await _deviceRepository.GetDeviceByImeiAsync(request.DeviceData.Imei);
 
             if (existingDevice != null) return Result<Device>.Failure(Errors.DeviceErrors.DeviceNotFound);
 
             Device device = new Device()
             {
-                Imei = request.Imei,
-                IsEnabled = request.IsEnabled,
-                Name = request.Name,
+                Imei = request.DeviceData.Imei,
+                IsEnabled = request.DeviceData.IsEnabled,
+                Name = request.DeviceData.Name,
                 DeviceModelId = deviceModel.Id,
                 UserId = request.UserId
             };

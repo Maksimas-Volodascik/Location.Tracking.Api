@@ -43,17 +43,21 @@ namespace Location.Tracking.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDeviceAsync([FromQuery] CreateNewDeviceCommand deviceConfiguration)
+        public async Task<IActionResult> CreateDeviceAsync([FromBody] CreateNewDeviceRequest deviceConfiguration)
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("Missing Name Identifier");
 
-            deviceConfiguration.UserId = new Guid(userId);
+            var command = new CreateNewDeviceCommand
+            {
+                DeviceData = deviceConfiguration,
+                UserId = Guid.Parse(userId)
+            };
 
-            var result = await _mediator.Send(deviceConfiguration);
+            var result = await _mediator.Send(command);
 
             if (result.IsSuccess == false) return BadRequest(result.Error!.ErrorMessage);
 
-            return Ok(userId);
+            return Ok();
         }
 
         [HttpPatch("{deviceId}")]
