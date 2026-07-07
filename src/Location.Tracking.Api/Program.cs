@@ -69,7 +69,7 @@ builder.Services.AddCors(opt =>
     opt.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins("http://localhost:5173", "http://localhost:80") //5173 Port from vite dev server || 80 Port from docker container
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -85,15 +85,15 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-/*if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference("docs", opt =>
-    {//load separate documentation for different versions
-        opt.AddDocument("v1", "API Version 1.0", "/openapi/v1.json", isDefault: true);
-        opt.AddDocument("v2", "API Version 2.0", "/openapi/v2.json");
-    });
-}*/
+    //app.MapOpenApi();
+    //app.MapScalarApiReference("docs", opt =>
+    //{//load separate documentation for different versions
+    //    opt.AddDocument("v1", "API Version 1.0", "/openapi/v1.json", isDefault: true);
+    //    opt.AddDocument("v2", "API Version 2.0", "/openapi/v2.json");
+    //});
+}
 
 app.MapOpenApi();
 app.MapScalarApiReference("docs", opt =>
