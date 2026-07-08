@@ -46,8 +46,9 @@ namespace Location.Tracking.Application.Users.Commands.Login
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new (JwtRegisteredClaimNames.Name,  $"{user.FirstName} {user.LastName}"),
+                new (JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role)
             };
 

@@ -24,6 +24,7 @@ namespace Location.Tracking.Application.Users.Commands.Register
                 FirstName = credentials.FirstName,
                 LastName = credentials.LastName,
                 Email = credentials.Email,
+                Role = "demo"
             };
 
             var hashedPassword = new PasswordHasher<User>().HashPassword(newUser, credentials.Password);

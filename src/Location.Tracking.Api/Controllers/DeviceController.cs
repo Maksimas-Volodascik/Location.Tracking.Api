@@ -46,7 +46,6 @@ namespace Location.Tracking.Api.Controllers
         public async Task<IActionResult> CreateDeviceAsync([FromBody] CreateNewDeviceRequest deviceConfiguration)
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("Missing Name Identifier");
-
             var command = new CreateNewDeviceCommand
             {
                 DeviceData = deviceConfiguration,

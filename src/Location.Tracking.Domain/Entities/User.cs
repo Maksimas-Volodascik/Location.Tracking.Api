@@ -26,7 +26,7 @@ namespace Location.Tracking.Domain.Entities
         
         [MaxLength(50)]
         public string LastName { get; set; } = string.Empty;
-        public string Role { get; set; } = "User"; //Or "Admin"
+        public string Role { get; set; } = "demo"; //"Admin | User | Demo"
         public bool IsActive { get; set; } = true;
         public DateTimeOffset CreatedAt { get; set; } = DateTime.UtcNow;
 
