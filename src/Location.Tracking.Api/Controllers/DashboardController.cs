@@ -2,12 +2,12 @@
 using Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Authorization;
 namespace Location.Tracking.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiVersion(1)]
-    [Route("api/[controller]")]
+    [Route("v{v:apiVersion}/[controller]")]
     [ApiController]
     public class DashboardController : ControllerBase
     {
