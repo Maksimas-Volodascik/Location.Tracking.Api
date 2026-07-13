@@ -11,5 +11,6 @@ namespace Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics
         public UsersMetrics Users { get; set; }
         public RecordsMetrics Records { get; set; }
         public DevicesMetrics Devices { get; set; }
+        public ErrorMetrics Errors { get; set; }
     }
 }

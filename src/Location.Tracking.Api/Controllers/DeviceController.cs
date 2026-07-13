@@ -60,11 +60,13 @@ namespace Location.Tracking.Api.Controllers
         }
 
         [HttpPatch("{deviceId}")]
-        public async Task<IActionResult> UpdateDeviceAsync([FromQuery] UpdateDeviceCommand deviceConfiguration, Guid deviceId)
+        public async Task<IActionResult> UpdateDeviceAsync([FromBody] DeviceConfiguration deviceConfiguration, Guid deviceId)
         {
-            deviceConfiguration.DeviceId = deviceId;
+            UpdateDeviceCommand command = new UpdateDeviceCommand();
+            command.DeviceId = deviceId;
+            command.DeviceConfiguration = deviceConfiguration;
 
-            var result = await _mediator.Send(deviceConfiguration);
+            var result = await _mediator.Send(command);
 
             if (!result.IsSuccess) return NotFound(result.Error!.ErrorMessage);
 

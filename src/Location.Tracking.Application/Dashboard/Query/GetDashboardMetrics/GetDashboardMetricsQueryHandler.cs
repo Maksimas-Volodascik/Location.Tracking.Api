@@ -25,12 +25,14 @@ namespace Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics
             UsersMetrics usersMetrics = await _userRepository.GetUsersMetrics();
             RecordsMetrics recordsMetrics = await _recordRepository.GetRecordsMetrics();
             DevicesMetrics devicesMetrics = await _deviceRepository.GetDeviceMetricsAsync();
+            ErrorMetrics errorMetrics = new ErrorMetrics(); //tba
 
             SystemMetrics systemMetrics = new SystemMetrics
             {
                 Users = usersMetrics,
                 Records = recordsMetrics,
                 Devices = devicesMetrics,
+                Errors = errorMetrics,
             };
 
             return systemMetrics;
