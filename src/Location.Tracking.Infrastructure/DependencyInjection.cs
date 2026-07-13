@@ -17,7 +17,7 @@ namespace Location.Tracking.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<TrackingDbContext>(options =>
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Environment.GetEnvironmentVariable("DB_CONNECTION") ?? configuration.GetConnectionString("DefaultConnection")));
 
             //Repositories
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));

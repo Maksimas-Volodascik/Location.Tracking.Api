@@ -69,7 +69,8 @@ builder.Services.AddCors(opt =>
     opt.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173", "http://localhost:80") //5173 Port from vite dev server || 80 Port from docker container
+            //policy.WithOrigins("http://localhost:5173", "http://localhost:80") //5173 Port from vite dev server || 80 Port from docker container
+            policy.WithOrigins("https://maksweb.site/")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
