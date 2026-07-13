@@ -28,7 +28,7 @@ namespace Location.Tracking.Infrastructure.Repositories
 
         public async Task<DeviceModel?> GetDeviceModelByName(string name)
         {
-            var deviceModel = await _context.Set<DeviceModel>().FirstOrDefaultAsync(e => e.ProtocolName.Equals(name));
+            var deviceModel = await _context.Set<DeviceModel>().FirstOrDefaultAsync(e => e.Name.Equals(name));
 
             return deviceModel;
         }
