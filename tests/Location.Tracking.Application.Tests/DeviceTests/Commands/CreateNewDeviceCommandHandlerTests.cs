@@ -36,12 +36,18 @@ namespace Location.Tracking.Application.Tests.DeviceTests.Commands
                 Id = new Guid("1111a1a1-a1a1-11a1-11aa-1a1111aaaaaa")
             };
 
-            CreateNewDeviceCommand deviceConfiguration = new CreateNewDeviceCommand
+            CreateNewDeviceRequest deviceConfiguration = new CreateNewDeviceRequest
             {
                 DeviceModelName = "test-model",
                 Imei = "012345678901234",
                 IsEnabled = true,
                 Name = "test_name"
+            };
+
+            CreateNewDeviceCommand command = new CreateNewDeviceCommand
+            {
+                DeviceData = deviceConfiguration,
+                UserId = Guid.NewGuid()
             };
 
             Device newDevice = new Device
@@ -62,7 +68,7 @@ namespace Location.Tracking.Application.Tests.DeviceTests.Commands
                 .Returns(Task.CompletedTask);
 
             //Act
-            var result = await _handler.Handle(deviceConfiguration, CancellationToken.None);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             //Assert
             Assert.True(result.IsSuccess);
@@ -77,19 +83,24 @@ namespace Location.Tracking.Application.Tests.DeviceTests.Commands
         public async Task Handle_InvalidDeviceModel_ReturnsErrorResult()
         {
             //Arrange
-            CreateNewDeviceCommand deviceConfiguration = new CreateNewDeviceCommand
+            CreateNewDeviceRequest deviceConfiguration = new CreateNewDeviceRequest
             {
                 DeviceModelName = "test-model",
                 Imei = "012345678901234",
                 IsEnabled = true,
                 Name = "test_name"
             };
+            CreateNewDeviceCommand command = new CreateNewDeviceCommand
+            {
+                DeviceData = deviceConfiguration,
+                UserId = Guid.NewGuid()
+            };
 
             _deviceModelRepositoryMock.Setup(dm => dm.GetDeviceModelByName(deviceConfiguration.DeviceModelName))
                 .ReturnsAsync((DeviceModel)null);
 
             //Act
-            var result = await _handler.Handle(deviceConfiguration, CancellationToken.None);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             //Assert
             Assert.False(result.IsSuccess);

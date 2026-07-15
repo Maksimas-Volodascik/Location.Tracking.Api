@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Location.Tracking.Application.Users.Commands.Login;
 using Location.Tracking.Application.Users.Commands.Register;
+using Location.Tracking.Application.Users.Query.GetUsers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,16 @@ namespace Location.Tracking.Api.Controllers
         public UsersController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsers()
+        {
+            var response = await _mediator.Send(new GetUsersQuery());
+
+            //if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
+
+            return Ok(response);
         }
 
         [HttpPost("register")]
