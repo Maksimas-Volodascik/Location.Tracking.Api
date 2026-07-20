@@ -30,7 +30,7 @@ namespace Location.Tracking.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync([FromQuery] RegisterCommand command)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterCommand command)
         {
             var response = await _mediator.Send(command);
 
@@ -40,13 +40,13 @@ namespace Location.Tracking.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync([FromQuery] LoginCommand command)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginCommand command)
         {
             var response = await _mediator.Send(command);
 
-            if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
+            if (!response.IsSuccess) return BadRequest(response.Error);
 
-            return Ok($"token: {response.Data.accessToken}");
+            return Ok($"{response.Data.accessToken}");
         }
     }
 }

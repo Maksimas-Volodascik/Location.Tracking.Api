@@ -7,6 +7,7 @@ using Location.Tracking.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using Serilog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,13 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
 
+//Logging
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 //JWT Auth
 builder.Services.AddAuthentication()
@@ -69,8 +77,8 @@ builder.Services.AddCors(opt =>
     opt.AddPolicy("AllowFrontend",
         policy =>
         {
-            //policy.WithOrigins("http://localhost:5173", "http://localhost:80") //5173 Port from vite dev server || 80 Port from docker container
-            policy.WithOrigins("https://maksweb.site/")
+            policy.WithOrigins("http://localhost:5173", "http://localhost:80") //5173 Port from vite dev server || 80 Port from docker container
+            //policy.WithOrigins("https://maksweb.site/")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -106,6 +114,8 @@ app.MapScalarApiReference("docs", opt =>
 app.UseCors("AllowFrontend");
 
 app.UseRateLimiter();
+
+app.UseMiddleware<LoggingMiddleware>();
 
 app.MapControllers()
     .RequireRateLimiting("FixedLimiter"); //apply rate limiting to all controllers
