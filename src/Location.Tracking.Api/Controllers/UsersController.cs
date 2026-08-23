@@ -3,10 +3,12 @@ using Location.Tracking.Application.Users.Commands.Login;
 using Location.Tracking.Application.Users.Commands.Register;
 using Location.Tracking.Application.Users.Query.GetUsers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers
 {
+    [Authorize]
     [ApiVersion(1, Deprecated = true)]
     [ApiVersion(2)] //v2 for testing
     [Route("v{v:apiVersion}/[controller]")]
@@ -26,9 +28,10 @@ namespace Location.Tracking.Api.Controllers
 
             //if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
 
-            return Ok(response);
+            return Ok(response.Data);
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterCommand command)
         {
@@ -39,6 +42,7 @@ namespace Location.Tracking.Api.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginCommand command)
         {
