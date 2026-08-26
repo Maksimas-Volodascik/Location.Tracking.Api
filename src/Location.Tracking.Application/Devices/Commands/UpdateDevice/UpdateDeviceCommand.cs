@@ -1,5 +1,4 @@
-﻿using Location.Tracking.Application.DeviceModels.Commands.UpdateDeviceModel;
-using Location.Tracking.Application.Shared;
+﻿using Location.Tracking.Application.Shared;
 using MediatR;
 using System;
 using System.Collections.Generic;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Location.Tracking.Application.DeviceModels.Commands.UpdateDeviceModel
+namespace Location.Tracking.Application.Devices.Commands.UpdateDevice
 {
     public record DeviceConfiguration
     {

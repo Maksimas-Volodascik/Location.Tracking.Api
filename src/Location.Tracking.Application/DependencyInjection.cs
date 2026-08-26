@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
 using Location.Tracking.Application.AutoMapper;
+using Location.Tracking.Application.Mapper;
 using Location.Tracking.Application.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,6 +26,7 @@ namespace Location.Tracking.Application
             {
                 cfg.AddProfile<DeviceProfile>();
                 cfg.AddProfile<DeviceModelProfile>();
+                cfg.AddProfile<UserProfile>();
             });
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
