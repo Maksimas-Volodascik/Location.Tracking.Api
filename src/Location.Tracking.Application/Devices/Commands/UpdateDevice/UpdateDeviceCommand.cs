@@ -1,4 +1,5 @@
-﻿using Location.Tracking.Application.Shared;
+﻿using Location.Tracking.Application.DeviceModels.Commands.UpdateDeviceModel;
+using Location.Tracking.Application.Shared;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -13,19 +14,5 @@ namespace Location.Tracking.Application.Devices.Commands.UpdateDevice
     {
         public DeviceConfiguration DeviceConfiguration { get; set; } = new DeviceConfiguration();
         public Guid DeviceId { get; set; } = Guid.Empty;
-    }
-    public record DeviceConfiguration
-    {
-        [Required(ErrorMessage = "Device IMEI is required.")]
-        [MaxLength(15, ErrorMessage = "IMEI cannot exceed 15 characters")]
-        public string Imei { get; set; } = string.Empty;
-
-        [MaxLength(50, ErrorMessage = "Name cannot exceed 50 characters")]
-        public string Name { get; set; } = string.Empty;
-
-        public bool IsEnabled { get; set; } = true;
-
-        [Required(ErrorMessage = "Device model is required.")]
-        public string DeviceModelName { get; set; } = string.Empty;
     }
 }
