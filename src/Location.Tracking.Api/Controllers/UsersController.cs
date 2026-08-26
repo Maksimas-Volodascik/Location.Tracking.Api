@@ -1,6 +1,9 @@
 ﻿using Asp.Versioning;
+using Location.Tracking.Application.Devices.Commands.UpdateDevice;
+using Location.Tracking.Application.Users.Commands.DeleteUser;
 using Location.Tracking.Application.Users.Commands.Login;
 using Location.Tracking.Application.Users.Commands.Register;
+using Location.Tracking.Application.Users.Commands.UpdateUser;
 using Location.Tracking.Application.Users.Query.GetUsers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiVersion(1, Deprecated = true)]
     [ApiVersion(2)] //v2 for testing
     [Route("v{v:apiVersion}/[controller]")]
@@ -29,6 +32,30 @@ namespace Location.Tracking.Api.Controllers
             //if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
 
             return Ok(response.Data);
+        }
+
+        [HttpPatch("{userId:guid}")]
+        public async Task<IActionResult> UpdateDeviceAsync([FromBody] UserConfiguration userConfiguration, Guid userId)
+        {
+            UpdateUserCommand command = new UpdateUserCommand();
+            command.UserId = userId;
+            command.UserConfiguration= userConfiguration;
+
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSuccess) return NotFound(result.Error!.ErrorMessage);
+
+            return Ok();
+        }
+
+        [HttpDelete("{userId:guid}")]
+        public async Task<IActionResult> DeleteUser(Guid userId)
+        {
+            var response = await _mediator.Send(new DeleteUserCommand { UserId = userId});
+            
+            if (!response.IsSuccess) return NotFound(response.Error!.ErrorMessage);
+            
+            return Ok();
         }
 
         [AllowAnonymous]

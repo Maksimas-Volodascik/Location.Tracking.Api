@@ -22,6 +22,7 @@ namespace Location.Tracking.Application.Shared
         {
             public static Error UserExists = new Error("User already exists.", "already_exists");
             public static Error InvalidCredentials = new Error("Invalid credentials.", "invalid_credentials");
+            public static Error UserNotFound = new Error("User does not exist.", "user_not_found");
         }
     }
 }
