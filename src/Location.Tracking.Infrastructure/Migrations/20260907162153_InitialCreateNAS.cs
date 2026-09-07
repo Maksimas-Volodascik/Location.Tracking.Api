@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Location.Tracking.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialCreateNAS : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,22 @@ namespace Location.Tracking.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DeviceModel", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LogEntry",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    TraceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Imei = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    ReceivedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    Message = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    Severity = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LogEntry", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,6 +68,7 @@ namespace Location.Tracking.Infrastructure.Migrations
                     Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     IsEnabled = table.Column<bool>(type: "boolean", nullable: false),
                     LastSeen = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    DateAdded = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     DeviceModelId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
@@ -77,6 +94,7 @@ namespace Location.Tracking.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ParsedData = table.Column<string>(type: "character varying(1500)", maxLength: 1500, nullable: false),
                     RawData = table.Column<string>(type: "character varying(1500)", maxLength: 1500, nullable: false),
                     ReceivedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     ExpiresAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -96,8 +114,7 @@ namespace Location.Tracking.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Devices_DeviceModelId",
                 table: "Devices",
-                column: "DeviceModelId",
-                unique: true);
+                column: "DeviceModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Devices_Imei_UserId",
@@ -109,6 +126,12 @@ namespace Location.Tracking.Infrastructure.Migrations
                 name: "IX_Devices_UserId",
                 table: "Devices",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LogEntry_TraceId_ReceivedDate",
+                table: "LogEntry",
+                columns: new[] { "TraceId", "ReceivedDate" },
+                descending: new[] { false, true });
 
             migrationBuilder.CreateIndex(
                 name: "IX_RawRecords_DeviceId",
@@ -125,6 +148,9 @@ namespace Location.Tracking.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "LogEntry");
+
             migrationBuilder.DropTable(
                 name: "RawRecords");
 

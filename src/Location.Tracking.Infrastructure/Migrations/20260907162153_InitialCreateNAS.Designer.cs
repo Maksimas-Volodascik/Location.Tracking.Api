@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Location.Tracking.Infrastructure.Migrations
 {
     [DbContext(typeof(TrackingDbContext))]
-    [Migration("20260530135713_AddDateAddedColumnToDevices")]
-    partial class AddDateAddedColumnToDevices
+    [Migration("20260907162153_InitialCreateNAS")]
+    partial class InitialCreateNAS
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,8 +58,7 @@ namespace Location.Tracking.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceModelId")
-                        .IsUnique();
+                    b.HasIndex("DeviceModelId");
 
                     b.HasIndex("UserId");
 
@@ -95,6 +94,41 @@ namespace Location.Tracking.Infrastructure.Migrations
                     b.ToTable("DeviceModel");
                 });
 
+            modelBuilder.Entity("Location.Tracking.Domain.Entities.LogEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Imei")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<DateTimeOffset>("ReceivedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Severity")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<Guid>("TraceId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TraceId", "ReceivedDate")
+                        .IsDescending(false, true);
+
+                    b.ToTable("LogEntry");
+                });
+
             modelBuilder.Entity("Location.Tracking.Domain.Entities.RawRecord", b =>
                 {
                     b.Property<Guid>("Id")
@@ -106,6 +140,11 @@ namespace Location.Tracking.Infrastructure.Migrations
 
                     b.Property<DateTimeOffset>("ExpiresAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ParsedData")
+                        .IsRequired()
+                        .HasMaxLength(1500)
+                        .HasColumnType("character varying(1500)");
 
                     b.Property<string>("RawData")
                         .IsRequired()
@@ -168,8 +207,8 @@ namespace Location.Tracking.Infrastructure.Migrations
             modelBuilder.Entity("Location.Tracking.Domain.Entities.Device", b =>
                 {
                     b.HasOne("Location.Tracking.Domain.Entities.DeviceModel", "DeviceModel")
-                        .WithOne("Device")
-                        .HasForeignKey("Location.Tracking.Domain.Entities.Device", "DeviceModelId")
+                        .WithMany("Devices")
+                        .HasForeignKey("DeviceModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -202,8 +241,7 @@ namespace Location.Tracking.Infrastructure.Migrations
 
             modelBuilder.Entity("Location.Tracking.Domain.Entities.DeviceModel", b =>
                 {
-                    b.Navigation("Device")
-                        .IsRequired();
+                    b.Navigation("Devices");
                 });
 
             modelBuilder.Entity("Location.Tracking.Domain.Entities.User", b =>

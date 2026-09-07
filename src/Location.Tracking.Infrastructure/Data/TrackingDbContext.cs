@@ -16,6 +16,7 @@ namespace Location.Tracking.Infrastructure.Data
         public DbSet<RawRecord> RawRecords { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<DeviceModel> DeviceModel { get; set; }
+        public DbSet<LogEntry> LogEntry { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +45,14 @@ namespace Location.Tracking.Infrastructure.Data
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<LogEntry>()
+               .HasIndex(le => new {le.TraceId, le.ReceivedDate})
+               .IsDescending(false, true);//order by newest
         }
 
     }

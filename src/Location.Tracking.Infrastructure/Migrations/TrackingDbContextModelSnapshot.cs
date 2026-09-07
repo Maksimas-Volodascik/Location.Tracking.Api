@@ -91,6 +91,41 @@ namespace Location.Tracking.Infrastructure.Migrations
                     b.ToTable("DeviceModel");
                 });
 
+            modelBuilder.Entity("Location.Tracking.Domain.Entities.LogEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Imei")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<DateTimeOffset>("ReceivedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Severity")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<Guid>("TraceId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TraceId", "ReceivedDate")
+                        .IsDescending(false, true);
+
+                    b.ToTable("LogEntry");
+                });
+
             modelBuilder.Entity("Location.Tracking.Domain.Entities.RawRecord", b =>
                 {
                     b.Property<Guid>("Id")

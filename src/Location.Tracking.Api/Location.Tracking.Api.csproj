@@ -50,4 +50,8 @@
     <ProjectReference Include="..\Location.Tracking.Infrastructure\Location.Tracking.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 </Project>

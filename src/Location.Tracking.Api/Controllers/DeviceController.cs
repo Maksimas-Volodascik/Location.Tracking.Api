@@ -80,7 +80,7 @@ namespace Location.Tracking.Api.Controllers
 
             if (!result.IsSuccess) return NotFound(result.Error!.ErrorMessage);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

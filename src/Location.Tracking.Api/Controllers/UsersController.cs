@@ -55,7 +55,7 @@ namespace Location.Tracking.Api.Controllers
             
             if (!response.IsSuccess) return NotFound(response.Error!.ErrorMessage);
             
-            return Ok();
+            return NoContent();
         }
 
         [AllowAnonymous]
