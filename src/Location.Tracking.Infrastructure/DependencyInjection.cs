@@ -25,6 +25,7 @@ namespace Location.Tracking.Infrastructure
             services.AddScoped<IDeviceRepository, DeviceRepository>();
             services.AddScoped<IDeviceModelRepository, DeviceModelRepository>();
             services.AddScoped<IRecordRepository, RecordRepository>();
+            services.AddScoped<ILogEntryRepository, LogEntryRepository>();
 
             // Add other infrastructure services here (caching, external APIs, email, etc.)
 
