@@ -1,6 +1,6 @@
 ﻿using Location.Tracking.Application.Devices.Commands.DeleteDevice;
 using Location.Tracking.Application.Interfaces.Repositories;
-using Location.Tracking.Application.Shared;
+using Location.Tracking.Application.Shared.Results;
 using Location.Tracking.Domain.Entities;
 using Moq;
 using System;

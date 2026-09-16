@@ -1,5 +1,5 @@
 ﻿using Location.Tracking.Application.Interfaces.Repositories;
-using Location.Tracking.Application.Shared;
+using Location.Tracking.Application.Shared.AuthToken;
 using Location.Tracking.Application.Users.Commands.Login;
 using Location.Tracking.Domain.Entities;
 using Microsoft.AspNetCore.Identity;

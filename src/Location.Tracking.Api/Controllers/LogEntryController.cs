@@ -24,7 +24,7 @@ namespace Location.Tracking.Api.Controllers
         {
             var response = await _mediator.Send(new GetLogEntriesQuery());
 
-            return Ok(response);            
+            return Ok(response.Data);            
         }
 
     }

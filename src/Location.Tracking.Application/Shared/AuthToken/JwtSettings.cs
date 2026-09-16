@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Location.Tracking.Application.Shared
+namespace Location.Tracking.Application.Shared.AuthToken
 {
     public class JwtSettings
     {

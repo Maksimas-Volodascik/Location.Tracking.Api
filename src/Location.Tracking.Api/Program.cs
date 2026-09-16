@@ -3,6 +3,7 @@ using Asp.Versioning.ApiExplorer;
 using Location.Tracking.Api.Middleware;
 using Location.Tracking.Application;
 using Location.Tracking.Application.Shared;
+using Location.Tracking.Application.Shared.AuthToken;
 using Location.Tracking.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

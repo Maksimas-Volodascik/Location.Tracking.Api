@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Location.Tracking.Application.Shared
+namespace Location.Tracking.Application.Shared.Results
 {
     public record Error (string ErrorMessage, string ErrorType);
 }
