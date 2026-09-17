@@ -1,4 +1,6 @@
 ﻿using Asp.Versioning;
+using Location.Tracking.Application.Auth;
+using Location.Tracking.Application.Auth.Dtos;
 using Location.Tracking.Application.Devices.Commands.UpdateDevice;
 using Location.Tracking.Application.Users.Commands.DeleteUser;
 using Location.Tracking.Application.Users.Commands.Login;
@@ -19,9 +21,11 @@ namespace Location.Tracking.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public UsersController(IMediator mediator)
+        private readonly IAuthService _authService;
+        public UsersController(IMediator mediator, IAuthService authService)
         {
             _mediator = mediator;
+            _authService = authService;
         }
 
         [HttpGet]
@@ -60,9 +64,9 @@ namespace Location.Tracking.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] RegisterCommand command)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request)
         {
-            var response = await _mediator.Send(command);
+            var response = await _authService.Register(request);
 
             if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
 
@@ -71,11 +75,11 @@ namespace Location.Tracking.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginCommand command)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request)
         {
-            var response = await _mediator.Send(command);
+            var response = await _authService.Login(request);
 
-            if (!response.IsSuccess) return BadRequest(response.Error);
+            if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
 
             return Ok($"{response.Data.accessToken}");
         }

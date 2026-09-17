@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Location.Tracking.Application.Shared.AuthToken
 {
-    internal class TokenIssuer : ITokenIssuer
+    public class TokenIssuer : ITokenIssuer
     {
         private readonly JwtSettings _jwtSettings;
         public TokenIssuer(IOptions<JwtSettings> options)

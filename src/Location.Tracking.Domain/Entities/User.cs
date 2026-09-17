@@ -16,10 +16,10 @@ namespace Location.Tracking.Domain.Entities
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
         [MaxLength(255)]
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; set; }
 
         [Required]
-        public string PasswordHash { get; set; } = string.Empty;
+        public string PasswordHash { get; set; }
 
         [MaxLength(50)]
         public string FirstName { get; set; } = string.Empty;

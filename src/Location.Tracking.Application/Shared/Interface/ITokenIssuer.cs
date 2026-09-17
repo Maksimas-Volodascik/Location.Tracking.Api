@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Location.Tracking.Application.Shared.Interface
 {
-    internal interface ITokenIssuer
+    public interface ITokenIssuer
     {
         string CreateAccessToken(User user);
     }

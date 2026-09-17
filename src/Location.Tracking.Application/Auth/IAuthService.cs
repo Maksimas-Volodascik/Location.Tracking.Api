@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Location.Tracking.Application.Auth
 {
-    internal interface IAuthService
+    public interface IAuthService
     {
         public Task<Result<TokenResponse>> Login(LoginRequest loginRequest);
-        public Task<TokenResponse> Register(string email, string password);
+        public Task<Result> Register(RegisterRequest registerRequest);
     }
 }

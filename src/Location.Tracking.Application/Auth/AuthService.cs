@@ -10,12 +10,13 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Location.Tracking.Application.Auth
 {
-    internal class AuthService : IAuthService
+    public class AuthService : IAuthService
     {
         private readonly ITrackingDbContext _context;
         private readonly ITokenIssuer _tokenIssuer;
@@ -41,9 +42,28 @@ namespace Location.Tracking.Application.Auth
             return Result<TokenResponse>.Success(token);
         }
 
-        public Task<TokenResponse> Register(string email, string password)
+        public async Task<Result> Register(RegisterRequest registerRequest)
         {
-            throw new NotImplementedException();
+
+            if (await _context.Users.FirstOrDefaultAsync(b => b.Email == registerRequest.Email) != null)
+                return Result.Failure(Errors.UserErrors.UserExists);
+
+            User newUser = new User
+            {
+                FirstName = registerRequest.FirstName,
+                LastName = registerRequest.LastName,
+                Email = registerRequest.Email,
+                Role = "demo"
+            };
+
+            var hashedPassword = new PasswordHasher<User>().HashPassword(newUser, registerRequest.Password);
+
+            newUser.PasswordHash = hashedPassword;
+
+            await _context.Users.AddAsync(newUser);
+            await _context.SaveChangesAsync();
+
+            return Result.Success();
         }
     }
 }
