@@ -1,5 +1,5 @@
 ﻿using Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics;
-using Location.Tracking.Application.Users.Query.GetUsers;
+using Location.Tracking.Application.Users.Dtos;
 using Location.Tracking.Domain.Entities;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Location.Tracking.Application.Users.Commands.UpdateUser;
+using Location.Tracking.Application.Users.Dtos;
 using Location.Tracking.Domain.Entities;
 using System;
 using System.Collections.Generic;

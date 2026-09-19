@@ -1,5 +1,6 @@
 ﻿using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Application.Shared.Results;
+using Location.Tracking.Application.Users.Dtos;
 using Location.Tracking.Domain.Entities;
 using MediatR;
 using System;

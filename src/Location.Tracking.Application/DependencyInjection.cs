@@ -11,6 +11,7 @@ using Location.Tracking.Application.AutoMapper;
 using Location.Tracking.Application.Mapper;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Application.Shared.Interface;
+using Location.Tracking.Application.Users;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -35,6 +36,7 @@ namespace Location.Tracking.Application
 
             // Add other application services here later
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }
