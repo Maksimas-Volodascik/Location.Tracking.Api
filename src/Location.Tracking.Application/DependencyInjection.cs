@@ -6,9 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
+using Location.Tracking.Application.Auth;
 using Location.Tracking.Application.AutoMapper;
 using Location.Tracking.Application.Mapper;
 using Location.Tracking.Application.Shared;
+using Location.Tracking.Application.Shared.Interface;
+using Location.Tracking.Application.Users;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -32,6 +35,8 @@ namespace Location.Tracking.Application
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             // Add other application services here later
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

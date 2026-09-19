@@ -4,6 +4,7 @@ using Location.Tracking.Api.Middleware;
 using Location.Tracking.Application;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Infrastructure;
+using Location.Tracking.Infrastructure.Auth;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;

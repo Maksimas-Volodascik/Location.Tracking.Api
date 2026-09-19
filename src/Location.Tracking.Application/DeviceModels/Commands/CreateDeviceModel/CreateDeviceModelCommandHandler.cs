@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Location.Tracking.Application.Interfaces.Repositories;
-using Location.Tracking.Application.Shared;
+using Location.Tracking.Application.Shared.Results;
 using Location.Tracking.Domain.Entities;
 using MediatR;
 using System;

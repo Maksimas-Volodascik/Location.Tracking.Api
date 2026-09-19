@@ -1,5 +1,5 @@
 ﻿using Location.Tracking.Application.RawRecords.Query;
-using Location.Tracking.Application.Shared;
+using Location.Tracking.Application.Shared.Results;
 using MediatR;
 using System;
 using System.Collections.Generic;

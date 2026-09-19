@@ -1,4 +1,5 @@
-﻿using Location.Tracking.Application.Shared;
+﻿using Location.Tracking.Application.Shared.Results;
+using Location.Tracking.Application.Users.Dtos;
 using MediatR;
 using System;
 using System.Collections.Generic;
