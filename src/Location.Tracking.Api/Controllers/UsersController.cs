@@ -1,10 +1,7 @@
 ﻿using Asp.Versioning;
 using Location.Tracking.Application.Auth;
 using Location.Tracking.Application.Auth.Dtos;
-using Location.Tracking.Application.Devices.Commands.UpdateDevice;
 using Location.Tracking.Application.Users.Commands.DeleteUser;
-using Location.Tracking.Application.Users.Commands.Login;
-using Location.Tracking.Application.Users.Commands.Register;
 using Location.Tracking.Application.Users.Commands.UpdateUser;
 using Location.Tracking.Application.Users.Query.GetUsers;
 using MediatR;

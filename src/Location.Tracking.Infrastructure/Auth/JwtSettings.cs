@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Location.Tracking.Application.Shared.AuthToken
+namespace Location.Tracking.Infrastructure.Auth
 {
     public class JwtSettings
     {
@@ -12,6 +12,5 @@ namespace Location.Tracking.Application.Shared.AuthToken
         public string Audience { get; set; } = string.Empty;
         public string Issuer { get; set; } = string.Empty;
         public int TokenExpiryInHours { get; set; } = 8;
-
     }
 }

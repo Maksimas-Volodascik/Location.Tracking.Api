@@ -11,6 +11,7 @@ using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Infrastructure.Repositories;
 using Location.Tracking.Application.Auth;
 using Location.Tracking.Application.Shared.Interface;
+using Location.Tracking.Infrastructure.Auth;
 
 namespace Location.Tracking.Infrastructure
 {
@@ -32,7 +33,7 @@ namespace Location.Tracking.Infrastructure
             services.AddScoped<IRecordRepository, RecordRepository>();
             services.AddScoped<ILogEntryRepository, LogEntryRepository>();
 
-
+            services.AddSingleton<ITokenIssuer, TokenIssuer>();
             // Add other infrastructure services here (caching, external APIs, email, etc.)
 
             return services;
