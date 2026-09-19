@@ -2,10 +2,7 @@
 using Location.Tracking.Application.Auth;
 using Location.Tracking.Application.Auth.Dtos;
 using Location.Tracking.Application.Users;
-using Location.Tracking.Application.Users.Commands.DeleteUser;
-using Location.Tracking.Application.Users.Commands.UpdateUser;
 using Location.Tracking.Application.Users.Dtos;
-using Location.Tracking.Application.Users.Query.GetUsers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

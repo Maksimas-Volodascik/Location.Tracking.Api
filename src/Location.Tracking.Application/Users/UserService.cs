@@ -3,7 +3,6 @@ using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
 using Location.Tracking.Application.Users.Dtos;
-using Location.Tracking.Application.Users.Query.GetUsers;
 using Location.Tracking.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
