@@ -1,13 +1,13 @@
 ﻿using Asp.Versioning;
+using Location.Tracking.Application.DeviceModels;
 using Location.Tracking.Application.DeviceModels.Commands.CreateDeviceModel;
 using Location.Tracking.Application.DeviceModels.Commands.DeleteDeviceModel;
 using Location.Tracking.Application.DeviceModels.Commands.UpdateDeviceModel;
+using Location.Tracking.Application.DeviceModels.Dtos;
 using Location.Tracking.Application.DeviceModels.Query.GetAllDeviceModels;
 using Location.Tracking.Application.DeviceModels.Query.GetDeviceModelById;
 using Location.Tracking.Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers
@@ -17,62 +17,71 @@ namespace Location.Tracking.Api.Controllers
     [ApiController]
     public class DeviceModelController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public DeviceModelController(IMediator mediator)
+        private readonly IDeviceModelService _deviceModelService;
+        public DeviceModelController(IDeviceModelService deviceModelService)
         {
-            _mediator = mediator;
-        }
-
-        [Authorize(Roles = "User")]
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Device>>> GetAllDeviceModelsAsync()
-        {
-            var deviceModels = await _mediator.Send(new GetAllDeviceModelsQuery());
-
-            return Ok(deviceModels);
+            _deviceModelService = deviceModelService;
         }
 
         //[Authorize(Roles = "User")]
-        [HttpGet("{Id}")]
-        public async Task<ActionResult<IEnumerable<Device>>> GetDeviceModelByIdAsync(Guid Id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Device>>> GetAllDeviceModelsAsync()
         {
-            GetDeviceModelByIdQuery query = new GetDeviceModelByIdQuery { DeviceModelId = Id };
+            var response = await _deviceModelService.GetAllDeviceModelsAsync();
 
-            var deviceModels = await _mediator.Send(query);
-
-            return Ok(deviceModels);
+            return Ok(response);
         }
 
-        [Authorize(Roles = "User, Admin")]
+        //[Authorize(Roles = "User")]
+        [HttpGet("{deviceModelId}")]
+        public async Task<ActionResult<IEnumerable<Device>>> GetDeviceModelByIdAsync(Guid deviceModelId)
+        {
+            var response = await _deviceModelService.GetDeviceModelByIdAsync(deviceModelId);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.Error!.ErrorMessage);
+            }
+
+            return Ok(response.Data);
+        }
+
+        //[Authorize(Roles = "User, Admin")]
         [HttpPost]
-        public async Task<IActionResult> CreateDeviceModelAsync([FromQuery] CreateDeviceModelCommand command)
+        public async Task<IActionResult> CreateDeviceModelAsync([FromBody] CreateDeviceModelRequest request)
         {
-            var result = await _mediator.Send(command);
+            var response = await _deviceModelService.CreateNewDeviceModelAsync(request);
 
-            if (result.IsSuccess == false) return BadRequest(result.Error!.ErrorMessage);
+            if (!response.IsSuccess) return BadRequest(response.Error!.ErrorMessage);
 
             return Ok();
         }
 
-        [Authorize(Roles = "User, Admin")]
-        [HttpPatch("{deviceId}")]
-        public async Task<IActionResult> UpdateDeviceModelAsync([FromQuery] UpdateDeviceModelCommand command, Guid deviceId)
+       //[Authorize(Roles = "User, Admin")]
+        [HttpPatch("{deviceModelId}")]
+        public async Task<IActionResult> UpdateDeviceModelAsync([FromBody] UpdateDeviceModelRequest request, Guid deviceModelId)
         {
-            command.DeviceModelId = deviceId;
+            var response = await _deviceModelService.UpdateDeviceModelAsync(deviceModelId, request);
 
-            await _mediator.Send(command);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.Error!.ErrorMessage);
+            }
 
             return Ok();
         }
 
-        [Authorize(Roles = "User, Admin")]
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteDeviceModelAsync(Guid Id)
+        //[Authorize(Roles = "User, Admin")]
+        [HttpDelete("{deviceModelId}")]
+        public async Task<IActionResult> DeleteDeviceModelAsync(Guid deviceModelId)
         {
-            DeleteDeviceModelCommand command = new DeleteDeviceModelCommand { deviceModelId = Id };
+            var response = await _deviceModelService.DeleteDeviceModelAsync(deviceModelId);
 
-            await _mediator.Send(command);
-            
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.Error!.ErrorMessage);
+            }
+
             return Ok();
         }
     }

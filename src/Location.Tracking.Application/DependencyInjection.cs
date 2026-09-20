@@ -9,6 +9,7 @@ using FluentValidation;
 using Location.Tracking.Application.Auth;
 using Location.Tracking.Application.AutoMapper;
 using Location.Tracking.Application.Dashboard;
+using Location.Tracking.Application.DeviceModels;
 using Location.Tracking.Application.Mapper;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Application.Shared.Interface;
@@ -39,6 +40,7 @@ namespace Location.Tracking.Application
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<IDeviceModelService, DeviceModelService>();
 
             return services;
         }
