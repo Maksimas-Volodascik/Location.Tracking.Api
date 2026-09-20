@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics
+namespace Location.Tracking.Application.Dashboard.Dtos
 {
     public record UsersMetrics
     {

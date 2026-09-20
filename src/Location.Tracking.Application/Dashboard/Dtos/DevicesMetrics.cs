@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics
+namespace Location.Tracking.Application.Dashboard.Dtos
 {
-    public record ErrorMetrics
+    public record DevicesMetrics
     {
         public int Total { get; init; } = 0;
         public int Weekly { get; init; } = 0;

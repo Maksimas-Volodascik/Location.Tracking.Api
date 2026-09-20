@@ -11,6 +11,10 @@ namespace Location.Tracking.Application.Shared.Interface
     public interface ITrackingDbContext
     {
         DbSet<User> Users { get; }
+        DbSet<RawRecord> RawRecords { get; }
+        DbSet<LogEntry> LogEntry { get; }
+        DbSet<DeviceModel> DeviceModel { get; }
+        DbSet<Device> Devices { get; }
         Task<int> SaveChangesAsync(CancellationToken ct = default);
     }
 }
