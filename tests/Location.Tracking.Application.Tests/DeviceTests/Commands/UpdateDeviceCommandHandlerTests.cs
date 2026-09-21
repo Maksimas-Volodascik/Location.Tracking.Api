@@ -31,7 +31,7 @@ namespace Location.Tracking.Application.Tests.DeviceTests.Commands
         public async Task Handle_ValidData_ReturnsSuccessResult()
         {
             //Arrange
-            DeviceConfiguration deviceConfig = new DeviceConfiguration
+            DeviceConfigurations deviceConfig = new DeviceConfigurations
             {
                 DeviceModelName = "ModelA",
                 Name = "Custom Name"
@@ -88,7 +88,7 @@ namespace Location.Tracking.Application.Tests.DeviceTests.Commands
         public async Task Handle_DeviceNotFound_ReturnsFailure()
         {
             // Arrange
-            DeviceConfiguration deviceConfig = new DeviceConfiguration
+            DeviceConfigurations deviceConfig = new DeviceConfigurations
             {
                 DeviceModelName = "ModelA",
                 Name = "Custom Name"
@@ -128,7 +128,7 @@ namespace Location.Tracking.Application.Tests.DeviceTests.Commands
         public async Task Handle_DeviceModelNotFound_ReturnsFailure()
         {
             // Arrange
-            DeviceConfiguration deviceConfig = new DeviceConfiguration
+            DeviceConfigurations deviceConfig = new DeviceConfigurations
             {
                 DeviceModelName = "ModelA",
                 Name = "Custom Name"

@@ -1,13 +1,7 @@
 ﻿using Asp.Versioning;
 using Location.Tracking.Application.DeviceModels;
-using Location.Tracking.Application.DeviceModels.Commands.CreateDeviceModel;
-using Location.Tracking.Application.DeviceModels.Commands.DeleteDeviceModel;
-using Location.Tracking.Application.DeviceModels.Commands.UpdateDeviceModel;
 using Location.Tracking.Application.DeviceModels.Dtos;
-using Location.Tracking.Application.DeviceModels.Query.GetAllDeviceModels;
-using Location.Tracking.Application.DeviceModels.Query.GetDeviceModelById;
 using Location.Tracking.Domain.Entities;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers

@@ -10,6 +10,7 @@ using Location.Tracking.Application.Auth;
 using Location.Tracking.Application.AutoMapper;
 using Location.Tracking.Application.Dashboard;
 using Location.Tracking.Application.DeviceModels;
+using Location.Tracking.Application.Devices;
 using Location.Tracking.Application.Mapper;
 using Location.Tracking.Application.Shared;
 using Location.Tracking.Application.Shared.Interface;
@@ -41,6 +42,7 @@ namespace Location.Tracking.Application
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IDeviceModelService, DeviceModelService>();
+            services.AddScoped<IDeviceService, DeviceService>();
 
             return services;
         }

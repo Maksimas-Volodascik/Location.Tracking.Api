@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
-using Location.Tracking.Application.Devices.Commands.UpdateDevice;
+using Location.Tracking.Application.Devices.Dtos;
 using Location.Tracking.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Location.Tracking.Application.AutoMapper
 {
@@ -13,9 +8,15 @@ namespace Location.Tracking.Application.AutoMapper
     {
         public DeviceProfile()
         {
-            CreateMap<DeviceConfiguration, Device>()
+            CreateMap<CreateDeviceRequest, Device>()
                 .ForMember(dest => dest.DeviceModelId, opt => opt.Ignore())
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); //ignore null values (keep old)
+
+            CreateMap<UpdateDeviceRequest, Device>()
+                .ForMember(dest => dest.DeviceModelId, opt => opt.Ignore())
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }
