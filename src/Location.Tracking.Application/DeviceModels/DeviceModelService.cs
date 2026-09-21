@@ -18,11 +18,11 @@ namespace Location.Tracking.Application.DeviceModels
             _mapper = mapper;
         }
 
-        public async Task<Result> CreateNewDeviceModelAsync(CreateDeviceModelRequest createDevice)
+        public async Task<Result> CreateNewDeviceModelAsync(CreateDeviceModelRequest createDeviceModel)
         {
             DeviceModel deviceModel = new DeviceModel();
 
-            _mapper.Map(createDevice, deviceModel);
+            _mapper.Map(createDeviceModel, deviceModel);
 
             await _context.DeviceModel.AddAsync(deviceModel);
             await _context.SaveChangesAsync();
@@ -30,9 +30,9 @@ namespace Location.Tracking.Application.DeviceModels
             return Result.Success();
         }
 
-        public async Task<Result> DeleteDeviceModelAsync(Guid deviceId)
+        public async Task<Result> DeleteDeviceModelAsync(Guid modelId)
         {
-            var deviceModel = await _context.DeviceModel.FindAsync(deviceId);
+            var deviceModel = await _context.DeviceModel.FindAsync(modelId);
 
             if (deviceModel == null) return Result.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
 
@@ -56,10 +56,10 @@ namespace Location.Tracking.Application.DeviceModels
             return Result<IEnumerable<DeviceModelDetails>>.Success(deviceModelList);
         }
 
-        public async Task<Result<DeviceModelDetails>> GetDeviceModelByIdAsync(Guid deviceId)
+        public async Task<Result<DeviceModelDetails>> GetDeviceModelByIdAsync(Guid modelId)
         {
             var deviceModel = await _context.DeviceModel
-                                            .Where(device => device.Id == deviceId)
+                                            .Where(device => device.Id == modelId)
                                             .Select(dm => new DeviceModelDetails
                                             {
                                                 Name = dm.Name,
@@ -96,13 +96,13 @@ namespace Location.Tracking.Application.DeviceModels
             return Result<DeviceModelDetails>.Success(deviceModel);
         }
 
-        public async Task<Result> UpdateDeviceModelAsync(Guid deviceId, UpdateDeviceModelRequest updateDevice)
+        public async Task<Result> UpdateDeviceModelAsync(Guid modelId, UpdateDeviceModelRequest updateDeviceModel)
         {
-            var deviceModel = await _context.DeviceModel.FindAsync(deviceId);
+            var deviceModel = await _context.DeviceModel.FindAsync(modelId);
 
             if (deviceModel == null) return Result.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
 
-            _mapper.Map(updateDevice, deviceModel);
+            _mapper.Map(updateDeviceModel, deviceModel);
 
             _context.DeviceModel.Update(deviceModel);
             await _context.SaveChangesAsync();
