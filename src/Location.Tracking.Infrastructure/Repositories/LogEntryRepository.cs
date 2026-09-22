@@ -1,5 +1,5 @@
 ﻿using Location.Tracking.Application.Interfaces.Repositories;
-using Location.Tracking.Application.RawRecords.Query;
+using Location.Tracking.Application.LogEntries.Dtos;
 using Location.Tracking.Domain.Entities;
 using Location.Tracking.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +19,10 @@ namespace Location.Tracking.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<LogEntryDto>> GetAllLogEntriesAsync()
+        public async Task<IEnumerable<LogEntryDetails>> GetAllLogEntriesAsync()
         {
             var query = from logEntries in _context.LogEntry
-                        select new LogEntryDto{
+                        select new LogEntryDetails{
                             Imei = logEntries.Imei,
                             Message = logEntries.Message,
                             ReceivedDate = logEntries.ReceivedDate,

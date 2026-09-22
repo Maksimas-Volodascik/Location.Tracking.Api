@@ -1,11 +1,8 @@
 ﻿using Asp.Versioning;
-using Location.Tracking.Application.RawRecords.Query;
+using Location.Tracking.Application.RawRecords;
 using Location.Tracking.Domain.Entities;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Location.Tracking.Api.Controllers
 {
@@ -15,18 +12,18 @@ namespace Location.Tracking.Api.Controllers
     [ApiController]
     public class RecordsController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public RecordsController(IMediator mediator)
+        private readonly IRecordService _recordService;
+        public RecordsController(IRecordService recordService)
         {
-            _mediator = mediator;
+            _recordService = recordService;
         }
 
         [HttpGet("{deviceId}")]
         public async Task<ActionResult<Device>> GetDeviceRecords(Guid deviceId)
         {
-            var result = await _mediator.Send(new GetDeviceRecordsQuery { DeviceId = deviceId });
+            var response = await _recordService.GetAllRecords(deviceId);
 
-            return Ok(result.Data);
+            return Ok(response.Data);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Location.Tracking.Application.RawRecords.Query;
+﻿using Location.Tracking.Application.LogEntries.Dtos;
 using Location.Tracking.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,6 @@ namespace Location.Tracking.Application.Interfaces.Repositories
 {
     public interface ILogEntryRepository: IBaseRepository<LogEntry>
     {
-        Task<IEnumerable<LogEntryDto>> GetAllLogEntriesAsync();
+        Task<IEnumerable<LogEntryDetails>> GetAllLogEntriesAsync();
     }
 }

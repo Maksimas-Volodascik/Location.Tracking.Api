@@ -1,10 +1,7 @@
 ﻿using Asp.Versioning;
-using Location.Tracking.Application.LogEntries.Query;
-using Location.Tracking.Application.RawRecords.Query;
-using MediatR;
+using Location.Tracking.Application.LogEntries;
+using Location.Tracking.Application.LogEntries.Dtos;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Location.Tracking.Api.Controllers
 {
@@ -13,16 +10,16 @@ namespace Location.Tracking.Api.Controllers
     [ApiController]
     public class LogEntryController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public LogEntryController(IMediator mediator)
+        private readonly ILogEntriesService _logEntriesService;
+        public LogEntryController(ILogEntriesService logEntriesService)
         {
-            _mediator = mediator;
+            _logEntriesService = logEntriesService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LogEntryDto>>> GetAllLogEntries()
+        public async Task<ActionResult<IEnumerable<LogEntryDetails>>> GetAllLogEntries()
         {
-            var response = await _mediator.Send(new GetLogEntriesQuery());
+            var response = await _logEntriesService.GetLogEntriesAsync();
 
             return Ok(response.Data);            
         }

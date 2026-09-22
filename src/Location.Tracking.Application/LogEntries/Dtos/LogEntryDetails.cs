@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Location.Tracking.Application.RawRecords.Query
+
+namespace Location.Tracking.Application.LogEntries.Dtos
 {
-    public class LogEntryDto
+    public class LogEntryDetails
     {
         public Guid TraceId { get; set; }
 
