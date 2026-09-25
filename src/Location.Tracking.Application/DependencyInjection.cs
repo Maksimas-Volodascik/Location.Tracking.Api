@@ -35,8 +35,6 @@ namespace Location.Tracking.Application
                 cfg.AddProfile<UserProfile>();
             });
 
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-
             // Add other application services here later
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();

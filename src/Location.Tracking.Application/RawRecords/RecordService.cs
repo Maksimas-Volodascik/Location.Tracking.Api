@@ -1,7 +1,6 @@
 ﻿using Location.Tracking.Application.RawRecords.Dtos;
 using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Location.Tracking.Application.RawRecords

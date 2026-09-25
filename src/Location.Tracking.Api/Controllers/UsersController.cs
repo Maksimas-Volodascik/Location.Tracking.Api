@@ -3,7 +3,6 @@ using Location.Tracking.Application.Auth;
 using Location.Tracking.Application.Auth.Dtos;
 using Location.Tracking.Application.Users;
 using Location.Tracking.Application.Users.Dtos;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,12 +15,10 @@ namespace Location.Tracking.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IMediator _mediator;
         private readonly IAuthService _authService;
         private readonly IUserService _userService;
-        public UsersController(IMediator mediator, IAuthService authService, IUserService userService)
+        public UsersController(IAuthService authService, IUserService userService)
         {
-            _mediator = mediator;
             _authService = authService;
             _userService = userService;
         }

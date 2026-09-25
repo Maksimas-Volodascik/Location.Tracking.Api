@@ -1,16 +1,9 @@
 ﻿using AutoMapper;
-using Location.Tracking.Application.Interfaces.Repositories;
 using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
 using Location.Tracking.Application.Users.Dtos;
 using Location.Tracking.Domain.Entities;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Location.Tracking.Application.Users
 {
