@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
-using Location.Tracking.Application.DeviceModels.Commands.CreateDeviceModel;
+using Location.Tracking.Application.DeviceModels.Dtos;
 using Location.Tracking.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Location.Tracking.Application.AutoMapper
+
 {
     public class DeviceModelProfile : Profile
     {
         public DeviceModelProfile()
         {
-            CreateMap<CreateDeviceModelCommand, DeviceModel>()
+            CreateMap<CreateDeviceModelRequest, DeviceModel>()
                 .ForAllMembers(o => o.Condition((src, dest, srcMember) => srcMember != null)); //map parameters that are not null
+
+            CreateMap<UpdateDeviceModelRequest, DeviceModel>()
+                .ForAllMembers(o => o.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

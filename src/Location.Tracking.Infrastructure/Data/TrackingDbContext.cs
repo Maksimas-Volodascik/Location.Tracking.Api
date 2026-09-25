@@ -1,4 +1,5 @@
-﻿using Location.Tracking.Domain.Entities;
+﻿using Location.Tracking.Application.Shared.Interface;
+using Location.Tracking.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Location.Tracking.Infrastructure.Data
 {
-    public class TrackingDbContext : DbContext
+    public class TrackingDbContext : DbContext, ITrackingDbContext
     {
         public TrackingDbContext(DbContextOptions<TrackingDbContext> options) : base(options) { }
         public DbSet<User> Users { get; set; }

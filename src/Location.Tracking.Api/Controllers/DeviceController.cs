@@ -1,13 +1,7 @@
 ﻿using Asp.Versioning;
-using Location.Tracking.Application.Devices.Commands.CreateNewDevice;
-using Location.Tracking.Application.Devices.Commands.DeleteDevice;
-using Location.Tracking.Application.Devices.Commands.UpdateDevice;
-using Location.Tracking.Application.Devices.Query.GetAllDevices;
-using Location.Tracking.Application.Devices.Query.GetDeviceById;
-using Location.Tracking.Application.RawRecords.Query;
-using Location.Tracking.Application.Shared;
+using Location.Tracking.Application.Devices;
+using Location.Tracking.Application.Devices.Dtos;
 using Location.Tracking.Domain.Entities;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -20,55 +14,52 @@ namespace Location.Tracking.Api.Controllers
     [ApiController]
     public class DeviceController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public DeviceController(IMediator mediator)
+        private readonly IDeviceService _deviceService;
+        public DeviceController(IDeviceService deviceService)
         {
-            _mediator = mediator;
+            _deviceService = deviceService;
         }
 
         [HttpGet()]
         public async Task<ActionResult<IEnumerable<Device>>> GetAllDevicesAsync()
         {
-            var devices = await _mediator.Send(new GetAllDevicesQuery());
+            var response = await _deviceService.GetAllDevicesAsync();
 
-            return Ok(devices.Data);
+            return Ok(response.Data);
         }
 
         [HttpGet("{deviceId}")]
         public async Task<ActionResult<Device>> GetDeviceByIdAsync(Guid deviceId)
         {
-            var device = await _mediator.Send(new GetDeviceByIdQuery { DeviceId = deviceId});
+            var response = await _deviceService.GetDeviceByIdAsync(deviceId);
 
-            return Ok(device);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.Error!.ErrorMessage);
+            }
+
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDeviceAsync([FromBody] CreateNewDeviceRequest deviceConfiguration)
+        public async Task<IActionResult> CreateDeviceAsync([FromBody] CreateDeviceRequest createDeviceRequest)
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("Missing Name Identifier");
-            var command = new CreateNewDeviceCommand
-            {
-                DeviceData = deviceConfiguration,
-                UserId = Guid.Parse(userId)
-            };
+            
 
-            var result = await _mediator.Send(command);
+            var response = await _deviceService.CreateNewDeviceAsync(createDeviceRequest, new Guid(userId));
 
-            if (result.IsSuccess == false) return BadRequest(result.Error!.ErrorMessage);
+            if (response.IsSuccess == false) return BadRequest(response.Error!.ErrorMessage);
 
             return Ok();
         }
 
         [HttpPatch("{deviceId}")]
-        public async Task<IActionResult> UpdateDeviceAsync([FromBody] DeviceConfiguration deviceConfiguration, Guid deviceId)
+        public async Task<IActionResult> UpdateDeviceAsync([FromBody] UpdateDeviceRequest updateDeviceRequest, Guid deviceId)
         {
-            UpdateDeviceCommand command = new UpdateDeviceCommand();
-            command.DeviceId = deviceId;
-            command.DeviceConfiguration = deviceConfiguration;
+            var response = await _deviceService.UpdateDeviceAsync(deviceId, updateDeviceRequest);
 
-            var result = await _mediator.Send(command);
-
-            if (!result.IsSuccess) return NotFound(result.Error!.ErrorMessage);
+            if (!response.IsSuccess) return NotFound(response.Error!.ErrorMessage);
 
             return Ok();
         }
@@ -76,9 +67,9 @@ namespace Location.Tracking.Api.Controllers
         [HttpDelete("{deviceId}")]
         public async Task<IActionResult> DeleteDeviceAsync(Guid deviceId)
         {
-            var result = await _mediator.Send(new DeleteDeviceCommand { DeviceId = deviceId});
+            var response = await _deviceService.DeleteDeviceAsync(deviceId);
 
-            if (!result.IsSuccess) return NotFound(result.Error!.ErrorMessage);
+            if (!response.IsSuccess) return NotFound(response.Error!.ErrorMessage);
 
             return NoContent();
         }

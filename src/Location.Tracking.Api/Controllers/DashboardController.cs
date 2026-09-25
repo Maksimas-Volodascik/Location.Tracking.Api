@@ -1,8 +1,8 @@
 ﻿using Asp.Versioning;
-using Location.Tracking.Application.Dashboard.Query.GetDashboardMetrics;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Location.Tracking.Application.Dashboard.Dtos;
+using Location.Tracking.Application.Dashboard;
 namespace Location.Tracking.Api.Controllers
 {
     [Authorize]
@@ -11,16 +11,16 @@ namespace Location.Tracking.Api.Controllers
     [ApiController]
     public class DashboardController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public DashboardController(IMediator mediator)
+        private readonly IDashboardService _dashboardService;
+        public DashboardController(IDashboardService dashboardService)
         {
-            _mediator = mediator;
+            _dashboardService = dashboardService;
         }
 
         [HttpGet]
         public async Task<ActionResult<SystemMetrics>> GetDashboardMetrics()
         {
-            var response = await _mediator.Send(new GetDashboardMetricsQuery());
+            var response = await _dashboardService.GetDashboardMetricsAsync();
 
             return Ok(response);
         }

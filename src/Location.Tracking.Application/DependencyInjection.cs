@@ -6,9 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
+using Location.Tracking.Application.Auth;
 using Location.Tracking.Application.AutoMapper;
+using Location.Tracking.Application.Dashboard;
+using Location.Tracking.Application.DeviceModels;
+using Location.Tracking.Application.Devices;
+using Location.Tracking.Application.LogEntries;
 using Location.Tracking.Application.Mapper;
-using Location.Tracking.Application.Shared;
+using Location.Tracking.Application.RawRecords;
+using Location.Tracking.Application.Users;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -29,9 +35,14 @@ namespace Location.Tracking.Application
                 cfg.AddProfile<UserProfile>();
             });
 
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-
             // Add other application services here later
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<IDeviceModelService, DeviceModelService>();
+            services.AddScoped<IDeviceService, DeviceService>();
+            services.AddScoped<IRecordService, RecordService>();
+            services.AddScoped<ILogEntriesService, LogEntriesService>();
 
             return services;
         }
