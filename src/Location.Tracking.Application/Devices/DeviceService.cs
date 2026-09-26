@@ -25,7 +25,7 @@ namespace Location.Tracking.Application.Devices
 
             if (deviceModel == null) return Result<Device>.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
 
-            var existingDevice = await _context.Devices.Select(d => d.Imei == createDevice.Imei).FirstOrDefaultAsync();
+            var existingDevice = await _context.Devices.AnyAsync(d => d.Imei == createDevice.Imei);
 
             if (existingDevice) return Result<Device>.Failure(Errors.DeviceErrors.DeviceExists);
 

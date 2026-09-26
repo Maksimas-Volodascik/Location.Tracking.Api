@@ -40,7 +40,7 @@ namespace Location.Tracking.Infrastructure.Data
                 .IsRequired();
 
             modelBuilder.Entity<Device>()
-                .HasIndex(d => new { d.Imei, d.UserId })
+                .HasIndex(d => d.Imei)
                 .IsUnique();
 
             modelBuilder.Entity<User>()
