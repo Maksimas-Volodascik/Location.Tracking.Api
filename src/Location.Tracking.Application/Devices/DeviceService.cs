@@ -125,7 +125,7 @@ namespace Location.Tracking.Application.Devices
 
             if (deviceModel == null) return Result.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
 
-            var device = await _context.Devices.FindAsync(updateDevice.Id);
+            var device = await _context.Devices.FindAsync(deviceId);
 
             if (device == null) return Result.Failure(Errors.DeviceErrors.DeviceNotFound);
 
