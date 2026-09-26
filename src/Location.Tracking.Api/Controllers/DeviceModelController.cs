@@ -23,7 +23,7 @@ namespace Location.Tracking.Api.Controllers
         {
             var response = await _deviceModelService.GetAllDeviceModelsAsync();
 
-            return Ok(response);
+            return Ok(response.Data);
         }
 
         //[Authorize(Roles = "User")]
@@ -48,7 +48,7 @@ namespace Location.Tracking.Api.Controllers
 
             if (!response.IsSuccess) return BadRequest(response.Error!.ErrorMessage);
 
-            return Ok();
+            return NoContent();
         }
 
        //[Authorize(Roles = "User, Admin")]
@@ -62,7 +62,7 @@ namespace Location.Tracking.Api.Controllers
                 return BadRequest(response.Error!.ErrorMessage);
             }
 
-            return Ok();
+            return NoContent();
         }
 
         //[Authorize(Roles = "User, Admin")]
@@ -76,7 +76,7 @@ namespace Location.Tracking.Api.Controllers
                 return BadRequest(response.Error!.ErrorMessage);
             }
 
-            return Ok();
+            return NoContent();
         }
     }
 }

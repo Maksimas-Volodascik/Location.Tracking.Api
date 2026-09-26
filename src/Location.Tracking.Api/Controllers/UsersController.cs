@@ -40,7 +40,7 @@ namespace Location.Tracking.Api.Controllers
 
             if (!result.IsSuccess) return NotFound(result.Error!.ErrorMessage);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{userId:guid}")]
@@ -61,7 +61,7 @@ namespace Location.Tracking.Api.Controllers
 
             if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
 
-            return Ok();
+            return NoContent();
         }
 
         [AllowAnonymous]

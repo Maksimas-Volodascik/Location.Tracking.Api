@@ -38,7 +38,7 @@ namespace Location.Tracking.Api.Controllers
                 return BadRequest(response.Error!.ErrorMessage);
             }
 
-            return Ok(response);
+            return Ok(response.Data);
         }
 
         [HttpPost]
@@ -51,7 +51,7 @@ namespace Location.Tracking.Api.Controllers
 
             if (response.IsSuccess == false) return BadRequest(response.Error!.ErrorMessage);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPatch("{deviceId}")]
@@ -61,7 +61,7 @@ namespace Location.Tracking.Api.Controllers
 
             if (!response.IsSuccess) return NotFound(response.Error!.ErrorMessage);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{deviceId}")]
