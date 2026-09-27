@@ -123,9 +123,10 @@ namespace Location.Tracking.Application.Devices
 
         public async Task<Result> UpdateDeviceAsync(Guid deviceId, UpdateDeviceRequest updateDevice)
         {
-            var deviceModel = await _context.DeviceModel.FindAsync(updateDevice.DeviceModelId);
-
-            if (deviceModel == null) return Result.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
+            if (updateDevice.DeviceModelId != null)
+            {
+                if (await _context.DeviceModel.FindAsync(updateDevice.DeviceModelId) == null) return Result.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
+            }
 
             var device = await _context.Devices.FindAsync(deviceId);
 
