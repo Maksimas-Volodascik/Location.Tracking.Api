@@ -28,6 +28,6 @@ namespace Location.Tracking.Domain.Entities
         public Guid DeviceModelId { get; set; }
         public DeviceModel DeviceModel { get; set; } = null!;
 
-        public List<RawRecord> Records = new List<RawRecord>();
+        public List<RawRecord> Records { get; } = new();
     }
 }
