@@ -115,7 +115,7 @@ namespace Location.Tracking.Application.Devices
 
             if (device == null)
             {
-                return Result<DeviceDetails>.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
+                return Result<DeviceDetails>.Failure(Errors.DeviceErrors.DeviceNotFound);
             }
 
             return Result<DeviceDetails>.Success(device);
