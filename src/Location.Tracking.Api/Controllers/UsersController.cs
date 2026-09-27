@@ -59,7 +59,7 @@ namespace Location.Tracking.Api.Controllers
         {
             var response = await _authService.Register(request);
 
-            if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
+            if (!response.IsSuccess) return BadRequest(response.Error!.ErrorMessage);
 
             return NoContent();
         }
@@ -70,9 +70,9 @@ namespace Location.Tracking.Api.Controllers
         {
             var response = await _authService.Login(request);
 
-            if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
+            if (!response.IsSuccess) return BadRequest(response.Error!.ErrorMessage);
 
-            return Ok($"{response.Data.accessToken}");
+            return Ok($"{response.Data}");
         }
     }
 }

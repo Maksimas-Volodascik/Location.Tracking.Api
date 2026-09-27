@@ -9,7 +9,7 @@ namespace Location.Tracking.Application.Devices.Dtos
         [MaxLength(50, ErrorMessage = "Name cannot exceed 50 characters")]
         public string? Name { get; set; }
 
-        public bool IsEnabled { get; set; } = false;
-        public required Guid DeviceModelId { get; set; }
+        public bool? IsEnabled { get; set; }
+        public Guid? DeviceModelId { get; set; }
     }
 }

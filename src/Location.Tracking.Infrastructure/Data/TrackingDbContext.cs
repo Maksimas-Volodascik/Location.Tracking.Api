@@ -47,10 +47,6 @@ namespace Location.Tracking.Infrastructure.Data
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
-                .IsUnique();
-
             modelBuilder.Entity<LogEntry>()
                .HasIndex(le => new {le.TraceId, le.ReceivedDate})
                .IsDescending(false, true);//order by newest
