@@ -1,5 +1,6 @@
 ﻿using Location.Tracking.Application.Dashboard.Dtos;
 using Location.Tracking.Application.Shared.Interface;
+using Location.Tracking.Application.Shared.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace Location.Tracking.Application.Dashboard
@@ -12,7 +13,7 @@ namespace Location.Tracking.Application.Dashboard
             _context = context;
         }
 
-        public async Task<SystemMetrics> GetDashboardMetricsAsync()
+        public async Task<Result<SystemMetrics>> GetDashboardMetricsAsync()
         {
             UsersMetrics usersMetrics = await GetUserMetricsAsync();
             RecordsMetrics recordsMetrics = await GetRecordsMetrics();
@@ -27,7 +28,7 @@ namespace Location.Tracking.Application.Dashboard
                 Errors = errorMetrics,
             };
 
-            return systemMetrics;
+            return Result<SystemMetrics>.Success(systemMetrics);
         }
 
         private async Task<UsersMetrics> GetUserMetricsAsync()

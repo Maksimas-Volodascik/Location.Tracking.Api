@@ -22,7 +22,7 @@ namespace Location.Tracking.Api.Controllers
         {
             var response = await _dashboardService.GetDashboardMetricsAsync();
 
-            return Ok(response);
+            return Ok(response.Data);
         }
     }
 }
