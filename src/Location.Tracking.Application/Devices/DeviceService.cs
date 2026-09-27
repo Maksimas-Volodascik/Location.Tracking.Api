@@ -19,15 +19,17 @@ namespace Location.Tracking.Application.Devices
         }
         public async Task<Result> CreateNewDeviceAsync(CreateDeviceRequest createDevice, Guid userId)
         {
-            //todo: check if user exists
+            var user = await _context.DeviceModel.FindAsync(userId);
+
+            if (user == null) return Result.Failure(Errors.UserErrors.UserNotFound); //return a response in case user is deleted during this request
 
             var deviceModel = await _context.DeviceModel.FindAsync(createDevice.DeviceModelId);
 
-            if (deviceModel == null) return Result<Device>.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
+            if (deviceModel == null) return Result.Failure(Errors.DeviceModelErrors.DeviceModelNotFound);
 
             var existingDevice = await _context.Devices.AnyAsync(d => d.Imei == createDevice.Imei);
 
-            if (existingDevice) return Result<Device>.Failure(Errors.DeviceErrors.DeviceExists);
+            if (existingDevice) return Result.Failure(Errors.DeviceErrors.DeviceExists);
 
             Device device = new Device()
             {
