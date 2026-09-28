@@ -29,7 +29,7 @@ namespace Location.Tracking.Application.Auth
                 return Result<TokenResponse>.Failure(Errors.UserErrors.InvalidCredentials); //invalid password
             }
 
-            TokenResponse token = new TokenResponse { accessToken = _tokenIssuer.CreateAccessToken(user) };
+            var token = new TokenResponse { accessToken = _tokenIssuer.CreateAccessToken(user) };
 
             return Result<TokenResponse>.Success(token);
         }

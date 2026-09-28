@@ -72,7 +72,7 @@ namespace Location.Tracking.Api.Controllers
 
             if (!response.IsSuccess) return BadRequest(response.Error!.ErrorMessage);
 
-            return Ok($"{response.Data}");
+            return Ok(response.Data);
         }
     }
 }
