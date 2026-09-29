@@ -10,6 +10,6 @@ namespace Location.Tracking.Application.Devices.Dtos
         public string? Name { get; set; }
 
         public bool? IsEnabled { get; set; }
-        public Guid? DeviceModelId { get; set; }
+        public string? DeviceModelId { get; set; }
     }
 }
