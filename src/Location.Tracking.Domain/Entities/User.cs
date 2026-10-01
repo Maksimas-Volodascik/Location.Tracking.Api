@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Location.Tracking.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -26,12 +27,11 @@ namespace Location.Tracking.Domain.Entities
         
         [MaxLength(50)]
         public string LastName { get; set; } = string.Empty;
-        public string Role { get; set; } = "demo"; //"Admin | User | Demo"
+        public UserRole Role { get; set; } = UserRole.Demo;
         public bool IsActive { get; set; } = true;
         public DateTimeOffset CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public List<Device> Devices = new List<Device>();
-
+        public List<Device> Devices { get; } = new();
         public User() { } 
 
         public User(string email, string passwordHash) {

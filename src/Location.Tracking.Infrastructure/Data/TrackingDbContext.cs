@@ -22,10 +22,19 @@ namespace Location.Tracking.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
-                .HasMany(u => u.Devices)
-                .WithOne(d => d.User)
-                .HasForeignKey(u => u.UserId)
+                .HasMany(d => d.Devices)
+                .WithOne(u => u.User)
+                .HasForeignKey(d => d.UserId)
                 .IsRequired();
+
+            modelBuilder
+                .Entity<User>()
+                .Property(u => u.Role)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
 
             modelBuilder.Entity<Device>()
                 .HasOne(d => d.DeviceModel)
@@ -41,10 +50,6 @@ namespace Location.Tracking.Infrastructure.Data
 
             modelBuilder.Entity<Device>()
                 .HasIndex(d => d.Imei)
-                .IsUnique();
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
                 .IsUnique();
 
             modelBuilder.Entity<LogEntry>()

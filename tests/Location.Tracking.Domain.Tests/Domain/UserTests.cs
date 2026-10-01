@@ -22,7 +22,7 @@ namespace Location.Tracking.Domain.Tests.Domain
             Assert.Equal(Guid.Empty, user.Id);
             Assert.Equal("test@email.com", user.Email);
             Assert.Equal("hash123", user.PasswordHash);
-            Assert.Equal("User", user.Role);
+            Assert.Equal("User", user.Role.ToString());
             Assert.Empty(user.FirstName);
             Assert.Empty(user.LastName);
             Assert.Empty(user.Devices);

@@ -1,6 +1,7 @@
 ﻿using Location.Tracking.Application.Dashboard.Dtos;
 using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
+using Location.Tracking.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Location.Tracking.Application.Dashboard
@@ -38,8 +39,8 @@ namespace Location.Tracking.Application.Dashboard
                 .Select(user => new UsersMetrics
                 {
                     Total = user.Count(),
-                    Users = user.Count(usr => usr.Role == "User"),
-                    Admin = user.Count(usr => usr.Role == "Admin")
+                    Users = user.Count(usr => usr.Role == UserRole.User),
+                    Admin = user.Count(usr => usr.Role == UserRole.Admin)
                 }).SingleOrDefaultAsync();
 
             return usersMetrics ?? new UsersMetrics();

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Location.Tracking.Infrastructure.Migrations
 {
     [DbContext(typeof(TrackingDbContext))]
-    [Migration("20260907162153_InitialCreateNAS")]
-    partial class InitialCreateNAS
+    [Migration("20261001175025_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,10 +60,10 @@ namespace Location.Tracking.Infrastructure.Migrations
 
                     b.HasIndex("DeviceModelId");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("Imei", "UserId")
+                    b.HasIndex("Imei")
                         .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Devices");
                 });

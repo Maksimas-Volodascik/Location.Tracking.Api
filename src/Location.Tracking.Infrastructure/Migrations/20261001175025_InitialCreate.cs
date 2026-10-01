@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Location.Tracking.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateNAS : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -117,9 +117,9 @@ namespace Location.Tracking.Infrastructure.Migrations
                 column: "DeviceModelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Devices_Imei_UserId",
+                name: "IX_Devices_Imei",
                 table: "Devices",
-                columns: new[] { "Imei", "UserId" },
+                column: "Imei",
                 unique: true);
 
             migrationBuilder.CreateIndex(

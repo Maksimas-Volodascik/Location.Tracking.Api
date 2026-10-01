@@ -3,6 +3,7 @@ using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
 using Location.Tracking.Application.Users.Commands.Login;
 using Location.Tracking.Domain.Entities;
+using Location.Tracking.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,7 +46,7 @@ namespace Location.Tracking.Application.Auth
                 FirstName = registerRequest.FirstName,
                 LastName = registerRequest.LastName,
                 Email = registerRequest.Email,
-                Role = "demo"
+                Role = UserRole.Demo
             };
 
             var hashedPassword = new PasswordHasher<User>().HashPassword(newUser, registerRequest.Password);
