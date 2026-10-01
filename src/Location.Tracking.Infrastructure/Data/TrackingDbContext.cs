@@ -22,9 +22,9 @@ namespace Location.Tracking.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
-                .HasMany(d => d.Devices)
-                .WithOne(u => u.User)
-                .HasForeignKey(d => d.UserId)
+                .HasMany(u => u.Devices)
+                .WithOne(d => d.User)
+                .HasForeignKey(u => u.UserId)
                 .IsRequired();
 
             modelBuilder
