@@ -2,10 +2,12 @@
 using Location.Tracking.Application.DeviceModels;
 using Location.Tracking.Application.DeviceModels.Dtos;
 using Location.Tracking.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers
 {
+    [Authorize]
     [ApiVersion(1)]
     [Route("v{v:apiVersion}/[controller]")]
     [ApiController]

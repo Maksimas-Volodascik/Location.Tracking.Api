@@ -40,7 +40,7 @@ builder.Services.AddAuthentication()
 
             ValidateLifetime = true, //checks "exp"
             RequireExpirationTime = true, //Forces token to have expiration time
-
+            ClockSkew = TimeSpan.Zero,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfiguration:Token"]!)) //Verifies tokens signature using secret key
         };

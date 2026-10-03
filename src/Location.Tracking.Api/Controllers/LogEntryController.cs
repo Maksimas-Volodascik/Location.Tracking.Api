@@ -1,10 +1,12 @@
 ﻿using Asp.Versioning;
 using Location.Tracking.Application.LogEntries;
 using Location.Tracking.Application.LogEntries.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers
 {
+    [Authorize]
     [ApiVersion(1)]
     [Route("v{v:apiVersion}/[controller]")]
     [ApiController]

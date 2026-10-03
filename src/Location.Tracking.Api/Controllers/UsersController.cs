@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiVersion(1, Deprecated = true)]
     [ApiVersion(2)] //v2 for testing
     [Route("v{v:apiVersion}/[controller]")]
