@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using Castle.Core.Logging;
+using Location.Tracking.Application.AutoMapper;
 using Location.Tracking.Application.Devices;
 using Location.Tracking.Application.Devices.Dtos;
 using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
 using Location.Tracking.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using MockQueryable.Moq;
 using Moq;
 
@@ -13,11 +16,12 @@ namespace Location.Tracking.Application.Tests.Devices
     public class DeviceServiceTests
     {
         private readonly Mock<ITrackingDbContext> _mockDbContext;
-        private readonly Mock<IMapper> _mapperMock;
+        private static IMapper _mapper;
         private readonly DeviceService _deviceService;
 
         private static readonly Guid ExistingUserId = new("11111111-1111-1111-1111-111111111111");
         private static readonly Guid ExistingDeviceModelId = new("22222222-2222-2222-2222-222222222222");
+        private static readonly Guid ExistingDeviceId = new("33333333-3333-3333-3333-333333333333");
         private const string ExistingDeviceImei= "111111111111111";
 
         public DeviceServiceTests()
@@ -25,8 +29,9 @@ namespace Location.Tracking.Application.Tests.Devices
             _mockDbContext = new Mock<ITrackingDbContext>();
 
             var users = new List<User> { new User { Id = ExistingUserId } };
-            var devices = new List<Device> { new Device { Id = Guid.NewGuid(), Imei = ExistingDeviceImei } };
             var deviceModels = new List<DeviceModel> { new DeviceModel { Id = ExistingDeviceModelId } };
+            var devices = new List<Device> { new Device { Id = ExistingDeviceId, Imei = ExistingDeviceImei } };
+
 
             _mockDbContext.Setup(u => u.Users)
                 .Returns(MockDbSet(users, u => u.Id).Object);
@@ -39,8 +44,17 @@ namespace Location.Tracking.Application.Tests.Devices
 
             _mockDbContext.Setup(d => d.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
 
-            _mapperMock = new Mock<IMapper>();
-            _deviceService = new DeviceService(_mockDbContext.Object, _mapperMock.Object);
+            if (_mapper == null)
+            {
+                var mappingConfig = new MapperConfiguration(mc =>
+                {
+                    mc.AddProfile<DeviceProfile>();
+                }, NullLoggerFactory.Instance);
+                IMapper mapper = mappingConfig.CreateMapper();
+                _mapper = mapper;
+            }
+
+            _deviceService = new DeviceService(_mockDbContext.Object, _mapper);
         }
 
         private static Mock<DbSet<T>> MockDbSet<T>(List<T> entityList, Func<T, Guid> getId) where T: class
@@ -110,5 +124,58 @@ namespace Location.Tracking.Application.Tests.Devices
             Assert.Equal(Errors.DeviceErrors.DeviceExists.ErrorMessage, result.Error?.ErrorMessage);
             _mockDbContext.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
+
+        [Fact]
+        public async Task DeleteDeviceAsync_ValidDeviceId_ReturnsSuccess()
+        {
+            var device = new Device { Id = Guid.NewGuid() };
+            var mockDevices = MockDbSet(new List<Device> { device }, x => x.Id);
+            _mockDbContext.Setup(c => c.Devices).Returns(mockDevices.Object);
+
+            var result = await _deviceService.DeleteDeviceAsync(device.Id);
+
+            Assert.True(result.IsSuccess, result.Error?.ErrorMessage);
+            mockDevices.Verify(s => s.Remove(device), Times.Once);
+            _mockDbContext.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task DeleteDeviceAsync_InvalidDeviceId_ReturnsFailure()
+        {
+            var device = new Device { Id = Guid.NewGuid() };
+            var mockDevices = MockDbSet(new List<Device> { new Device { Id = Guid.NewGuid() } }, x => x.Id);
+            _mockDbContext.Setup(c => c.Devices).Returns(mockDevices.Object);
+
+            var result = await _deviceService.DeleteDeviceAsync(device.Id);
+
+            Assert.Equal(Errors.DeviceErrors.DeviceNotFound.ErrorMessage, result.Error?.ErrorMessage);
+            mockDevices.Verify(s => s.Remove(It.IsAny<Device>()), Times.Never);
+            _mockDbContext.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateDeviceAsync_ValidData_ReturnsSuccess()
+        {
+            var updateDevice = new UpdateDeviceRequest
+            {
+                DeviceModelId = ExistingDeviceModelId.ToString(),
+                Imei = ExistingDeviceImei
+            };
+
+            var result = await _deviceService.UpdateDeviceAsync(ExistingDeviceId, updateDevice);
+
+            Assert.True(result.IsSuccess, result.Error?.ErrorMessage);
+            _mockDbContext.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        //[Fact]
+        //public void MappingConfiguration_IsValid()
+        //{
+        //    var config = new MapperConfiguration(
+        //        cfg => cfg.AddMaps(typeof(DeviceProfile).Assembly),
+        //        NullLoggerFactory.Instance);
+
+        //    config.AssertConfigurationIsValid();
+        //}
     }
 }
