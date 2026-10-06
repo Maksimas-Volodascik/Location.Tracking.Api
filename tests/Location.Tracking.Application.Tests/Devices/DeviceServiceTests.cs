@@ -7,7 +7,6 @@ using Location.Tracking.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
 using Moq;
-using System.Security.Principal;
 
 namespace Location.Tracking.Application.Tests.Devices
 {
@@ -16,9 +15,30 @@ namespace Location.Tracking.Application.Tests.Devices
         private readonly Mock<ITrackingDbContext> _mockDbContext;
         private readonly Mock<IMapper> _mapperMock;
         private readonly DeviceService _deviceService;
+
+        private static readonly Guid ExistingUserId = new("11111111-1111-1111-1111-111111111111");
+        private static readonly Guid ExistingDeviceModelId = new("22222222-2222-2222-2222-222222222222");
+        private const string ExistingDeviceImei= "111111111111111";
+
         public DeviceServiceTests()
         {
             _mockDbContext = new Mock<ITrackingDbContext>();
+
+            var users = new List<User> { new User { Id = ExistingUserId } };
+            var devices = new List<Device> { new Device { Id = Guid.NewGuid(), Imei = ExistingDeviceImei } };
+            var deviceModels = new List<DeviceModel> { new DeviceModel { Id = ExistingDeviceModelId } };
+
+            _mockDbContext.Setup(u => u.Users)
+                .Returns(MockDbSet(users, u => u.Id).Object);
+
+            _mockDbContext.Setup(u => u.Devices)
+                .Returns(MockDbSet(devices, u => u.Id).Object);
+
+            _mockDbContext.Setup(u => u.DeviceModel)
+                .Returns(MockDbSet(deviceModels, u => u.Id).Object);
+
+            _mockDbContext.Setup(d => d.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
+
             _mapperMock = new Mock<IMapper>();
             _deviceService = new DeviceService(_mockDbContext.Object, _mapperMock.Object);
         }
@@ -33,29 +53,13 @@ namespace Location.Tracking.Application.Tests.Devices
         [Fact]
         public async Task CreateNewDeviceAsync_ValidData_ReturnsSuccess()
         {
-            var userId = Guid.NewGuid();
             var createDevice = new CreateDeviceRequest
             {
-                DeviceModelId = Guid.NewGuid().ToString(),
+                DeviceModelId = ExistingDeviceModelId.ToString(),
                 Imei = "123456789012345"
-            };
+            }; 
 
-            var users = new List<User> { new User { Id = userId } };
-            var devices = new List<Device> { new Device { Id = Guid.NewGuid(), Imei = "111111111111111" } };
-            var deviceModels = new List<DeviceModel> { new DeviceModel { Id = new Guid(createDevice.DeviceModelId) } };
-
-            _mockDbContext.Setup(u => u.Users)
-                .Returns(MockDbSet(users, u => u.Id).Object);
-
-            _mockDbContext.Setup(u => u.Devices)
-                .Returns(MockDbSet(devices, u => u.Id).Object);
-
-            _mockDbContext.Setup(u => u.DeviceModel)
-                .Returns(MockDbSet(deviceModels, u => u.Id).Object);
-
-            _mockDbContext.Setup(d => d.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
-
-            var result = await _deviceService.CreateNewDeviceAsync(createDevice, userId);
+            var result = await _deviceService.CreateNewDeviceAsync(createDevice, ExistingUserId);
 
             Assert.True(result.IsSuccess, result.Error?.ErrorMessage);
             _mockDbContext.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -67,26 +71,43 @@ namespace Location.Tracking.Application.Tests.Devices
             var userId = Guid.NewGuid();
             var createDevice = new CreateDeviceRequest
             {
+                DeviceModelId = ExistingDeviceModelId.ToString(),
+                Imei = "123456789012345"
+            };
+
+            var result = await _deviceService.CreateNewDeviceAsync(createDevice, userId);
+
+            Assert.Equal(Errors.UserErrors.UserNotFound.ErrorMessage, result.Error?.ErrorMessage);
+            _mockDbContext.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task CreateNewDeviceAsync_MissingModel_ReturnsFailure()
+        {
+            var createDevice = new CreateDeviceRequest
+            {
                 DeviceModelId = Guid.NewGuid().ToString(),
                 Imei = "123456789012345"
             };
 
-            var users = new List<User> { new User { Id = Guid.NewGuid() } };
-            var devices = new List<Device> { new Device { Id = Guid.NewGuid(), Imei = "111111111111111" } };
-            var deviceModels = new List<DeviceModel> { new DeviceModel { Id = new Guid(createDevice.DeviceModelId) } };
+            var result = await _deviceService.CreateNewDeviceAsync(createDevice, ExistingUserId);
 
-            _mockDbContext.Setup(u => u.Users)
-                .Returns(MockDbSet(users, u => u.Id).Object);
+            Assert.Equal(Errors.DeviceModelErrors.DeviceModelNotFound.ErrorMessage, result.Error?.ErrorMessage);
+            _mockDbContext.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        }
 
-            _mockDbContext.Setup(u => u.Devices)
-                .Returns(MockDbSet(devices, u => u.Id).Object);
+        [Fact]
+        public async Task CreateNewDeviceAsync_DuplicateIMEI_ReturnsFailure()
+        {
+            var createDevice = new CreateDeviceRequest
+            {
+                DeviceModelId = ExistingDeviceModelId.ToString(),
+                Imei = ExistingDeviceImei
+            };
 
-            _mockDbContext.Setup(u => u.DeviceModel)
-                .Returns(MockDbSet(deviceModels, u => u.Id).Object);
+            var result = await _deviceService.CreateNewDeviceAsync(createDevice, ExistingUserId);
 
-            var result = await _deviceService.CreateNewDeviceAsync(createDevice, userId);
-
-            Assert.Equal(result.Error?.ErrorMessage, Errors.UserErrors.UserNotFound.ErrorMessage);
+            Assert.Equal(Errors.DeviceErrors.DeviceExists.ErrorMessage, result.Error?.ErrorMessage);
             _mockDbContext.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
     }
