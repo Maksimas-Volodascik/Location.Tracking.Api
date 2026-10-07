@@ -156,17 +156,63 @@ namespace Location.Tracking.Application.Tests.Devices
         [Fact]
         public async Task UpdateDeviceAsync_ValidData_ReturnsSuccess()
         {
+            var deviceId = Guid.NewGuid();
+            var device = new Device { Id = deviceId, Imei = "123456789000000" };
+            var mockDevices = MockDbSet(new List<Device> { device }, x => x.Id);
+            _mockDbContext.Setup(c => c.Devices).Returns(mockDevices.Object);
+
             var updateDevice = new UpdateDeviceRequest
             {
                 DeviceModelId = ExistingDeviceModelId.ToString(),
-                Imei = ExistingDeviceImei
+                Imei = "123456789000000"
             };
-
-            var result = await _deviceService.UpdateDeviceAsync(ExistingDeviceId, updateDevice);
+            var result = await _deviceService.UpdateDeviceAsync(deviceId, updateDevice);
 
             Assert.True(result.IsSuccess, result.Error?.ErrorMessage);
+            mockDevices.Verify(s => s.Update(It.IsAny<Device>()), Times.Once);
             _mockDbContext.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
+
+        [Fact]
+        public async Task UpdateDeviceAsync_DeviceModelDoesNotExist_ReturnsErrorMessage()
+        {
+            var deviceId = Guid.NewGuid();
+            var device = new Device { Id = deviceId, Imei = "123456789000000" };
+            var mockDevices = MockDbSet(new List<Device> { device }, x => x.Id);
+            _mockDbContext.Setup(c => c.Devices).Returns(mockDevices.Object);
+
+            var updateDevice = new UpdateDeviceRequest
+            {
+                DeviceModelId = Guid.NewGuid().ToString(),
+                Imei = "123456789000000"
+            };
+            var result = await _deviceService.UpdateDeviceAsync(deviceId, updateDevice);
+
+            Assert.Equal(Errors.DeviceModelErrors.DeviceModelNotFound.ErrorMessage, result.Error?.ErrorMessage);
+            mockDevices.Verify(s => s.Update(It.IsAny<Device>()), Times.Never);
+            _mockDbContext.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateDeviceAsync_DeviceDoesNotExist_ReturnsErrorMessage()
+        {
+            var deviceId = Guid.NewGuid();
+            var device = new Device { Id = Guid.NewGuid(), Imei = "123456789000000" };
+            var mockDevices = MockDbSet(new List<Device> { device }, x => x.Id);
+            _mockDbContext.Setup(c => c.Devices).Returns(mockDevices.Object);
+
+            var updateDevice = new UpdateDeviceRequest
+            {
+                DeviceModelId = ExistingDeviceModelId.ToString(),
+                Imei = "123456789000000"
+            };
+            var result = await _deviceService.UpdateDeviceAsync(deviceId, updateDevice);
+
+            Assert.Equal(Errors.DeviceErrors.DeviceNotFound.ErrorMessage, result.Error?.ErrorMessage);
+            mockDevices.Verify(s => s.Update(It.IsAny<Device>()), Times.Never);
+            _mockDbContext.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        }
+
 
         //[Fact]
         //public void MappingConfiguration_IsValid()
