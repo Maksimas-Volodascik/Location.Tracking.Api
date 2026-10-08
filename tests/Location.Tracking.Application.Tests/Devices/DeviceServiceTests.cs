@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Castle.Core.Logging;
 using Location.Tracking.Application.AutoMapper;
 using Location.Tracking.Application.Devices;
 using Location.Tracking.Application.Devices.Dtos;
@@ -7,9 +6,7 @@ using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
 using Location.Tracking.Application.Tests.Shared;
 using Location.Tracking.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
-using MockQueryable.Moq;
 using Moq;
 
 namespace Location.Tracking.Application.Tests.Devices
@@ -57,8 +54,6 @@ namespace Location.Tracking.Application.Tests.Devices
 
             _deviceService = new DeviceService(_mockDbContext.Object, _mapper);
         }
-
-      
 
         [Fact]
         public async Task CreateNewDeviceAsync_ValidData_ReturnsSuccess()
