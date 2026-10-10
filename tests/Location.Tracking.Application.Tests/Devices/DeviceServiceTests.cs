@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
-using Castle.Core.Logging;
 using Location.Tracking.Application.AutoMapper;
 using Location.Tracking.Application.Devices;
 using Location.Tracking.Application.Devices.Dtos;
 using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
+using Location.Tracking.Application.Tests.Shared;
 using Location.Tracking.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
-using MockQueryable.Moq;
 using Moq;
 
 namespace Location.Tracking.Application.Tests.Devices
@@ -34,13 +32,13 @@ namespace Location.Tracking.Application.Tests.Devices
 
 
             _mockDbContext.Setup(u => u.Users)
-                .Returns(MockDbSet(users, u => u.Id).Object);
+                .Returns(DbSetMockFactory.Create(users, u => u.Id).Object);
 
             _mockDbContext.Setup(u => u.Devices)
-                .Returns(MockDbSet(devices, u => u.Id).Object);
+                .Returns(DbSetMockFactory.Create(devices, u => u.Id).Object);
 
             _mockDbContext.Setup(u => u.DeviceModel)
-                .Returns(MockDbSet(deviceModels, u => u.Id).Object);
+                .Returns(DbSetMockFactory.Create(deviceModels, u => u.Id).Object);
 
             _mockDbContext.Setup(d => d.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
 
@@ -55,13 +53,6 @@ namespace Location.Tracking.Application.Tests.Devices
             }
 
             _deviceService = new DeviceService(_mockDbContext.Object, _mapper);
-        }
-
-        private static Mock<DbSet<T>> MockDbSet<T>(List<T> entityList, Func<T, Guid> getId) where T: class
-        {
-            Mock<DbSet<T>> set = entityList.BuildMockDbSet();
-            set.Setup(s => s.FindAsync(It.IsAny<object[]>())).ReturnsAsync((object[] keys) => entityList.FirstOrDefault(x => getId(x) == (Guid)keys[0]));
-            return set;
         }
 
         [Fact]
@@ -129,7 +120,7 @@ namespace Location.Tracking.Application.Tests.Devices
         public async Task DeleteDeviceAsync_ValidDeviceId_ReturnsSuccess()
         {
             var device = new Device { Id = Guid.NewGuid() };
-            var mockDevices = MockDbSet(new List<Device> { device }, x => x.Id);
+            var mockDevices = DbSetMockFactory.Create(new List<Device> { device }, x => x.Id);
             _mockDbContext.Setup(c => c.Devices).Returns(mockDevices.Object);
 
             var result = await _deviceService.DeleteDeviceAsync(device.Id);
@@ -143,7 +134,7 @@ namespace Location.Tracking.Application.Tests.Devices
         public async Task DeleteDeviceAsync_InvalidDeviceId_ReturnsFailure()
         {
             var device = new Device { Id = Guid.NewGuid() };
-            var mockDevices = MockDbSet(new List<Device> { new Device { Id = Guid.NewGuid() } }, x => x.Id);
+            var mockDevices = DbSetMockFactory.Create(new List<Device> { new Device { Id = Guid.NewGuid() } }, x => x.Id);
             _mockDbContext.Setup(c => c.Devices).Returns(mockDevices.Object);
 
             var result = await _deviceService.DeleteDeviceAsync(device.Id);
@@ -158,7 +149,7 @@ namespace Location.Tracking.Application.Tests.Devices
         {
             var deviceId = Guid.NewGuid();
             var device = new Device { Id = deviceId, Imei = "123456789000000" };
-            var mockDevices = MockDbSet(new List<Device> { device }, x => x.Id);
+            var mockDevices = DbSetMockFactory.Create(new List<Device> { device }, x => x.Id);
             _mockDbContext.Setup(c => c.Devices).Returns(mockDevices.Object);
 
             var updateDevice = new UpdateDeviceRequest
@@ -178,7 +169,7 @@ namespace Location.Tracking.Application.Tests.Devices
         {
             var deviceId = Guid.NewGuid();
             var device = new Device { Id = deviceId, Imei = "123456789000000" };
-            var mockDevices = MockDbSet(new List<Device> { device }, x => x.Id);
+            var mockDevices = DbSetMockFactory.Create(new List<Device> { device }, x => x.Id);
             _mockDbContext.Setup(c => c.Devices).Returns(mockDevices.Object);
 
             var updateDevice = new UpdateDeviceRequest
@@ -198,7 +189,7 @@ namespace Location.Tracking.Application.Tests.Devices
         {
             var deviceId = Guid.NewGuid();
             var device = new Device { Id = Guid.NewGuid(), Imei = "123456789000000" };
-            var mockDevices = MockDbSet(new List<Device> { device }, x => x.Id);
+            var mockDevices = DbSetMockFactory.Create(new List<Device> { device }, x => x.Id);
             _mockDbContext.Setup(c => c.Devices).Returns(mockDevices.Object);
 
             var updateDevice = new UpdateDeviceRequest
