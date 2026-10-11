@@ -15,6 +15,7 @@ namespace Location.Tracking.Application.Mapper
             {
                 CreateMap<UserConfiguration, User>()
                     .ForMember(dest => dest.Id, opt => opt.Ignore())
+                    .ForMember(dest => dest.Role, opt => opt.PreCondition(src => src.Role.HasValue))
                     .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); //ignore null values (keep old)
             }
     }
