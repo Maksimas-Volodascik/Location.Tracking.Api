@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Location.Tracking.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Location.Tracking.Application.Users.Dtos
 
         [MaxLength(50, ErrorMessage = "Last name cannot exceed 50 characters")]
         public string? LastName { get; set; }
-
-        public string? Role { get; set; }
+        
+        public UserRole? Role { get; set; }
     }
 }

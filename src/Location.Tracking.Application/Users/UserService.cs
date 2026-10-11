@@ -3,6 +3,7 @@ using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
 using Location.Tracking.Application.Users.Dtos;
 using Location.Tracking.Domain.Entities;
+using Location.Tracking.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Location.Tracking.Application.Users
