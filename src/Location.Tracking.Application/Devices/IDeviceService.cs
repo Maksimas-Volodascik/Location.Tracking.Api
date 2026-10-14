@@ -12,7 +12,7 @@ namespace Location.Tracking.Application.Devices
     {
         public Task<Result<DeviceDetails>> GetDeviceByIdAsync(Guid deviceId);
         public Task<Result<DeviceDetails>> GetDeviceByImeiAsync(string imei);
-        public Task<Result<IEnumerable<DeviceDetails>>> GetAllDevicesAsync();
+        public Task<Result<IEnumerable<DeviceDetails>>> GetAllDevicesAsync(DeviceFilterSettings deviceFilterSettings);
         public Task<Result> CreateNewDeviceAsync(CreateDeviceRequest createDevice, Guid userId);
         public Task<Result> DeleteDeviceAsync(Guid deviceId);
         public Task<Result> UpdateDeviceAsync(Guid deviceId, UpdateDeviceRequest updateDevice);
