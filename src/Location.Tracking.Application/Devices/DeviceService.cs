@@ -58,21 +58,44 @@ namespace Location.Tracking.Application.Devices
             return Result.Success();
         }
 
-        public async Task<Result<IEnumerable<DeviceDetails>>> GetAllDevicesAsync()
+        public async Task<Result<IEnumerable<DeviceDetails>>> GetAllDevicesAsync(DeviceFilterSettings deviceFilterSettings)
         {
-            var deviceList = await _context.Devices
-                                        .Select(d => new DeviceDetails
-                                        {
-                                            Id = d.Id,
-                                            Name = d.Name,
-                                            Imei = d.Imei,
-                                            DateAdded = d.DateAdded,
-                                            LastSeen = d.LastSeen,
-                                            DeviceModelId = d.DeviceModelId,
-                                            IsEnabled = d.IsEnabled
-                                        }).ToListAsync();
+            IQueryable<Device> deviceList = _context.Devices;
 
-            return Result<IEnumerable<DeviceDetails>>.Success(deviceList);
+            if (!String.IsNullOrWhiteSpace(deviceFilterSettings.Imei))
+                deviceList = deviceList.Where(i => i.Imei == deviceFilterSettings.Imei);
+
+            if (!String.IsNullOrWhiteSpace(deviceFilterSettings.Name))
+                deviceList = deviceList.Where(i => i.Name == deviceFilterSettings.Name);
+
+            if (deviceFilterSettings.IsEnabled != null)
+                deviceList = deviceList.Where(i => i.IsEnabled == deviceFilterSettings.IsEnabled);
+
+            if (deviceFilterSettings.LastSeen != null)
+                deviceList = deviceList.Where(i => i.LastSeen == deviceFilterSettings.LastSeen);
+
+            if (deviceFilterSettings.DateAdded != null)
+                deviceList = deviceList.Where(i => i.DateAdded == deviceFilterSettings.DateAdded);
+
+            if (deviceFilterSettings.DeviceModelId != null)
+                deviceList = deviceList.Where(i => i.DeviceModelId == deviceFilterSettings.DeviceModelId);
+
+            var paginatedResult = deviceList
+                .Skip((deviceFilterSettings.PageNumber - 1) * deviceFilterSettings.PageSize)
+                .Take(deviceFilterSettings.PageSize);
+
+            var result = await paginatedResult.Select(d => new DeviceDetails
+            {
+                Id = d.Id,
+                Name = d.Name,
+                Imei = d.Imei,
+                DateAdded = d.DateAdded,
+                LastSeen = d.LastSeen,
+                DeviceModelId = d.DeviceModelId,
+                IsEnabled = d.IsEnabled
+            }).ToListAsync();
+
+            return Result<IEnumerable<DeviceDetails>>.Success(result);
         }
 
         public async Task<Result<DeviceDetails>> GetDeviceByIdAsync(Guid deviceId)

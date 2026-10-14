@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace Location.Tracking.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiVersion(1)]
     [Route("v{v:apiVersion}/[controller]")]
     [ApiController]
@@ -21,9 +21,9 @@ namespace Location.Tracking.Api.Controllers
         }
 
         [HttpGet()]
-        public async Task<ActionResult<IEnumerable<Device>>> GetAllDevicesAsync()
+        public async Task<ActionResult<IEnumerable<DeviceDetails>>> GetAllDevicesAsync([FromQuery] DeviceFilterSettings deviceFilterSettings)
         {
-            var response = await _deviceService.GetAllDevicesAsync();
+            var response = await _deviceService.GetAllDevicesAsync(deviceFilterSettings);
 
             return Ok(response.Data);
         }
@@ -45,7 +45,6 @@ namespace Location.Tracking.Api.Controllers
         public async Task<IActionResult> CreateDeviceAsync([FromBody] CreateDeviceRequest createDeviceRequest)
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("Missing Name Identifier");
-            
 
             var response = await _deviceService.CreateNewDeviceAsync(createDeviceRequest, new Guid(userId));
 
