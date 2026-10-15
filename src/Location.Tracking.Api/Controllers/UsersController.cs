@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiVersion(1, Deprecated = true)]
     [ApiVersion(2)] //v2 for testing
     [Route("v{v:apiVersion}/[controller]")]
@@ -24,9 +24,9 @@ namespace Location.Tracking.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserData>>> GetUsers([FromQuery] UserFilterSettings userFilterSettings)
         {
-            var response = await _userService.GetAllUsers();
+            var response = await _userService.GetAllUsers(userFilterSettings);
 
             //if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
 
