@@ -21,9 +21,9 @@ namespace Location.Tracking.Api.Controllers
 
         //[Authorize(Roles = "User")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Device>>> GetAllDeviceModelsAsync()
+        public async Task<ActionResult<IEnumerable<DeviceModelDetails>>> GetAllDeviceModelsAsync([FromQuery] DeviceModelFilterSettings deviceModelFilterSettings)
         {
-            var response = await _deviceModelService.GetAllDeviceModelsAsync();
+            var response = await _deviceModelService.GetAllDeviceModelsAsync(deviceModelFilterSettings);
 
             return Ok(response.Data);
         }
