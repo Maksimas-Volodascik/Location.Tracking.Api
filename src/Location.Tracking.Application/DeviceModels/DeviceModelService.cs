@@ -41,10 +41,24 @@ namespace Location.Tracking.Application.DeviceModels
             return Result.Success();
         }
 
-        public async Task<Result<IEnumerable<DeviceModelDetails>>> GetAllDeviceModelsAsync()
+        public async Task<Result<IEnumerable<DeviceModelDetails>>> GetAllDeviceModelsAsync(DeviceModelFilterSettings deviceModelFilterSettings)
         {
-            var deviceModelList = await _context.DeviceModel
-                                        .Select(dm => new DeviceModelDetails
+            IQueryable<DeviceModel> deviceModelQuery = _context.DeviceModel;
+
+            if (!String.IsNullOrWhiteSpace(deviceModelFilterSettings.Name))
+                deviceModelQuery = deviceModelQuery.Where(dm => dm.Name.Contains(deviceModelFilterSettings.Name));
+
+            if (!String.IsNullOrWhiteSpace(deviceModelFilterSettings.ProtocolName))
+                deviceModelQuery = deviceModelQuery.Where(dm => dm.ProtocolName.Contains(deviceModelFilterSettings.ProtocolName));
+
+            if (!String.IsNullOrWhiteSpace(deviceModelFilterSettings.Description))
+                deviceModelQuery = deviceModelQuery.Where(dm => dm.Description.Contains(deviceModelFilterSettings.Description));
+
+            var paginatedResult = deviceModelQuery
+                .Skip((deviceModelFilterSettings.PageNumber - 1) * deviceModelFilterSettings.PageSize)
+                .Take(deviceModelFilterSettings.PageSize);
+
+            var result = await paginatedResult.Select(dm => new DeviceModelDetails
                                         {
                                             Name = dm.Name,
                                             ProtocolName = dm.ProtocolName,
@@ -52,7 +66,7 @@ namespace Location.Tracking.Application.DeviceModels
                                             Id = dm.Id
                                         }).ToListAsync();
 
-            return Result<IEnumerable<DeviceModelDetails>>.Success(deviceModelList);
+            return Result<IEnumerable<DeviceModelDetails>>.Success(result);
         }
 
         public async Task<Result<DeviceModelDetails>> GetDeviceModelByIdAsync(Guid modelId)

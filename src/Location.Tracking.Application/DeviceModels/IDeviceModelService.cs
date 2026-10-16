@@ -5,7 +5,7 @@ namespace Location.Tracking.Application.DeviceModels
 {
     public interface IDeviceModelService
     {
-        public Task<Result<IEnumerable<DeviceModelDetails>>> GetAllDeviceModelsAsync();
+        public Task<Result<IEnumerable<DeviceModelDetails>>> GetAllDeviceModelsAsync(DeviceModelFilterSettings deviceModelFilterSettings);
         public Task<Result<DeviceModelDetails>> GetDeviceModelByNameAsync(string modelName);
         public Task<Result<DeviceModelDetails>> GetDeviceModelByIdAsync(Guid modelId);
         public Task<Result> CreateNewDeviceModelAsync(CreateDeviceModelRequest createDeviceModel);
