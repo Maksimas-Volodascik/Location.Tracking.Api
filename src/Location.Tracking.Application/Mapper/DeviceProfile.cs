@@ -9,12 +9,10 @@ namespace Location.Tracking.Application.AutoMapper
         public DeviceProfile()
         {
             CreateMap<CreateDeviceRequest, Device>()
-                .ForMember(dest => dest.DeviceModelId, opt => opt.Ignore())
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); //ignore null values (keep old)
 
             CreateMap<UpdateDeviceRequest, Device>()
-                .ForMember(dest => dest.DeviceModelId, opt => opt.Ignore())
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
         }
