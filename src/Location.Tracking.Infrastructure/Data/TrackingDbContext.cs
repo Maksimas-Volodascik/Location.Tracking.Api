@@ -1,12 +1,6 @@
 ﻿using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Location.Tracking.Infrastructure.Data
 {
@@ -18,6 +12,7 @@ namespace Location.Tracking.Infrastructure.Data
         public DbSet<Device> Devices { get; set; }
         public DbSet<DeviceModel> DeviceModel { get; set; }
         public DbSet<LogEntry> LogEntry { get; set; }
+        public DbSet<Workspace> Workspaces { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,6 +50,12 @@ namespace Location.Tracking.Infrastructure.Data
             modelBuilder.Entity<LogEntry>()
                .HasIndex(le => new {le.TraceId, le.ReceivedDate})
                .IsDescending(false, true);//order by newest
+
+            modelBuilder.Entity<Workspace>()
+                .HasMany(w => w.Users)
+                .WithOne(u => u.Workspace)
+                .HasForeignKey(u => u.WorkspaceId)
+                .IsRequired();
         }
 
     }
