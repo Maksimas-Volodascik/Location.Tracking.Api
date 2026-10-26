@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Location.Tracking.Infrastructure.Migrations
 {
     [DbContext(typeof(TrackingDbContext))]
-    [Migration("20261001175025_InitialCreate")]
+    [Migration("20261026195906_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -196,12 +196,42 @@ namespace Location.Tracking.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("WorkspaceId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("WorkspaceId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Location.Tracking.Domain.Entities.Workspace", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Workspaces");
                 });
 
             modelBuilder.Entity("Location.Tracking.Domain.Entities.Device", b =>
@@ -234,6 +264,17 @@ namespace Location.Tracking.Infrastructure.Migrations
                     b.Navigation("Device");
                 });
 
+            modelBuilder.Entity("Location.Tracking.Domain.Entities.User", b =>
+                {
+                    b.HasOne("Location.Tracking.Domain.Entities.Workspace", "Workspace")
+                        .WithMany("Users")
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Workspace");
+                });
+
             modelBuilder.Entity("Location.Tracking.Domain.Entities.Device", b =>
                 {
                     b.Navigation("Records");
@@ -247,6 +288,11 @@ namespace Location.Tracking.Infrastructure.Migrations
             modelBuilder.Entity("Location.Tracking.Domain.Entities.User", b =>
                 {
                     b.Navigation("Devices");
+                });
+
+            modelBuilder.Entity("Location.Tracking.Domain.Entities.Workspace", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

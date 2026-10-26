@@ -30,7 +30,9 @@ namespace Location.Tracking.Domain.Entities
         public UserRole Role { get; set; } = UserRole.Demo;
         public bool IsActive { get; set; } = true;
         public DateTimeOffset CreatedAt { get; set; } = DateTime.UtcNow;
-
+      
+        public Guid WorkspaceId { get; set; }
+        public Workspace Workspace { get; set; } = null!;
         public List<Device> Devices { get; } = new();
         public User() { } 
 
