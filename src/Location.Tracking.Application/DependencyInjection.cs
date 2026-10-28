@@ -15,6 +15,7 @@ using Location.Tracking.Application.LogEntries;
 using Location.Tracking.Application.Mapper;
 using Location.Tracking.Application.RawRecords;
 using Location.Tracking.Application.Users;
+using Location.Tracking.Application.Workspaces;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -43,6 +44,7 @@ namespace Location.Tracking.Application
             services.AddScoped<IDeviceService, DeviceService>();
             services.AddScoped<IRecordService, RecordService>();
             services.AddScoped<ILogEntriesService, LogEntriesService>();
+            services.AddScoped<IWorkspaceService, WorkspaceService>();
 
             return services;
         }
