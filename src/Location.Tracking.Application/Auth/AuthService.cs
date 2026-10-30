@@ -7,6 +7,8 @@ using Location.Tracking.Domain.Entities;
 using Location.Tracking.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Location.Tracking.Application.Auth
 {
@@ -20,6 +22,52 @@ namespace Location.Tracking.Application.Auth
             _context = context;
             _tokenIssuer = tokenIssuer;
             _workspaceService = workspaceService;
+        }
+
+        public async Task<Result> AcceptInvite(AcceptInviteRequest request)
+        {
+            var tokenHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(request.Token)));
+            var invitation = await _context.Invitations.FirstOrDefaultAsync(i => i.TokenHash == tokenHash);
+
+            if (invitation == null || invitation.ExpiresAt < DateTimeOffset.UtcNow || invitation.UsedAt != null)
+            {
+                return Result.Failure(Errors.InvitationErrors.Invalid);
+            }
+
+            var result = await AddUser(invitation.WorkspaceId, request.FirstName, request.LastName,
+               request.Email, request.Password, invitation.Role);
+
+            invitation.UsedAt = DateTimeOffset.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return Result.Success();
+        }
+
+        public async Task<Result<string>> CreateInvite(Guid inviterId, InviteUserRequest request)
+        {
+            var user = await _context.Users.FindAsync(inviterId);
+            if (user is null)
+                return Result<string>.Failure(Errors.UserErrors.UserNotFound);
+
+            if(user.WorkspaceId != request.WorkspaceId)
+            {
+                return Result<string>.Failure(Errors.WorkspaceErrors.WorkspaceNotFound);
+            }
+
+            var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+
+            _context.Invitations.Add(new Invitation
+            {
+                CreatedByUserId = user.Id,
+                TokenHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token))),
+                WorkspaceId = request.WorkspaceId,
+                Role = request.Role,
+                ExpiresAt = DateTimeOffset.UtcNow.AddDays(7),
+            });
+
+            await _context.SaveChangesAsync();
+            return Result<string>.Success(token);
         }
 
         public async Task<Result<TokenResponse>> Login(LoginRequest loginRequest)

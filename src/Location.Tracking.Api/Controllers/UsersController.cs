@@ -5,6 +5,7 @@ using Location.Tracking.Application.Users;
 using Location.Tracking.Application.Users.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Location.Tracking.Api.Controllers
 {
@@ -73,6 +74,30 @@ namespace Location.Tracking.Api.Controllers
             if (!response.IsSuccess) return BadRequest(response.Error!.ErrorMessage);
 
             return Ok(response.Data);
+        }
+
+        [Authorize]
+        [HttpPost("invites")]
+        public async Task<IActionResult> CreateInvite(InviteUserRequest request)
+        {
+            var inviterId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _authService.CreateInvite(inviterId, request);
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+
+            return Ok(new { token = result.Data });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("invites/accept")]
+        public async Task<IActionResult> AcceptInvite(AcceptInviteRequest request)
+        {
+            var result = await _authService.AcceptInvite(request);
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+
+            return Ok();
         }
     }
 }

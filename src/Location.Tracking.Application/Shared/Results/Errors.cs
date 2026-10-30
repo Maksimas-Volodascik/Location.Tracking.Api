@@ -29,5 +29,9 @@ namespace Location.Tracking.Application.Shared.Results
         {
             public static Error WorkspaceNotFound = new Error("\"Workspace not found.", "not_found");
         }
+        public static class InvitationErrors
+        {
+            public static Error Invalid = new Error("\"The invitation is invalid or has expired.", "invalid");
+        }
     }
 }

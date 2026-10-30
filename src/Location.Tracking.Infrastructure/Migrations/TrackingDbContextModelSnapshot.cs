@@ -91,6 +91,38 @@ namespace Location.Tracking.Infrastructure.Migrations
                     b.ToTable("DeviceModel");
                 });
 
+            modelBuilder.Entity("Location.Tracking.Domain.Entities.Invitation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UsedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("WorkspaceId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.ToTable("Invitations");
+                });
+
             modelBuilder.Entity("Location.Tracking.Domain.Entities.LogEntry", b =>
                 {
                     b.Property<Guid>("Id")
@@ -250,6 +282,17 @@ namespace Location.Tracking.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Location.Tracking.Domain.Entities.Invitation", b =>
+                {
+                    b.HasOne("Location.Tracking.Domain.Entities.Workspace", "Workspace")
+                        .WithMany("Invitations")
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Workspace");
+                });
+
             modelBuilder.Entity("Location.Tracking.Domain.Entities.RawRecord", b =>
                 {
                     b.HasOne("Location.Tracking.Domain.Entities.Device", "Device")
@@ -289,6 +332,8 @@ namespace Location.Tracking.Infrastructure.Migrations
 
             modelBuilder.Entity("Location.Tracking.Domain.Entities.Workspace", b =>
                 {
+                    b.Navigation("Invitations");
+
                     b.Navigation("Users");
                 });
 #pragma warning restore 612, 618

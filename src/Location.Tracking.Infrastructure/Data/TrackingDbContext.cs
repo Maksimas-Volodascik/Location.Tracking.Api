@@ -13,6 +13,7 @@ namespace Location.Tracking.Infrastructure.Data
         public DbSet<DeviceModel> DeviceModel { get; set; }
         public DbSet<LogEntry> LogEntry { get; set; }
         public DbSet<Workspace> Workspaces { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,6 +57,13 @@ namespace Location.Tracking.Infrastructure.Data
                 .WithOne(u => u.Workspace)
                 .HasForeignKey(u => u.WorkspaceId)
                 .IsRequired();
+
+            modelBuilder.Entity<Workspace>()
+                .HasMany(w => w.Invitations)
+                .WithOne(i => i.Workspace)
+                .HasForeignKey(i => i.WorkspaceId)
+                .IsRequired();
+
         }
 
     }

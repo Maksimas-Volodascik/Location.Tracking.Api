@@ -16,6 +16,7 @@ namespace Location.Tracking.Application.Shared.Interface
         DbSet<DeviceModel> DeviceModel { get; }
         DbSet<Device> Devices { get; }
         DbSet<Workspace> Workspaces { get; }
+        DbSet<Invitation> Invitations { get; }
         Task<int> SaveChangesAsync(CancellationToken ct = default);
     }
 }
