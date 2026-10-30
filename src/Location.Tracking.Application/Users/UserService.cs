@@ -71,7 +71,8 @@ namespace Location.Tracking.Application.Users
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 Email = u.Email,
-                Role = u.Role.ToString()
+                Role = u.Role.ToString(),
+                WorkspaceId = u.WorkspaceId
             }).ToListAsync();
 
             return Result<IEnumerable<UserData>>.Success(result);

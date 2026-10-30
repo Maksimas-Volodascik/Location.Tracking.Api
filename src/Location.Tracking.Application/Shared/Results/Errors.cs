@@ -24,5 +24,14 @@ namespace Location.Tracking.Application.Shared.Results
             public static Error InvalidCredentials = new Error("Invalid credentials.", "invalid_credentials");
             public static Error UserNotFound = new Error("User does not exist.", "user_not_found");
         }
+
+        public static class WorkspaceErrors
+        {
+            public static Error WorkspaceNotFound = new Error("\"Workspace not found.", "not_found");
+        }
+        public static class InvitationErrors
+        {
+            public static Error Invalid = new Error("\"The invitation is invalid or has expired.", "invalid");
+        }
     }
 }
