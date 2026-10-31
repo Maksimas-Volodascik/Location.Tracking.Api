@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Location.Tracking.Domain.Enums
 {
     public enum UserRole
@@ -11,6 +6,7 @@ namespace Location.Tracking.Domain.Enums
         Unknown = 0,
         Demo = 1,
         User = 2,
-        Admin = 3
+        Manager = 3,
+        Admin = 4
     }
 }
