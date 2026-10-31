@@ -1,7 +1,4 @@
-﻿using Location.Tracking.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
-
-namespace Location.Tracking.Application.Devices.Dtos
+﻿namespace Location.Tracking.Application.Devices.Dtos
 {
     public class DeviceDetails
     {
@@ -12,5 +9,6 @@ namespace Location.Tracking.Application.Devices.Dtos
         public DateTimeOffset? LastSeen { get; set; } = null;
         public DateTimeOffset DateAdded { get; set; } = DateTimeOffset.UtcNow;
         public Guid DeviceModelId { get; set; }
+        public Guid WorkspaceId { get; set; }
     }
 }

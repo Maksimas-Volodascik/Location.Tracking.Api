@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Location.Tracking.Domain.Entities
 {
@@ -23,8 +18,8 @@ namespace Location.Tracking.Domain.Entities
         public DateTimeOffset? LastSeen { get; set; } = null;
         public DateTimeOffset DateAdded { get; set; } = DateTimeOffset.UtcNow;
 
-        public Guid UserId { get; set; }
-        public User User { get; set; } = null!;
+        public Guid WorkspaceId { get; set; }
+        public Workspace Workspace { get; set; } = null!;
         public Guid DeviceModelId { get; set; }
         public DeviceModel DeviceModel { get; set; } = null!;
 

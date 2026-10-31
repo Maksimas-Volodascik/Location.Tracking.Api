@@ -50,7 +50,7 @@ namespace Location.Tracking.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("WorkspaceId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -60,7 +60,7 @@ namespace Location.Tracking.Infrastructure.Migrations
                     b.HasIndex("Imei")
                         .IsUnique();
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("Devices");
                 });
@@ -271,15 +271,15 @@ namespace Location.Tracking.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Location.Tracking.Domain.Entities.User", "User")
+                    b.HasOne("Location.Tracking.Domain.Entities.Workspace", "Workspace")
                         .WithMany("Devices")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("WorkspaceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("DeviceModel");
 
-                    b.Navigation("User");
+                    b.Navigation("Workspace");
                 });
 
             modelBuilder.Entity("Location.Tracking.Domain.Entities.Invitation", b =>
@@ -325,13 +325,10 @@ namespace Location.Tracking.Infrastructure.Migrations
                     b.Navigation("Devices");
                 });
 
-            modelBuilder.Entity("Location.Tracking.Domain.Entities.User", b =>
-                {
-                    b.Navigation("Devices");
-                });
-
             modelBuilder.Entity("Location.Tracking.Domain.Entities.Workspace", b =>
                 {
+                    b.Navigation("Devices");
+
                     b.Navigation("Invitations");
 
                     b.Navigation("Users");
