@@ -17,12 +17,6 @@ namespace Location.Tracking.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Devices)
-                .WithOne(d => d.User)
-                .HasForeignKey(u => u.UserId)
-                .IsRequired();
-
             modelBuilder
                 .Entity<User>()
                 .Property(u => u.Role)
@@ -62,6 +56,12 @@ namespace Location.Tracking.Infrastructure.Data
                 .HasMany(w => w.Invitations)
                 .WithOne(i => i.Workspace)
                 .HasForeignKey(i => i.WorkspaceId)
+                .IsRequired();
+
+            modelBuilder.Entity<Workspace>()
+                .HasMany(w => w.Devices)
+                .WithOne(d => d.Workspace)
+                .HasForeignKey(d => d.WorkspaceId)
                 .IsRequired();
 
         }

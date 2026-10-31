@@ -37,7 +37,7 @@ namespace Location.Tracking.Application.Devices
                 IsEnabled = createDevice.IsEnabled,
                 Name = createDevice.Name,
                 DeviceModelId = deviceModel.Id,
-                UserId = userId
+                WorkspaceId = user.WorkspaceId
             };
 
             await _context.Devices.AddAsync(device);
@@ -92,7 +92,8 @@ namespace Location.Tracking.Application.Devices
                 DateAdded = d.DateAdded,
                 LastSeen = d.LastSeen,
                 DeviceModelId = d.DeviceModelId,
-                IsEnabled = d.IsEnabled
+                IsEnabled = d.IsEnabled,
+                WorkspaceId = d.WorkspaceId
             }).ToListAsync();
 
             return Result<IEnumerable<DeviceDetails>>.Success(result);
@@ -110,7 +111,8 @@ namespace Location.Tracking.Application.Devices
                                 DateAdded = d.DateAdded,
                                 LastSeen = d.LastSeen,
                                 DeviceModelId = d.DeviceModelId,
-                                IsEnabled = d.IsEnabled
+                                IsEnabled = d.IsEnabled,
+                                WorkspaceId = d.WorkspaceId
                             }).SingleOrDefaultAsync();
 
             if (device == null)
@@ -133,7 +135,8 @@ namespace Location.Tracking.Application.Devices
                                 DateAdded = d.DateAdded,
                                 LastSeen = d.LastSeen,
                                 DeviceModelId = d.DeviceModelId,
-                                IsEnabled = d.IsEnabled
+                                IsEnabled = d.IsEnabled,
+                                WorkspaceId = d.WorkspaceId
                             }).SingleOrDefaultAsync();
 
             if (device == null)

@@ -12,6 +12,7 @@ namespace Location.Tracking.Domain.Entities
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
         public List<User> Users { get; } = new();
+        public List<Device> Devices { get; } = new();
         public List<Invitation> Invitations { get; } = new();
     }
 }

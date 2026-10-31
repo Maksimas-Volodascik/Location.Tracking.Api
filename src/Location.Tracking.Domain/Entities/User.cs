@@ -28,7 +28,6 @@ namespace Location.Tracking.Domain.Entities
       
         public Guid WorkspaceId { get; set; }
         public Workspace Workspace { get; set; } = null!;
-        public List<Device> Devices { get; } = new();
         public User() { } 
 
         public User(string email, string passwordHash) {
