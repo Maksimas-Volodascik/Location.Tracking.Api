@@ -28,6 +28,7 @@ namespace Location.Tracking.Application.Shared.Results
         public static class WorkspaceErrors
         {
             public static Error WorkspaceNotFound = new Error("\"Workspace not found.", "not_found");
+            public static Error InvalidWorkspaceName = new Error("\"Invalid Workspace Name.", "invalid_name");
         }
         public static class InvitationErrors
         {
