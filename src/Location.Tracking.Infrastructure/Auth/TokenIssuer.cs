@@ -25,8 +25,8 @@ namespace Location.Tracking.Infrastructure.Auth
             var claims = new List<Claim>
             {
                 new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new (JwtRegisteredClaimNames.Name,  $"{user.FirstName} {user.LastName}"),
                 new (JwtRegisteredClaimNames.Email, user.Email),
+                new (TokenClaims.WorkspaceId, user.WorkspaceId.ToString()),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 

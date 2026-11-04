@@ -3,6 +3,7 @@ using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
 using Location.Tracking.Application.Users.Dtos;
 using Location.Tracking.Domain.Entities;
+using Location.Tracking.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Location.Tracking.Application.Users
@@ -45,7 +46,7 @@ namespace Location.Tracking.Application.Users
             return Result.Success();
         }
 
-        public async Task<Result<IEnumerable<UserData>>> GetAllUsers(UserFilterSettings userFilterSettings)
+        public async Task<Result<IEnumerable<UserData>>> GetAllUsers(UserFilterSettings userFilterSettings, Guid workspaceId, string userRole)
         {
             IQueryable<User> userQuery = _context.Users;
 
@@ -60,6 +61,11 @@ namespace Location.Tracking.Application.Users
 
             if (userFilterSettings.Role != null)
                 userQuery = userQuery.Where(u => u.Role == userFilterSettings.Role);
+
+            if (userRole != UserRole.Admin.ToString())
+            {
+                userQuery = userQuery.Where(u => u.WorkspaceId == workspaceId);
+            }
 
             var paginatedResult = userQuery
                 .Skip((userFilterSettings.PageNumber - 1) * userFilterSettings.PageSize)
@@ -77,6 +83,5 @@ namespace Location.Tracking.Application.Users
 
             return Result<IEnumerable<UserData>>.Success(result);
         }
-
     }
 }
