@@ -2,6 +2,7 @@
 using Location.Tracking.Application.Devices;
 using Location.Tracking.Application.Devices.Dtos;
 using Location.Tracking.Domain.Entities;
+using Location.Tracking.Infrastructure.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -23,7 +24,10 @@ namespace Location.Tracking.Api.Controllers
         [HttpGet()]
         public async Task<ActionResult<IEnumerable<DeviceDetails>>> GetAllDevicesAsync([FromQuery] DeviceFilterSettings deviceFilterSettings)
         {
-            var response = await _deviceService.GetAllDevicesAsync(deviceFilterSettings);
+            var workspaceId = HttpContext.User.FindFirstValue(TokenClaims.WorkspaceId) ?? throw new InvalidOperationException("Missing Workspace ID Identifier");
+            var userRole = HttpContext.User.FindFirstValue(ClaimTypes.Role) ?? throw new InvalidOperationException("Missing Role Identifier");
+
+            var response = await _deviceService.GetAllDevicesAsync(deviceFilterSettings, new Guid(workspaceId), userRole);
 
             return Ok(response.Data);
         }

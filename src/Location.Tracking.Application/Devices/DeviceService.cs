@@ -4,6 +4,7 @@ using Location.Tracking.Application.Devices.Dtos;
 using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
 using Location.Tracking.Domain.Entities;
+using Location.Tracking.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Location.Tracking.Application.Devices
@@ -58,7 +59,7 @@ namespace Location.Tracking.Application.Devices
             return Result.Success();
         }
 
-        public async Task<Result<IEnumerable<DeviceDetails>>> GetAllDevicesAsync(DeviceFilterSettings deviceFilterSettings)
+        public async Task<Result<IEnumerable<DeviceDetails>>> GetAllDevicesAsync(DeviceFilterSettings deviceFilterSettings, Guid workspaceId, string userRole)
         {
             IQueryable<Device> deviceList = _context.Devices;
 
@@ -79,6 +80,9 @@ namespace Location.Tracking.Application.Devices
 
             if (deviceFilterSettings.DeviceModelId != null)
                 deviceList = deviceList.Where(i => i.DeviceModelId == deviceFilterSettings.DeviceModelId);
+
+            if (userRole != UserRole.Admin.ToString())
+                deviceList = deviceList.Where(i => i.WorkspaceId == workspaceId);
 
             var paginatedResult = deviceList
                 .Skip((deviceFilterSettings.PageNumber - 1) * deviceFilterSettings.PageSize)
