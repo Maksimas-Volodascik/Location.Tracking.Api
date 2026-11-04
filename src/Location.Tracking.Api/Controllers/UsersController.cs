@@ -3,8 +3,11 @@ using Location.Tracking.Application.Auth;
 using Location.Tracking.Application.Auth.Dtos;
 using Location.Tracking.Application.Users;
 using Location.Tracking.Application.Users.Dtos;
+using Location.Tracking.Domain.Enums;
+using Location.Tracking.Infrastructure.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System.Security.Claims;
 
 namespace Location.Tracking.Api.Controllers
@@ -27,9 +30,10 @@ namespace Location.Tracking.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserData>>> GetUsers([FromQuery] UserFilterSettings userFilterSettings)
         {
-            var response = await _userService.GetAllUsers(userFilterSettings);
+            var workspaceId = HttpContext.User.FindFirstValue(TokenClaims.WorkspaceId) ?? throw new InvalidOperationException("Missing Workspace ID Identifier");
+            var userRole = HttpContext.User.FindFirstValue(ClaimTypes.Role) ?? throw new InvalidOperationException("Missing Role Identifier");
 
-            //if (!response.IsSuccess) return BadRequest(response.Error.ErrorMessage);
+            var response = await _userService.GetAllUsers(userFilterSettings, new Guid(workspaceId), userRole);
 
             return Ok(response.Data);
         }
