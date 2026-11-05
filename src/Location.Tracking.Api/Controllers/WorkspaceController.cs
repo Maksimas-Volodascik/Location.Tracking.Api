@@ -20,7 +20,7 @@ namespace Location.Tracking.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WorkspaceData>>> GetWorkspaceData()
+        public async Task<ActionResult<WorkspaceData>> GetWorkspaceData()
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("Missing Name Identifier");
 
@@ -30,7 +30,7 @@ namespace Location.Tracking.Api.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult> Update(Guid id, UpdateWorkspaceRequest request)
+        public async Task<ActionResult> UpdateWorkspace(Guid id, UpdateWorkspaceRequest request)
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("Missing Name Identifier");
 
