@@ -36,12 +36,13 @@ namespace Location.Tracking.Application.Workspaces
                             .Where(w => w.Id == user.WorkspaceId)
                             .Select(w => new WorkspaceData
                             {
+                                Id = w.Id,
                                 Name = w.Name,
                                 CreatedAt = w.CreatedAt,
                                 Description = w.Description,
                                 DeviceCount = w.Devices.Count(),
-                                UserCount = w.Users.Count()
-
+                                UserCount = w.Users.Count(),
+                                IsActive = w.IsActive                                
                             })
                             .FirstOrDefaultAsync();
 

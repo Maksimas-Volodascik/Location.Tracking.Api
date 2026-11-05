@@ -41,7 +41,7 @@ namespace Location.Tracking.Api.Controllers
                 return BadRequest(result.Error.ErrorMessage);
             }
 
-            return Ok();
+            return NoContent();
         }
     }
 }
