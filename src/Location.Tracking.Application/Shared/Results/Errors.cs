@@ -23,6 +23,7 @@ namespace Location.Tracking.Application.Shared.Results
             public static Error UserExists = new Error("User already exists.", "already_exists");
             public static Error InvalidCredentials = new Error("Invalid credentials.", "invalid_credentials");
             public static Error UserNotFound = new Error("User does not exist.", "user_not_found");
+            public static readonly Error RoleNotAllowed = new Error("You cannot assign a role higher than your own.", "role_not_allowed");
         }
 
         public static class WorkspaceErrors
