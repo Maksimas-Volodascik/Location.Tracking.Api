@@ -50,7 +50,7 @@ namespace Location.Tracking.Application.Auth
             if (user is null)
                 return Result<string>.Failure(Errors.UserErrors.UserNotFound);
 
-            if (user.Role > request.Role)
+            if (user.Role < request.Role)
             {
                 return Result<string>.Failure(Errors.UserErrors.RoleNotAllowed);
             }
