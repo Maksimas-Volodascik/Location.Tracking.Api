@@ -50,9 +50,9 @@ namespace Location.Tracking.Application.Auth
             if (user is null)
                 return Result<string>.Failure(Errors.UserErrors.UserNotFound);
 
-            if(user.WorkspaceId != request.WorkspaceId)
+            if (user.Role > request.Role)
             {
-                return Result<string>.Failure(Errors.WorkspaceErrors.WorkspaceNotFound);
+                return Result<string>.Failure(Errors.UserErrors.RoleNotAllowed);
             }
 
             var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
@@ -61,7 +61,7 @@ namespace Location.Tracking.Application.Auth
             {
                 CreatedByUserId = user.Id,
                 TokenHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token))),
-                WorkspaceId = request.WorkspaceId,
+                WorkspaceId = user.WorkspaceId,
                 Role = request.Role,
                 ExpiresAt = DateTimeOffset.UtcNow.AddDays(7),
             });
