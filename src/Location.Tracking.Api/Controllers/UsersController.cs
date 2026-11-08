@@ -103,5 +103,16 @@ namespace Location.Tracking.Api.Controllers
 
             return Ok();
         }
+
+        [AllowAnonymous]
+        [HttpGet("invites")]
+        public async Task<IActionResult> CheckInviteToken([FromQuery]string token)
+        {
+            var result = await _authService.ValidateToken(token);
+
+            if (!result.IsSuccess) return BadRequest(result.Error.ErrorMessage);
+
+            return NoContent();
+        }
     }
 }
