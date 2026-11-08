@@ -1,4 +1,5 @@
 ﻿using Location.Tracking.Application.Auth.Dtos;
+using Location.Tracking.Application.Devices.Dtos;
 using Location.Tracking.Application.Shared.Interface;
 using Location.Tracking.Application.Shared.Results;
 using Location.Tracking.Application.Users.Commands.Login;
@@ -99,6 +100,20 @@ namespace Location.Tracking.Application.Auth
             }
 
             await _context.SaveChangesAsync();
+
+            return Result.Success();
+        }
+
+        public async Task<Result> ValidateToken(string tokenString)
+        {
+            var tokenHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(tokenString)));
+
+            var token = await _context.Invitations
+                           .Where(token => token.TokenHash == tokenHash)
+                           .Select(t => new { })
+                           .SingleOrDefaultAsync();
+
+            if (token == null) return Result.Failure(Errors.InvitationErrors.Invalid);
 
             return Result.Success();
         }

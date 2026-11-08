@@ -16,5 +16,6 @@ namespace Location.Tracking.Application.Auth
         public Task<Result> Register(RegisterRequest registerRequest);
         public Task<Result<string>> CreateInvite(Guid inviterId, InviteUserRequest request);
         public Task<Result> AcceptInvite(AcceptInviteRequest request);
+        public Task<Result> ValidateToken(string tokenString);
     }
 }
