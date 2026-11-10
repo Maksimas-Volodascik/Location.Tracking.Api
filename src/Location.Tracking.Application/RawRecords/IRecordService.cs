@@ -6,5 +6,7 @@ namespace Location.Tracking.Application.RawRecords
     public interface IRecordService
     {
         public Task<Result<IEnumerable<RecordMessage>>> GetAllRecords(Guid deviceId);
+
+        public Task<Result<IEnumerable<DevicePosition>>> GetDeviceLocations(Guid deviceId);
     }
 }
