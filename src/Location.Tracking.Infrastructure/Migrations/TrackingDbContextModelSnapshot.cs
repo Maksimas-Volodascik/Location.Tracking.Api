@@ -173,7 +173,7 @@ namespace Location.Tracking.Infrastructure.Migrations
                     b.Property<string>("ParsedData")
                         .IsRequired()
                         .HasMaxLength(1500)
-                        .HasColumnType("character varying(1500)");
+                        .HasColumnType("jsonb");
 
                     b.Property<string>("RawData")
                         .IsRequired()

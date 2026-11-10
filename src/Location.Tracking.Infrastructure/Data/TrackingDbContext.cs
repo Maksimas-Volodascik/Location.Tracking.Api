@@ -64,6 +64,10 @@ namespace Location.Tracking.Infrastructure.Data
                 .HasForeignKey(d => d.WorkspaceId)
                 .IsRequired();
 
+            modelBuilder.Entity<RawRecord>()
+                .Property(r => r.ParsedData)
+                .HasColumnType("jsonb");
+
         }
 
     }
