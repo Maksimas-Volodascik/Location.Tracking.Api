@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Location.Tracking.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiVersion(1)]
     [Route("v{v:apiVersion}/[controller]")]
     [ApiController]

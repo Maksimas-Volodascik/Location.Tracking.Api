@@ -32,8 +32,8 @@ namespace Location.Tracking.Application.RawRecords
             var positionList = await _context.Database.SqlQuery<DevicePosition>($"""
                 SELECT "Id",
                         ("ParsedData"->>'Timestamp')::timestamptz AS "GpsTime",
-                		("ParsedData"->>'Latitude')::double precision AS "Latitude",
-                		("ParsedData"->>'Longitude')::double precision AS "Longitude",
+                		("ParsedData"->>'Latitude')::double precision / 1e7  AS "Latitude",
+                		("ParsedData"->>'Longitude')::double precision / 1e7  AS "Longitude",
                 		("ParsedData"->>'Altitude')::double precision AS "Altitude",
                 		("ParsedData"->>'Angle')::integer AS "Angle",
                 		"ReceivedAt"
